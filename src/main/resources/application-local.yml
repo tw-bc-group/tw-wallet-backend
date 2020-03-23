@@ -3,3 +3,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/tw-wallet
     username: postgres
     password: tw-wallet-2020
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 20
+        prefetch: 5
+
+  flyway:
+    enabled: false
