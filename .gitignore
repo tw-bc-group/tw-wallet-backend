@@ -30,3 +30,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/.DS_Store
+
+logs/
+
+gradle/wrapper/

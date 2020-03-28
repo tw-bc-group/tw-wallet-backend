@@ -1,6 +1,9 @@
+swagger:
+  enable: true
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tw-wallet
+    url: jdbc:postgresql://localhost:5432/tw_wallet
     username: postgres
     password: tw-wallet-2020
 
@@ -17,3 +20,4 @@ spring:
 
   flyway:
     enabled: false
+

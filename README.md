@@ -25,6 +25,7 @@ docker run -d --name rabbitmq --publish 5671:5671  --publish 5672:5672 --publish
 * `./gradlew clean` : clean `build` folder
 * `./gradlew build` : build application
 * `./gradlew bootRun` : run application
+* `bash gradlew -Dflyway.configFiles=flyway.conf flywayMigrate`: create table
 
 #### Conduct of commit
 > format: type: content

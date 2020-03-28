@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "org.flywaydb.flyway" version "6.3.2"
     id 'java'
 }
 
@@ -25,6 +26,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+
+
     implementation 'org.flywaydb:flyway-core'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -39,3 +49,11 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+//flyway {
+//    url = 'jdbc:mysql://localhost:3306/miniprograme?useSSL=false'
+//    locations = ['filesystem:db/migration']
+//    user = 'root'
+//    password = '123456'
+//    schemas = ['flywaydb']
+//}
