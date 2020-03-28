@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id "org.flywaydb.flyway" version "6.3.2"
+    id 'nu.studer.jooq' version '4.1'
     id 'java'
 }
 
@@ -28,12 +29,11 @@ dependencies {
 
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-
+    jooqRuntime group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    implementation 'org.jooq:jooq'
 
     implementation 'org.flywaydb:flyway-core'
     compileOnly 'org.projectlombok:lombok'
@@ -50,10 +50,40 @@ test {
     useJUnitPlatform()
 }
 
-//flyway {
-//    url = 'jdbc:mysql://localhost:3306/miniprograme?useSSL=false'
-//    locations = ['filesystem:db/migration']
-//    user = 'root'
-//    password = '123456'
-//    schemas = ['flywaydb']
-//}
+jooq {
+    version = '3.13.1'
+    edition = 'OSS'
+    generateSchemaSourceOnCompilation = true
+    sample(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:postgresql://localhost:5432/tw_wallet'
+            user = 'postgres'
+            password = 'tw-wallet-2020'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                inputSchema = 'public'
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+                daos=true
+                pojosEqualsAndHashCode=true
+                javaTimeTypes=true
+            }
+            target {
+                packageName = 'com.thoughtworks.wallet.gen'
+                directory = 'src/main/java'
+            }
+        }
+    }
+}
