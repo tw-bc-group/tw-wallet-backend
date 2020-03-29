@@ -34,6 +34,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     jooqRuntime group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
     implementation 'org.jooq:jooq'
+    implementation "org.modelmapper.extensions:modelmapper-jooq:2.3.0"
+    implementation "org.modelmapper:modelmapper:2.3.0"
 
     implementation 'org.flywaydb:flyway-core'
     compileOnly 'org.projectlombok:lombok'
@@ -54,7 +56,7 @@ jooq {
     version = '3.13.1'
     edition = 'OSS'
     generateSchemaSourceOnCompilation = true
-    sample(sourceSets.main) {
+    wallet(sourceSets.main) {
         jdbc {
             driver = 'org.postgresql.Driver'
             url = 'jdbc:postgresql://localhost:5432/tw_wallet'
@@ -74,10 +76,10 @@ jooq {
                 relations = true
                 deprecated = false
                 records = true
-                immutablePojos = true
+                immutablePojos = false
                 fluentSetters = true
-                daos=true
-                pojosEqualsAndHashCode=true
+                daos=false
+                pojosEqualsAndHashCode=false
                 javaTimeTypes=true
             }
             target {

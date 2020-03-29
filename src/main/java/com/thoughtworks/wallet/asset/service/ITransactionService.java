@@ -1,7 +1,8 @@
 package com.thoughtworks.wallet.asset.service;
 
-import java.math.BigDecimal;
+import com.thoughtworks.wallet.asset.model.Transaction;
+
 
 public interface ITransactionService {
-
+    Transaction fetchByTxnHash(String hash);
 }

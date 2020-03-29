@@ -12,20 +12,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
-    tomcat:
-      test-on-borrow: true
-      validation-query: SELECT 1
-      test-while-idle: true
-      time-between-eviction-runs-millis: 3600000
-
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
-        enable_lazy_load_no_trans: true
-    show-sql: false
+    hikari:
+      connection-timeout: 20000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
 
   flyway:
     enabled: true

@@ -5,9 +5,9 @@ package com.thoughtworks.wallet.gen;
 
 
 import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
-import com.thoughtworks.wallet.gen.tables.TblTxnDetail;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblTxnDetailRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
 
 import javax.annotation.Generated;
 
@@ -40,7 +40,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = UniqueKeys0.FLYWAY_SCHEMA_HISTORY_PK;
-    public static final UniqueKey<TblTxnDetailRecord> TBL_TXN_DETAIL_PKEY = UniqueKeys0.TBL_TXN_DETAIL_PKEY;
+    public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = UniqueKeys0.TBL_TRANSACTIONS_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -53,6 +53,6 @@ public class Keys {
 
     private static class UniqueKeys0 {
         public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, "flyway_schema_history_pk", new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
-        public static final UniqueKey<TblTxnDetailRecord> TBL_TXN_DETAIL_PKEY = Internal.createUniqueKey(TblTxnDetail.TBL_TXN_DETAIL, "tbl_txn_detail_pkey", new TableField[] { TblTxnDetail.TBL_TXN_DETAIL.TXN_HASH, TblTxnDetail.TBL_TXN_DETAIL.TXN_INDEX }, true);
+        public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = Internal.createUniqueKey(TblTransactions.TBL_TRANSACTIONS, "tbl_transactions_pkey", new TableField[] { TblTransactions.TBL_TRANSACTIONS.HASH, TblTransactions.TBL_TRANSACTIONS.TX_INDEX }, true);
     }
 }

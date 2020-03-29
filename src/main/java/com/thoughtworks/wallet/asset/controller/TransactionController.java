@@ -1,10 +1,10 @@
 package com.thoughtworks.wallet.asset.controller;
 
 
-import com.thoughtworks.wallet.asset.model.TransactionDetail;
+import com.thoughtworks.wallet.asset.model.Transaction;
 import com.thoughtworks.wallet.asset.service.ITransactionService;
 import com.thoughtworks.wallet.common.ResponseBean;
-import com.thoughtworks.wallet.util.JacksonUtil;
+import com.thoughtworks.wallet.common.RspCode;
 import com.thoughtworks.wallet.util.Utilities;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,13 +31,11 @@ public class TransactionController {
     private static final String CLASS_NAME = TransactionController.class.getSimpleName();
 
     private final ITransactionService transactionService;
-    private String txID;
 
     @Autowired
     public TransactionController(ITransactionService transactionService) {
         this.transactionService = transactionService;
     }
-
 
     /**
      * 查询交易历史
@@ -53,6 +51,7 @@ public class TransactionController {
             @ApiImplicitParam(paramType = "header", name = "jwt", dataType = "String", required = true, value = "jwt"),
     })
     @GetMapping()
+    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
     public ResponseBean getTxHistory(@RequestParam("page_index") @Min(value = 1) int pageIndex,
                                      @RequestParam("page_offset") @Min(value = 1) @Max(value = 100) int pageOffset,
                                      @RequestParam(name = "start_date", required = false) Long startDateTimestamp,
@@ -68,4 +67,16 @@ public class TransactionController {
         return new ResponseBean();
     }
 
+
+    @ApiOperation(value = "根据交易hash查询交易")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "jwt", dataType = "String", required = false, value = "jwt"),
+    })
+    @RequestMapping(value = "/{tx_hash}", method = RequestMethod.GET)
+    public ResponseBean getTx(@PathVariable(name = "tx_hash", required = true) String txHash, HttpServletRequest request, HttpServletResponse response) {
+
+        log.info("{}.{} - txHash:{}", CLASS_NAME, Utilities.currentMethod(), txHash);
+        Transaction transaction = transactionService.fetchByTxnHash(txHash);
+        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), transaction);
+    }
 }

@@ -5,7 +5,7 @@ package com.thoughtworks.wallet.gen;
 
 
 import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
-import com.thoughtworks.wallet.gen.tables.TblTxnDetail;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 403387716;
+    private static final long serialVersionUID = 1590036328;
 
     /**
      * The reference instance of <code>public</code>
@@ -43,9 +43,9 @@ public class Public extends SchemaImpl {
     public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
-     * The table <code>public.tbl_txn_detail</code>.
+     * The table <code>public.tbl_transactions</code>.
      */
-    public final TblTxnDetail TBL_TXN_DETAIL = TblTxnDetail.TBL_TXN_DETAIL;
+    public final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
 
     /**
      * No further instances allowed
@@ -64,6 +64,6 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
-            TblTxnDetail.TBL_TXN_DETAIL);
+            TblTransactions.TBL_TRANSACTIONS);
     }
 }

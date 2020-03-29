@@ -5,7 +5,7 @@ package com.thoughtworks.wallet.gen;
 
 
 import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
-import com.thoughtworks.wallet.gen.tables.TblTxnDetail;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
 
 import javax.annotation.Generated;
 
@@ -29,7 +29,7 @@ public class Tables {
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
-     * The table <code>public.tbl_txn_detail</code>.
+     * The table <code>public.tbl_transactions</code>.
      */
-    public static final TblTxnDetail TBL_TXN_DETAIL = TblTxnDetail.TBL_TXN_DETAIL;
+    public static final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
 }
