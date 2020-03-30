@@ -19,7 +19,7 @@ spring:
       auto-commit: true
 
   flyway:
-    enabled: true
+    enabled: false
 
   rabbitmq:
     host: ${RABBIT_MQ_URL}
