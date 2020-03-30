@@ -1,0 +1,14 @@
+---
+version: '2'
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: pg-docker
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=tw-wallet-2020
+      - POSTGRES_DB=tw_wallet
+    ports:
+      - "5432:5432"

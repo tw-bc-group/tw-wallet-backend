@@ -10,9 +10,11 @@
 #### Prerequisites
 * Install `PostgreSQL` at your `local` environment
 ```
-docker pull postgres
-docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tw-wallet-2020 -d postgres
+cd docker
+docker-compose up -d  
+./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate
 ```
+
 * Install `RabbitMQ` at your `local` environment
 ```
 docker pull rabbitmq:management
