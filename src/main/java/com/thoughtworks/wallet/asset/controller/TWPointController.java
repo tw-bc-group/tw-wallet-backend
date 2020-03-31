@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequestMapping(value = "/v1/tw-points")
-@Api(tags = "TW Point 相关操作的接口")
+@Api(tags = "TW Point 相关操作")
 public class TWPointController {
 
     private final IQuorumService quorumService;
@@ -31,12 +31,7 @@ public class TWPointController {
     @GetMapping("/{address}")
     @ApiOperation(value = "根据用户的 quorum 地址获取 TW Point 余额")
     public ResponseBean getBalanceByAddress(@PathVariable("address") String address) {
-        TWPointBalanceResponse twPointBalance = null;
-        try {
-            twPointBalance = quorumService.getTWPointBalanceBy(address);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseBean(HttpStatus.OK.value(), "", twPointBalance);
+        final TWPointBalanceResponse twPointBalance = quorumService.getTWPointBalanceBy(address);
+        return new ResponseBean(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), twPointBalance);
     }
 }
