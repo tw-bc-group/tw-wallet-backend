@@ -38,6 +38,9 @@ dependencies {
     implementation "org.modelmapper:modelmapper:2.3.0"
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
 
+    implementation('org.web3j:core:4.2.0')
+    implementation('org.web3j:contracts:4.2.0')
+
     implementation 'org.flywaydb:flyway-core'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -79,9 +82,9 @@ jooq {
                 records = true
                 immutablePojos = false
                 fluentSetters = true
-                daos=false
-                pojosEqualsAndHashCode=false
-                javaTimeTypes=true
+                daos = false
+                pojosEqualsAndHashCode = false
+                javaTimeTypes = true
             }
             target {
                 packageName = 'com.thoughtworks.wallet.gen'

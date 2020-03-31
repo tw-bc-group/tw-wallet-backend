@@ -1,15 +1,22 @@
 package com.thoughtworks.wallet.asset.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.thoughtworks.wallet.util.CoinSerializer;
 import lombok.Data;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 @Data
 public class TWPoint {
-    private String address;
+    private String name;
+    private String symbol;
+    private BigInteger decimal;
 
-    @JsonSerialize(using = CoinSerializer.class)
-    private BigDecimal balance;
+    private TWPoint(String name, String symbol, BigInteger decimal) {
+        this.name = name;
+        this.symbol = symbol;
+        this.decimal = decimal;
+    }
+
+    public static TWPoint create(String name, String symbol, BigInteger decimal) {
+        return new TWPoint(name, symbol, decimal);
+    }
 }

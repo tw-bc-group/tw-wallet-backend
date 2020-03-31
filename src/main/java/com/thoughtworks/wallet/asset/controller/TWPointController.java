@@ -1,6 +1,6 @@
 package com.thoughtworks.wallet.asset.controller;
 
-import com.thoughtworks.wallet.asset.model.TWPoint;
+import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.service.IQuorumService;
 import com.thoughtworks.wallet.common.ResponseBean;
 import io.swagger.annotations.Api;
@@ -31,7 +31,12 @@ public class TWPointController {
     @GetMapping("/{address}")
     @ApiOperation(value = "根据用户的 quorum 地址获取 TW Point 余额")
     public ResponseBean getBalanceByAddress(@PathVariable("address") String address) {
-        final TWPoint twPoint = quorumService.getTWPointBalanceBy(address);
-        return new ResponseBean(HttpStatus.OK.value(), "", twPoint);
+        TWPointBalanceResponse twPointBalance = null;
+        try {
+            twPointBalance = quorumService.getTWPointBalanceBy(address);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseBean(HttpStatus.OK.value(), "", twPointBalance);
     }
 }
