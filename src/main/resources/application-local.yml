@@ -21,3 +21,10 @@ spring:
   flyway:
     enabled: false
 
+quorum:
+  rpc:
+    url: 'http://localhost:22000'
+  tw-point:
+    contract-address: '0x9d13C6D3aFE1721BEef56B55D303B09E021E27ab'
+  node1:
+    private-key: '0x4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377'

@@ -31,3 +31,11 @@ spring:
         concurrency: 10
         max-concurrency: 20
         prefetch: 5
+
+quorum:
+  rpc:
+    url: ${RPC_URL}
+  tw-point:
+    contract-address: ${TWPOINT_CONTRACT_ADDRESS}
+  node1:
+    private-key: ${NODE1_PRIVATE_KEY}
