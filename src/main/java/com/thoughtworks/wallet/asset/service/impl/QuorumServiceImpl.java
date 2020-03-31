@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -38,6 +39,7 @@ public class QuorumServiceImpl implements IQuorumService {
 
     @Override
     public TWPointBalanceResponse getTWPointBalanceBy(String address) {
+        verifyAddress(address);
 
         Web3j web3j = Web3j.build(new HttpService(rpcUrl));
 
@@ -64,9 +66,23 @@ public class QuorumServiceImpl implements IQuorumService {
         }
     }
 
+    private void verifyAddress(String address) {
+        String pattern = "^0x[0-9a-fA-F]{40}$";
+        final boolean isMatch = Pattern.matches(pattern, address);
+        if (!isMatch) {
+            throw new InvalidAddressErrorException(address);
+        }
+    }
+
     private static class QuorumConnectionErrorException extends AppException {
         public QuorumConnectionErrorException(String rpcUrl) {
             super(ErrorCode.QUORUM_CONNECTION_ERROR, ImmutableMap.of("QuorumRpcUrl", rpcUrl));
+        }
+    }
+
+    private static class InvalidAddressErrorException extends AppException {
+        public InvalidAddressErrorException(String address) {
+            super(ErrorCode.INVALID_ADDRESS, ImmutableMap.of("Address", address));
         }
     }
 }
