@@ -1,14 +1,13 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
-import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.wallet.asset.annotation.Node1PrivateKey;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.annotation.TWPointContractAddress;
+import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
+import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.model.TWPoint;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
-import com.thoughtworks.wallet.asset.service.IQuorumService;
-import com.thoughtworks.wallet.common.exception.AppException;
-import com.thoughtworks.wallet.common.exception.ErrorCode;
+import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-public class QuorumServiceImpl implements IQuorumService {
+public class QuorumServiceImpl implements IBlockchainService {
 
     @QuorumRPCUrl
     private String rpcUrl;
@@ -71,18 +70,6 @@ public class QuorumServiceImpl implements IQuorumService {
         final boolean isMatch = Pattern.matches(pattern, address);
         if (!isMatch) {
             throw new InvalidAddressErrorException(address);
-        }
-    }
-
-    private static class QuorumConnectionErrorException extends AppException {
-        public QuorumConnectionErrorException(String rpcUrl) {
-            super(ErrorCode.QUORUM_CONNECTION_ERROR, ImmutableMap.of("QuorumRpcUrl", rpcUrl));
-        }
-    }
-
-    private static class InvalidAddressErrorException extends AppException {
-        public InvalidAddressErrorException(String address) {
-            super(ErrorCode.INVALID_ADDRESS, ImmutableMap.of("Address", address));
         }
     }
 }
