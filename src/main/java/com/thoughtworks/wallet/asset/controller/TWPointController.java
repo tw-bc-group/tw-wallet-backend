@@ -1,7 +1,7 @@
 package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
-import com.thoughtworks.wallet.asset.service.IQuorumService;
+import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import com.thoughtworks.wallet.common.ResponseBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "TW Point 相关操作")
 public class TWPointController {
 
-    private final IQuorumService quorumService;
+    private final IBlockchainService quorumService;
 
     @Autowired
-    public TWPointController(IQuorumService quorumService) {
+    public TWPointController(IBlockchainService quorumService) {
         this.quorumService = quorumService;
     }
 
