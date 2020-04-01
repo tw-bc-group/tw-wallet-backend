@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +38,7 @@ public class TransactionController {
     }
 
     @ApiOperation(value = "查询交易历史")
-    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
+    @GetMapping
     public List<Transaction> getTxHistory(@RequestParam(name = "from_addr") String fromAddr) {
         return transactionService.listByFromAddress(fromAddr);
     }
