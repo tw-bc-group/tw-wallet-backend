@@ -36,7 +36,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     private String TWPointContractAddress;
 
     @Override
-    public TWPointBalanceResponse getTWPointBalanceBy(String address) {
+    public TWPointBalanceResponse getTWPointBalanceBy(String address) throws InvalidAddressErrorException, QuorumConnectionErrorException {
         boolean isAddress = isValidAddress(address);
         if (!isAddress) {
             throw new InvalidAddressErrorException(address);
