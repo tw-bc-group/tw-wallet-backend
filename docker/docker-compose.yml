@@ -2,10 +2,7 @@
 version: '2'
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: dockerfile
-    image: pg-docker
+    image: postgres:12.2
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=tw-wallet-2020
