@@ -1,14 +1,13 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
+import static com.thoughtworks.wallet.gen.Tables.TBL_TRANSACTIONS;
 
 import com.thoughtworks.wallet.asset.model.Transaction;
 import com.thoughtworks.wallet.asset.service.ITransactionService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Service;
-
-import static com.thoughtworks.wallet.gen.Tables.TBL_TRANSACTIONS;
-
 
 @Slf4j
 @Service
@@ -27,4 +26,9 @@ public class TransactionServiceImpl implements ITransactionService {
             .fetchOneInto(Transaction.class);
     }
 
+    public List<Transaction> listByFromAddress(String addr) {
+        return dslContext.selectFrom(TBL_TRANSACTIONS)
+            .where(TBL_TRANSACTIONS.FROM_ADDRESS.eq(addr))
+            .fetch().into(Transaction.class);
+    }
 }

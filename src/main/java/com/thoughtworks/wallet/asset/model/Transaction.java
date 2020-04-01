@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.thoughtworks.wallet.util.CoinSerializer;
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Transaction {
 
@@ -31,15 +32,4 @@ public class Transaction {
     private String toAddress;
 
     private String toAddressName;
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                ", amount=" + amount +
-                ", createTime=" + createTime +
-                ", confirmTime=" + confirmTime +
-                ", txHash='" + hash + '\'' +
-                ", txType='" + txType + '\'' +
-                '}';
-    }
 }

@@ -1,36 +1,17 @@
 package com.thoughtworks.wallet.common;
 
-import lombok.Data;
+import lombok.NonNull;
+import lombok.Value;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * ResponseBean
- */
-@Data
+@Value
 public class ResponseBean {
-    /**
-     * HTTP状态码
-     */
+
+    @NonNull
     private Integer code;
 
-    /**
-     * 返回信息
-     */
+    @NonNull
     private String msg;
 
-    /**
-     * 返回的数据
-     */
+    @NonNull
     private Object result;
-
-    public ResponseBean(int code, String msg, Object result) {
-        this.code = code;
-        this.msg = msg;
-
-        this.result = result;
-    }
-    public ResponseBean() {
-    }
 }
