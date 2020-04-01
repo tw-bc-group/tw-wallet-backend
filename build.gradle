@@ -16,6 +16,19 @@ configurations {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main"
+        }
+    }
+    test {
+        resources {
+            srcDir "src/test"
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }
