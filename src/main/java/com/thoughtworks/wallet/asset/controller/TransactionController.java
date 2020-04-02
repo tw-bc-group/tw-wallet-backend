@@ -2,15 +2,9 @@ package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.model.Transaction;
 import com.thoughtworks.wallet.asset.service.ITransactionService;
-import com.thoughtworks.wallet.common.ResponseBean;
-import com.thoughtworks.wallet.common.RspCode;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -46,15 +40,8 @@ public class TransactionController {
 
 
     @ApiOperation(value = "根据交易hash查询交易")
-    @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "header", name = "jwt", dataType = "String", required = false, value = "jwt"),
-    })
     @RequestMapping(value = "/{tx_hash}", method = RequestMethod.GET)
-    public ResponseBean getTx(@PathVariable(name = "tx_hash", required = true) String txHash,
-        HttpServletRequest request, HttpServletResponse response) {
-
-        log.info("txHash:{}", txHash);
-        Transaction transaction = transactionService.fetchByTxnHash(txHash);
-        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), transaction);
+    public Transaction getTx(@PathVariable(name = "tx_hash") String txHash) {
+        return transactionService.fetchByTxnHash(txHash);
     }
 }
