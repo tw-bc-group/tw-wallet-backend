@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
-public class GlobalResponseBodyAdvice implements ResponseBodyAdvice {
+public class GlobalResponseAdvice implements ResponseBodyAdvice {
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
@@ -19,6 +19,9 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice {
     public Object beforeBodyWrite(Object body, MethodParameter returnType,
         MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request,
         ServerHttpResponse response) {
-        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), body);
+        if (body instanceof ResponseBean) {
+            return body;
+        }
+        return ResponseBean.okResponse(body);
     }
 }

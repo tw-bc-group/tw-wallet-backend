@@ -14,4 +14,8 @@ public class ResponseBean {
 
     @NonNull
     private Object result;
+
+    public static ResponseBean okResponse(Object body) {
+        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), body);
+    }
 }
