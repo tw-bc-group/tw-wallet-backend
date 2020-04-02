@@ -19,7 +19,6 @@ import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -54,17 +53,22 @@ public class QuorumServiceImpl implements IBlockchainService {
 
         final ERC20 twPoint = ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey), new DefaultGasProvider());
 
-        final CompletableFuture<String> twPointSymbol = twPoint.symbol().sendAsync();
-        final CompletableFuture<String> twPointName = twPoint.name().sendAsync();
-        final CompletableFuture<BigInteger> twPointDecimal = twPoint.decimals().sendAsync();
-        final CompletableFuture<BigInteger> twPointBalance = twPoint.balanceOf(address).sendAsync();
-
-        web3j.shutdown();
+        final String twPointSymbol;
+        final String twPointName;
+        final BigInteger twPointDecimal;
+        final BigInteger twPointBalance;
         try {
-            return TWPointBalanceResponse.of(address, TWPoint.create(twPointName.get(), twPointSymbol.get(), twPointDecimal.get()), new BigDecimal(twPointBalance.get()));
+            twPointSymbol = twPoint.symbol().sendAsync().get();
+            twPointName = twPoint.name().sendAsync().get();
+            twPointDecimal = twPoint.decimals().sendAsync().get();
+            twPointBalance = twPoint.balanceOf(address).sendAsync().get();
         } catch (InterruptedException | ExecutionException e) {
             throw new QuorumConnectionErrorException(rpcUrl);
+        } finally {
+            web3j.shutdown();
         }
+
+        return TWPointBalanceResponse.of(address, TWPoint.create(twPointName, twPointSymbol, twPointDecimal), new BigDecimal(twPointBalance));
     }
 
     public static boolean isValidAddress(String addr) {
