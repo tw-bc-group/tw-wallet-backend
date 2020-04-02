@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "交易信息相关的查询")
 public class TransactionController {
 
-    // TODO(xudongdong): use instance?
     private final ITransactionService transactionService;
 
     @Autowired
