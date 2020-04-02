@@ -5,11 +5,11 @@ import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import com.thoughtworks.wallet.common.ResponseBean;
+import com.thoughtworks.wallet.common.RspCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +44,6 @@ public class TWPointController {
         } catch (QuorumConnectionErrorException e) {
             return new ResponseBean(QUORUM_CONNECTION_ERROR.getStatus().value(), QUORUM_CONNECTION_ERROR.getMessage(), null);
         }
-        return new ResponseBean(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), twPointBalance);
+        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descCN(), twPointBalance);
     }
 }
