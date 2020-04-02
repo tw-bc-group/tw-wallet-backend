@@ -10,8 +10,8 @@
 #### Prerequisites
 * Install `PostgreSQL` at your `local` environment
 ```
-cd docker
-docker-compose up -d  
+docker pull postgres:12.2
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tw-wallet-2020 -e POSTGRES_DB=tw_wallet -d postgres:12.2
 ./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate
 ```
 
@@ -22,6 +22,13 @@ docker run -d --name rabbitmq --publish 5671:5671  --publish 5672:5672 --publish
 ```
 > 可在 `http://localhost:15672/` 页面,通过 `guest` 和 `guest`(用户名/密码) 登陆 rabbitMQ 的终端页面.
 > RabbitMQ 的配置文件位于: `java/com/thoughtworks/wallet/config/SenderConf.java` 
+
+* If you want to deploy the whole service, you have to export the below environment variable before you do `docker-compose up` in `./docker` folder.
+    * DB_USERNAME
+    * DB_PASSWORD
+    * RPC_URL (it's url of quorum network)
+    * TWPOINT_CONTRACT_ADDRESS
+    * NODE1_PRIVATE_KEY
 
 #### QuickStart
 * `./gradlew clean` : clean `build` folder
