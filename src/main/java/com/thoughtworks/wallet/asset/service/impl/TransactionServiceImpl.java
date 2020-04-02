@@ -30,7 +30,7 @@ public class TransactionServiceImpl implements ITransactionService {
         return dslContext.selectFrom(TBL_TRANSACTIONS)
             .where(TBL_TRANSACTIONS.FROM_ADDRESS.eq(addr))
             .orderBy(TBL_TRANSACTIONS.CREATE_TIME.desc())
-            .limit(10)
+            .limit(limit)
             .fetch().into(Transaction.class);
     }
 }
