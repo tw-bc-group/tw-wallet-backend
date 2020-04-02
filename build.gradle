@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jooq:jooq-codegen:3.13.1'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -30,6 +41,7 @@ sourceSets {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -45,10 +57,13 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+
     jooqRuntime group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
-    implementation 'org.jooq:jooq'
+    implementation 'org.jooq:jooq:3.13.1'
+    implementation 'org.jooq:jooq-codegen:3.13.1'
     implementation "org.modelmapper.extensions:modelmapper-jooq:2.3.0"
     implementation "org.modelmapper:modelmapper:2.3.0"
+
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
 
     implementation('org.web3j:core:4.2.0')
