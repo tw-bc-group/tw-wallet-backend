@@ -7,5 +7,5 @@ import java.util.List;
 public interface ITransactionService {
     Transaction fetchByTxnHash(String hash);
 
-    List<Transaction> listByFromAddress(String addr);
+    List<Transaction> listByFromAddress(String addr, int limit);
 }

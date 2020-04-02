@@ -26,9 +26,11 @@ public class TransactionServiceImpl implements ITransactionService {
             .fetchOneInto(Transaction.class);
     }
 
-    public List<Transaction> listByFromAddress(String addr) {
+    public List<Transaction> listByFromAddress(String addr, int limit) {
         return dslContext.selectFrom(TBL_TRANSACTIONS)
             .where(TBL_TRANSACTIONS.FROM_ADDRESS.eq(addr))
+            .orderBy(TBL_TRANSACTIONS.CREATE_TIME.desc())
+            .limit(10)
             .fetch().into(Transaction.class);
     }
 }
