@@ -1,36 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Test') {
+        stage('Clean') {
             steps {
-                sh './gradlew clean test'
+                sh './ci/clean.sh'
             }
         }
 
         stage('Build') {
             steps {
-                sh './gradlew clean build --no-daemon'
+                sh './ci/build.sh'
             }
         }
 
-        stage('Publish') {
+        stage('Dockerize') {
             steps {
-                // TO DO
-                sh 'echo \'publish script\''
-            }
-        }
-
-        stage('API test') {
-            steps {
-                // TO DO
-                sh 'echo \'API test script\''
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // TO DO
-                sh 'echo \'Deploy script\''
+                sh './ci/dockerize.sh'
             }
         }
     }
