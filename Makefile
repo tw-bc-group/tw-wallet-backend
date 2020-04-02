@@ -1,10 +1,12 @@
+.PHONY: build
+
 APP	      := tw-wallet-backend
-APP_IMAGE ?= tw-wallet:latest
+TAG       ?= tw-wallet:latest
 
 CACHE     := $(shell pwd | md5sum | awk '{ print "$(APP)-"$$1 }')
 JDK_IMAGE := openjdk:8u212-jdk-alpine3.9
 OPTS       = --rm
-OPTS	    +=  -u $(shell id -u) 
+# OPTS	    +=  -u $(shell id -u) 
 OPTS      +=  -v $(CACHE):/home/gradle/.gradle
 OPTS      +=  -v $(shell pwd):/home/gradle/project
 OPTS      +=  -w /home/gradle/project
@@ -28,5 +30,6 @@ build:
 	$(gradle) clean build -x test -x generateWalletJooqSchemaSource
 	@echo build done
 
-dockerize:
-	docker build -t ${APP_IMAGE} .
+image:
+	@echo build $(TAG)
+	docker build -t $(TAG) .

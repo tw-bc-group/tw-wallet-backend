@@ -15,9 +15,10 @@ pipeline {
         }
         steps {
             sh 'aws ecr get-login-password | docker login  -u AWS --password-stdin $DOCKER_REG'
-            sh 'make dockerize image=$IMAGE'
+            sh 'make image tag=$IMAGE'
             sh 'docker push $IMAGE'
         }
     }
   }
 }
+
