@@ -4,8 +4,60 @@ services:
   postgres:
     image: postgres:12.2
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=tw-wallet-2020
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=tw_wallet
     ports:
       - "5432:5432"
+    networks:
+      - backend
+
+  rabbitMQ:
+    image: rabbitmq:management
+    ports:
+      - "5671:5671"
+      - "5672:5672"
+      - "4369:4369"
+      - "25672:25672"
+      - "15671:15671"
+      - "15672:15672"
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: ..
+      dockerfile: ../Dockerfile
+    image: tw-wallet:latest
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      PROJECT_ENV: dev
+      DB_URL: postgres
+      DB_PORT: 5432
+      DB_NAME: tw_wallet
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      RPC_URL: ${RPC_URL}
+      TWPOINT_CONTRACT_ADDRESS: ${TWPOINT_CONTRACT_ADDRESS}
+      NODE1_PRIVATE_KEY: ${NODE1_PRIVATE_KEY}
+      swagger.enable: 'true'
+      server.port: 8080
+      RABBIT_MQ_URL: rabbitMQ
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: guest
+      RABBIT_MQ_PASSWORD: guest
+    depends_on:
+      - postgres
+      - rabbitMQ
+    ports:
+      - "80:8080"
+    links:
+      - postgres
+      - rabbitMQ
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
