@@ -1,10 +1,14 @@
 package com.thoughtworks.wallet.common;
 
+import com.thoughtworks.wallet.common.exception.AppException;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
@@ -23,5 +27,14 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice {
             return body;
         }
         return ResponseBean.okResponse(body);
+    }
+
+    @ExceptionHandler(AppException.class)
+    @ResponseBody
+    public ResponseBean applicationException(AppException appException,
+        HttpServletResponse resp) {
+        resp.setStatus(appException.getCode().getStatus().value());
+        return new ResponseBean(appException.getCode().getErrCode(), appException.getMessage(),
+            appException.getData());
     }
 }
