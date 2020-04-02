@@ -1,22 +1,23 @@
 pipeline {
-    agent any
-    stages {
-        stage('Clean') {
+  agent any
+  stages {
+    stage('Build') {
             steps {
-                sh './ci/clean.sh'
+                sh 'make cache'
+                sh 'make build'
             }
         }
 
-        stage('Build') {
-            steps {
-                sh './ci/build.sh'
-            }
+    stage('Dockerize') {
+        environment {
+          DOCKER_REG = "${DOCKER_REG}"
+          IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
         }
-
-        stage('Dockerize') {
-            steps {
-                sh './ci/dockerize.sh'
-            }
+        steps {
+            sh 'aws ecr get-login-password | docker login  -u AWS --password-stdin $DOCKER_REG'
+            sh 'make dockerize image=$IMAGE'
+            sh 'docker push $IMAGE'
         }
     }
+  }
 }

@@ -28,7 +28,7 @@ services:
     build:
       context: ..
       dockerfile: ../Dockerfile
-    image: tw-wallet:latest
+    image: ${TW_WALLET_IMAGE:-tw-wallet}
     volumes:
       - ./logs:/app/logs
     environment:
