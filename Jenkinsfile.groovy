@@ -12,8 +12,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'make cache'
-        sh 'make build'
+        // sh 'make cache'
+        // sh 'make build'
+        // TODO: Remove this workaround
+        sh './gradlew --no-daemon  clean build -x test -x generateWalletJooqSchemaSource'
       }
     }
 
