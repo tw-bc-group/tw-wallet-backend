@@ -25,10 +25,8 @@ services:
       - backend
 
   backend:
-    build:
-      context: ..
-      dockerfile: ../Dockerfile
     image: ${TW_WALLET_IMAGE}
+    user: root
     volumes:
       - ./logs:/app/logs
     environment:
