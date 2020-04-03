@@ -11,7 +11,7 @@ OPTS      +=  -v $(shell pwd):/mnt
 OPTS      +=  -w /mnt
 
 FLAG      ?= --info
-gradle    := docker run ${OPTS} ${JDK_IMAGE} ./gradlew --no-daemon $(flag)
+gradle    := docker run ${OPTS} ${JDK_IMAGE} ./gradlew --no-daemon $(FLAG)
 
 cache:
 	@echo $(OPTS)
