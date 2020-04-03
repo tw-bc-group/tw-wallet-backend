@@ -27,7 +27,7 @@ services:
   backend:
     build:
       context: ..
-      dockerfile: ../Dockerfile
+      dockerfile: Dockerfile
     image: tw-wallet:latest
     volumes:
       - ./logs:/app/logs
