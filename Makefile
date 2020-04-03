@@ -6,10 +6,9 @@ TAG       ?= tw-wallet:latest
 CACHE     := $(shell pwd | md5sum | awk '{ print "$(APP)-"$$1 }')
 JDK_IMAGE := openjdk:8u212-jdk-alpine3.9
 OPTS       = --rm
-# OPTS	    +=  -u $(shell id -u) 
-OPTS      +=  -v $(CACHE):/home/gradle/.gradle
-OPTS      +=  -v $(shell pwd):/home/gradle/project
-OPTS      +=  -w /home/gradle/project
+OPTS	    +=  -u $(shell id -u) 
+OPTS      +=  -v $(shell pwd):/mnt
+OPTS      +=  -w /mnt
 
 FLAG      ?= --info
 gradle    := docker run ${OPTS} ${JDK_IMAGE} ./gradlew --no-daemon $(flag)
