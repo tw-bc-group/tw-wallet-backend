@@ -48,6 +48,8 @@ public class QuorumServiceImpl implements IBlockchainService {
             web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
             log.info("Connected to Quorum client with version: " + web3ClientVersion.getWeb3ClientVersion());
         } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
@@ -63,6 +65,8 @@ public class QuorumServiceImpl implements IBlockchainService {
             twPointDecimal = twPoint.decimals().sendAsync().get();
             twPointBalance = twPoint.balanceOf(address).sendAsync().get();
         } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
             throw new QuorumConnectionErrorException(rpcUrl);
         } finally {
             web3j.shutdown();
