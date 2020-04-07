@@ -3,7 +3,7 @@ pipeline {
   environment {
     DB_USERNAME     = credentials('DB_USERNAME')
     DB_PASSWORD = credentials('DB_PASSWORD')
-    NODE1_PRIVATE_KEY = credentials('NODE1_PRIVATE_KEY')
+    NODE1_PRIVATE_KEY = "${NODE1_PRIVATE_KEY}"
     TWPOINT_CONTRACT_ADDRESS = "${TWPOINT_CONTRACT_ADDRESS}"
     RPC_URL = "${RPC_URL}"
     DOCKER_REG = "${DOCKER_REG}"
