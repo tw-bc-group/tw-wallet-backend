@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TWWalletApplication {
 
     public static void main(String[] args) {
-        System.out.println("!!! For test !!!");
         SpringApplication.run(TWWalletApplication.class, args);
     }
 
