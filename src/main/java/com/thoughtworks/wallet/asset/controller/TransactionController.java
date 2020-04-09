@@ -1,6 +1,8 @@
 package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.model.Transaction;
+import com.thoughtworks.wallet.asset.response.TransactionResponse;
+import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import com.thoughtworks.wallet.asset.service.ITransactionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,17 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionController {
 
     private final ITransactionService transactionService;
+    private final IBlockchainService blockchainService;
 
     @Autowired
-    public TransactionController(ITransactionService transactionService) {
+    public TransactionController(ITransactionService transactionService,
+        IBlockchainService blockchainService) {
         this.transactionService = transactionService;
+        this.blockchainService = blockchainService;
     }
 
     @ApiOperation(value = "查询交易历史")
     @GetMapping
-    public List<Transaction> getTxHistory(@RequestParam(name = "from_addr") String fromAddr,
+    public List<TransactionResponse> getTxHistory(@RequestParam(name = "from_addr") String fromAddr,
         @RequestParam(name = "limit", defaultValue = "10") int limit) {
-        return transactionService.listByFromAddress(fromAddr, limit);
+        return blockchainService.getTransactionsBy(fromAddr, limit);
     }
 
 
