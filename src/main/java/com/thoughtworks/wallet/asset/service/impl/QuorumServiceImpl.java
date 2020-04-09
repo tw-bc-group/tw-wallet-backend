@@ -33,7 +33,6 @@ import org.web3j.tx.gas.DefaultGasProvider;
 public class QuorumServiceImpl implements IBlockchainService {
 
     private final Web3j web3j;
-    private final ERC20 twPoint;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @QuorumRPCUrl
@@ -48,7 +47,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     @Autowired
     public QuorumServiceImpl(Web3j web3j) {
         this.web3j = web3j;
-        this.twPoint = getErc20(web3j);
+//        this.twPoint = getErc20(web3j);
     }
 
     public static boolean isValidAddress(String addr) {
@@ -71,6 +70,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         final String twPointName;
         final BigInteger twPointDecimal;
         final BigInteger twPointBalance;
+        final ERC20 twPoint = getErc20(web3j);
         try {
             twPointSymbol = twPoint.symbol().sendAsync().get();
             twPointName = twPoint.name().sendAsync().get();
