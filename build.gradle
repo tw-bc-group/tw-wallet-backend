@@ -62,7 +62,7 @@ dependencies {
     implementation 'org.jooq:jooq:3.13.1'
     implementation 'org.jooq:jooq-codegen:3.13.1'
     implementation "org.modelmapper.extensions:modelmapper-jooq:2.3.0"
-    implementation "org.modelmapper:modelmapper:2.3.0"
+    implementation "org.modelmapper:modelmapper:2.3.7"
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
 
