@@ -21,18 +21,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
-import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.Transaction;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.tx.gas.DefaultGasProvider;
 
 @Slf4j
 @Service
 public class QuorumServiceImpl implements IBlockchainService {
 
     private final Web3j web3j;
+    private final ERC20 twPoint;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @QuorumRPCUrl
@@ -45,9 +43,9 @@ public class QuorumServiceImpl implements IBlockchainService {
     private String TWPointContractAddress;
 
     @Autowired
-    public QuorumServiceImpl(Web3j web3j) {
+    public QuorumServiceImpl(Web3j web3j, ERC20 erc20) {
         this.web3j = web3j;
-//        this.twPoint = getErc20(web3j);
+        this.twPoint = erc20;
     }
 
     public static boolean isValidAddress(String addr) {
@@ -70,7 +68,6 @@ public class QuorumServiceImpl implements IBlockchainService {
         final String twPointName;
         final BigInteger twPointDecimal;
         final BigInteger twPointBalance;
-        final ERC20 twPoint = getErc20(web3j);
         try {
             twPointSymbol = twPoint.symbol().sendAsync().get();
             twPointName = twPoint.name().sendAsync().get();
@@ -99,6 +96,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         BigInteger ethBlockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
 
         for (int i = 0; i < blockLimit; i++) {
+            log.debug("fetching block number: {}", ethBlockNumber);
             if (countBlockTransactions(ethBlockNumber).compareTo(BigInteger.ZERO) > 0) {
                 final List<Transaction> transactions = fetchBlockTransactions(address,
                     ethBlockNumber);
@@ -140,22 +138,6 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     private boolean filterTransactions(Transaction tx, String address) {
         return address.equals(tx.getFrom()) || address.equals(tx.getTo());
-    }
-
-    private ERC20 getErc20(Web3j web3j) {
-        Web3ClientVersion web3ClientVersion;
-        try {
-            web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-            log.info("Connected to Quorum client with version: " + web3ClientVersion
-                .getWeb3ClientVersion());
-        } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-            web3j.shutdown();
-            throw new QuorumConnectionErrorException(rpcUrl);
-        }
-
-        return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
-            new DefaultGasProvider());
     }
 
 }
