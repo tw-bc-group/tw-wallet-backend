@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/v1/identities")
 @Api(tags = "身份相关操作")
 public class IdentityController {
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET})
+    @PostMapping
     @ApiOperation(value = "注册身份")
     public void identityRegistry(@Valid @RequestBody IdentityRegistryRequest request) {
         // TODO call blockchain identity registry smart contract
