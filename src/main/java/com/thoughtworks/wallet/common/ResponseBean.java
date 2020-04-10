@@ -3,6 +3,8 @@ package com.thoughtworks.wallet.common;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.Objects;
+
 @Value
 public class ResponseBean {
 
@@ -17,5 +19,9 @@ public class ResponseBean {
 
     public static ResponseBean okResponse(Object body) {
         return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), body);
+    }
+
+    public static ResponseBean createdResponse(Object body) {
+        return new ResponseBean(RspCode.SUCCESS.code(), RspCode.SUCCESS.descEN(), Objects.isNull(body) ? RspCode.SUCCESS.descEN() : body);
     }
 }
