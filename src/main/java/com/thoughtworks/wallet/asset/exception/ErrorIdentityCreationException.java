@@ -5,7 +5,7 @@ import com.thoughtworks.wallet.common.exception.AppException;
 import com.thoughtworks.wallet.common.exception.ErrorCode;
 
 public class ErrorIdentityCreationException extends AppException {
-    public ErrorIdentityCreationException(String signedTransactionData) {
-        super(ErrorCode.IDENTITY_CREATE_ERROR, ImmutableMap.of("signedTransactionData", signedTransactionData));
+    public ErrorIdentityCreationException(String errorMessage) {
+        super(ErrorCode.IDENTITY_CREATE_ERROR, ImmutableMap.of("error", errorMessage));
     }
 }

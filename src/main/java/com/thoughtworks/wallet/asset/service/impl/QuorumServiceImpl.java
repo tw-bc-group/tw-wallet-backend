@@ -116,11 +116,14 @@ public class QuorumServiceImpl implements IBlockchainService {
         try {
             log.info("Signed transaction data is :" + signedTransactionData);
             transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
+            if(transactionResponse.hasError()){
+                throw new ErrorIdentityCreationException(transactionResponse.getError().getMessage());
+            }
             String transactionHash = transactionResponse.getTransactionHash();
-            System.out.println(transactionHash);
+            log.info("Transaction hash: " + transactionHash);
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new ErrorIdentityCreationException(signedTransactionData);
+            throw new ErrorIdentityCreationException(e.getMessage());
         }
     }
 
