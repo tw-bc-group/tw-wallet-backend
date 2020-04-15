@@ -1,20 +1,13 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
-import com.thoughtworks.wallet.asset.annotation.Node1PrivateKey;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
-import com.thoughtworks.wallet.asset.annotation.TWPointContractAddress;
+import com.thoughtworks.wallet.asset.exception.ErrorIdentityCreationException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.model.TWPoint;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,7 +16,15 @@ import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.core.methods.request.Transaction;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,12 +36,6 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     @QuorumRPCUrl
     private String rpcUrl;
-
-    @Node1PrivateKey
-    private String privateKey;
-
-    @TWPointContractAddress
-    private String TWPointContractAddress;
 
     @Autowired
     public QuorumServiceImpl(Web3j web3j, ERC20 erc20) {
@@ -113,6 +108,20 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         return responses;
+    }
+
+    @Override
+    public void createIdentity(String signedTransactionData) {
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
+        try {
+            log.info("Signed transaction data is :" + signedTransactionData);
+            transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
+            String transactionHash = transactionResponse.getTransactionHash();
+            System.out.println(transactionHash);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new ErrorIdentityCreationException(signedTransactionData);
+        }
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)

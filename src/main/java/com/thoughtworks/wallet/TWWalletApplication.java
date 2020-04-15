@@ -4,7 +4,6 @@ import com.thoughtworks.wallet.asset.annotation.Node1PrivateKey;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.annotation.TWPointContractAddress;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
-import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +17,8 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
 import org.web3j.tx.gas.DefaultGasProvider;
+
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @SpringBootApplication
@@ -69,5 +70,4 @@ public class TWWalletApplication {
         return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
             new DefaultGasProvider());
     }
-
 }
