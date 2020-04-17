@@ -14,9 +14,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
+import org.web3j.crypto.ECDSASignature;
+import org.web3j.crypto.Keys;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.SignedRawTransaction;
+import org.web3j.crypto.TransactionDecoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.utils.Numeric;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -111,20 +118,56 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
-    public void createIdentity(String signedTransactionData) {
+    public void createIdentity(String signedTransactionData, String address, String messageHash) {
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
+
+        RawTransaction tx = TransactionDecoder.decode(signedTransactionData);
+
+        if (!(tx instanceof SignedRawTransaction)) {
+            throw new ErrorIdentityCreationException("Wrong raw transaction data");
+        }
+
+        final Sign.SignatureData signatureData = ((SignedRawTransaction) tx).getSignatureData();
+
+        if (!verifySignature(address, messageHash, signatureData)) {
+            throw new ErrorIdentityCreationException("Can not verify your signed transaction.");
+        }
+
         try {
-            log.info("Signed transaction data is :" + signedTransactionData);
             transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
-            if(transactionResponse.hasError()){
+            if (transactionResponse.hasError()) {
                 throw new ErrorIdentityCreationException(transactionResponse.getError().getMessage());
             }
-            String transactionHash = transactionResponse.getTransactionHash();
-            log.info("Transaction hash: " + transactionHash);
         } catch (IOException e) {
-            log.error(e.getMessage());
             throw new ErrorIdentityCreationException(e.getMessage());
         }
+
+        String transactionHash = transactionResponse.getTransactionHash();
+        log.info("Transaction hash: " + transactionHash);
+    }
+
+
+    public boolean verifySignature(String address, String messageHash, Sign.SignatureData signatureData) {
+        byte[] messageHashBytes = Numeric.hexStringToByteArray(messageHash);
+        boolean match = false;
+
+        // Iterate for each possible key to recover
+        for (int i = 0; i < 4; i++) {
+            BigInteger publicKey = Sign.recoverFromSignature(
+                (byte) i,
+                new ECDSASignature(new BigInteger(1, signatureData.getR()), new BigInteger(1, signatureData.getS())), messageHashBytes);
+
+            if (publicKey != null) {
+                String addressRecovered = "0x" + Keys.getAddress(publicKey);
+
+                if (addressRecovered.equalsIgnoreCase(address)) {
+                    match = true;
+                    System.out.println("index = " + i);
+                    break;
+                }
+            }
+        }
+        return match;
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)

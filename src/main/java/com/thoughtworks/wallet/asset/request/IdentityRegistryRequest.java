@@ -9,10 +9,35 @@ import javax.validation.constraints.NotBlank;
 @Value
 public class IdentityRegistryRequest {
     @NotBlank(message = "Signed Transaction should not be blank.")
-    String signedTransactionData;
+    String signedTransactionRawData;
+
+    @NotBlank(message = "Message Hash can not be blank.")
+    String messageHash;
+
+    @NotBlank(message = "Address can not be blank")
+    String address;
+
+    @NotBlank(message = "DID can not be blank")
+    String did;
+
+    @NotBlank(message = "Public key can not be blank")
+    String publicKey;
+
+    @NotBlank(message = "Name can not be blank")
+    String name;
 
     @JsonCreator
-    public IdentityRegistryRequest(@JsonProperty("signedTransactionData") String signedTransactionData) {
-        this.signedTransactionData = signedTransactionData;
+    public IdentityRegistryRequest(@JsonProperty("signedTransactionRawData") String signedTransactionRawData,
+                                   @JsonProperty("messageHash") String messageHash,
+                                   @JsonProperty("address") String address,
+                                   @JsonProperty("did") String did,
+                                   @JsonProperty("publicKey") String publicKey,
+                                   @JsonProperty("name") String name) {
+        this.signedTransactionRawData = signedTransactionRawData;
+        this.messageHash = messageHash;
+        this.address = address;
+        this.did = did;
+        this.publicKey = publicKey;
+        this.name = name;
     }
 }

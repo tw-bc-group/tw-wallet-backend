@@ -14,5 +14,5 @@ public interface IBlockchainService {
 
     List<TransactionResponse> getTransactionsBy(String address, int limit);
 
-    void createIdentity(String signedTransactionData);
+    void createIdentity(String signedTransactionData, String address, String messageHash);
 }
