@@ -8,6 +8,7 @@ import com.thoughtworks.wallet.asset.model.TWPoint;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
+import com.thoughtworks.wallet.util.Identity;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.ECDSASignature;
-import org.web3j.crypto.Keys;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignedRawTransaction;
@@ -23,7 +23,6 @@ import org.web3j.crypto.TransactionDecoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.utils.Numeric;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -31,7 +30,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static org.web3j.utils.Numeric.hexStringToByteArray;
 
 @Slf4j
 @Service
@@ -50,19 +51,12 @@ public class QuorumServiceImpl implements IBlockchainService {
         this.twPoint = erc20;
     }
 
-    public static boolean isValidAddress(String addr) {
-        String regex = "^0x[0-9a-fA-F]{40}$";
-
-        return addr.matches(regex);
-    }
-
     @Override
     public TWPointBalanceResponse getTWPointBalanceBy(String address)
         throws InvalidAddressErrorException, QuorumConnectionErrorException {
-        log.info("Thd address of this request is " + address);
+        log.info("The address of this request is " + address);
 
-        boolean isAddress = isValidAddress(address);
-        if (!isAddress) {
+        if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);
         }
 
@@ -81,8 +75,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         return TWPointBalanceResponse
-            .of(address, TWPoint.create(twPointName, twPointSymbol, twPointDecimal),
-                new BigDecimal(twPointBalance));
+            .of(address, TWPoint.create(twPointName, twPointSymbol, twPointDecimal), new BigDecimal(twPointBalance));
     }
 
     @SneakyThrows
@@ -91,7 +84,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         int blockLimit = 1000;
         List<TransactionResponse> responses = new ArrayList<>();
 
-        if (!isValidAddress(address)) {
+        if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);
         }
 
@@ -119,8 +112,26 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     @Override
     public void createIdentity(String signedTransactionData, String address, String messageHash) {
-        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
 
+        if (!Identity.verifySignature(extractEcdsaSignature(signedTransactionData), address, hexStringToByteArray(messageHash))) {
+            throw new ErrorIdentityCreationException("Can not verify your signed transaction.");
+        }
+
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
+        try {
+            transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
+            if (transactionResponse.hasError()) {
+                throw new ErrorIdentityCreationException(transactionResponse.getError().getMessage());
+            }
+        } catch (IOException e) {
+            log.error("Cannot send transaction", e);
+            throw new ErrorIdentityCreationException(e.getMessage());
+        }
+
+        log.info("Transaction hash: {}", transactionResponse.getTransactionHash());
+    }
+
+    private ECDSASignature extractEcdsaSignature(String signedTransactionData) {
         RawTransaction tx = TransactionDecoder.decode(signedTransactionData);
 
         if (!(tx instanceof SignedRawTransaction)) {
@@ -128,46 +139,9 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         final Sign.SignatureData signatureData = ((SignedRawTransaction) tx).getSignatureData();
-
-        if (!verifySignature(address, messageHash, signatureData)) {
-            throw new ErrorIdentityCreationException("Can not verify your signed transaction.");
-        }
-
-        try {
-            transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
-            if (transactionResponse.hasError()) {
-                throw new ErrorIdentityCreationException(transactionResponse.getError().getMessage());
-            }
-        } catch (IOException e) {
-            throw new ErrorIdentityCreationException(e.getMessage());
-        }
-
-        String transactionHash = transactionResponse.getTransactionHash();
-        log.info("Transaction hash: " + transactionHash);
-    }
-
-
-    public boolean verifySignature(String address, String messageHash, Sign.SignatureData signatureData) {
-        byte[] messageHashBytes = Numeric.hexStringToByteArray(messageHash);
-        boolean match = false;
-
-        // Iterate for each possible key to recover
-        for (int i = 0; i < 4; i++) {
-            BigInteger publicKey = Sign.recoverFromSignature(
-                (byte) i,
-                new ECDSASignature(new BigInteger(1, signatureData.getR()), new BigInteger(1, signatureData.getS())), messageHashBytes);
-
-            if (publicKey != null) {
-                String addressRecovered = "0x" + Keys.getAddress(publicKey);
-
-                if (addressRecovered.equalsIgnoreCase(address)) {
-                    match = true;
-                    System.out.println("index = " + i);
-                    break;
-                }
-            }
-        }
-        return match;
+        return new ECDSASignature(
+            new BigInteger(1, signatureData.getR()),
+            new BigInteger(1, signatureData.getS()));
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)
@@ -186,13 +160,11 @@ public class QuorumServiceImpl implements IBlockchainService {
             .getTransactions()
             .stream()
             .map(transactionResult -> (Transaction) transactionResult.get())
-            .filter(tx -> filterTransactions(tx, address))
-            .collect(Collectors.toList());
+            .filter(tx -> relatedTo(tx, address))
+            .collect(toList());
     }
 
-
-    private boolean filterTransactions(Transaction tx, String address) {
+    private boolean relatedTo(Transaction tx, String address) {
         return address.equals(tx.getFrom()) || address.equals(tx.getTo());
     }
-
 }
