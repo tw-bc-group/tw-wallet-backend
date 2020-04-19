@@ -3,11 +3,32 @@
 
 #### RunTime
 * Java 1.8
-* PostgreSQL
+* PostgreSQL/H2
 * RabbitMQ
-* Gradle
+* Gradle 5.2.1
 
-#### Prerequisites
+#### QuickStart
+* `./gradlew clean` : clean `build` folder
+* `./gradlew build -x integTest` : build application
+* `./gradlew test` : run unit test
+* `./gradlew integTest` : run integration test
+* `./gradlew bootRun` : run application
+* `./gradlew flywayMigrate`: create table
+* `./gradlew flywayClean`: delete table
+* `./gradlew generateWalletJooqSchemaSource`:  generate jooq
+
+#### Use different environments in application config files
+The **default environment** is `test`.
+
+flyway usage:
+* `./gradlew -Penv=test flywayMigrate` or `./gradlew flywayMigrate`: create table in h2 database in your home dir is likes `~/tw_wallet.*`
+* `./gradlew -Penv=local flywayMigrate`: create table in postgre: create table in postgres
+
+jooq usage:
+* `./gradlew generateWalletJooqSchemaSource`: generate jooq source code for h2 database in `build/genrated-sources/jooq/com/thoughtworks/wallet/gen`
+* `./gradlew -Penv=local generateWalletJooqSchemaSource`: generate jooq source code for postgres in `build/genrated-sources/jooq/com/thoughtworks/wallet/gen`, `env` can be local,dev,uat, etc.
+
+#### Run code with PostgreSQL
 * Install `PostgreSQL` at your `local` environment
 ```
 docker pull postgres:12.2
@@ -29,14 +50,6 @@ docker run -d --name rabbitmq --publish 5671:5671  --publish 5672:5672 --publish
     * RPC_URL (it's url of quorum network)
     * TWPOINT_CONTRACT_ADDRESS
     * NODE1_PRIVATE_KEY
-
-#### QuickStart
-* `./gradlew clean` : clean `build` folder
-* `./gradlew build` : build application
-* `./gradlew bootRun` : run application
-* `./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate`: create table
-* `./gradlew -Dflyway.configFiles=flyway.conf flywayClean`: delete table
-* `./gradlew generateWalletJooqSchemaSource`:  generate jooq 
 
 #### Conduct of commit
 > format: type: content
