@@ -6,6 +6,7 @@ buildscript {
 
     dependencies {
         classpath 'org.jooq:jooq-codegen:3.13.1'
+        classpath 'com.h2database:h2:1.4.200'
     }
 }
 
@@ -21,22 +22,11 @@ group = 'com.thoughtworks'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+apply from: 'gradle/enviroments.gradle'
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
-    }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir "src/main"
-        }
-    }
-    test {
-        resources {
-            srcDir "src/test"
-        }
     }
 }
 
@@ -58,6 +48,7 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
 
     jooqRuntime group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    jooqRuntime group: 'com.h2database', name: 'h2', version: '1.4.200'
     implementation 'org.jooq:jooq:3.13.1'
     implementation 'org.jooq:jooq-codegen:3.13.1'
     implementation "org.modelmapper.extensions:modelmapper-jooq:2.3.0"
@@ -71,6 +62,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -83,16 +75,23 @@ test {
     useJUnitPlatform()
 }
 
+task migrateH2(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    url = "${environment.spring.datasource.url}"
+    user = "${environment.spring.datasource.username}"
+    password = "${environment.spring.datasource.password}"
+    locations = ['filesystem:src/main/resources/h2/migration']
+}
+
 jooq {
     version = '3.13.1'
     edition = 'OSS'
     generateSchemaSourceOnCompilation = true
     wallet(sourceSets.main) {
         jdbc {
-            driver = 'org.postgresql.Driver'
-            url = 'jdbc:postgresql://localhost:5432/tw_wallet'
-            user = 'postgres'
-            password = 'tw-wallet-2020'
+            driver = "${environment.spring.datasource.'driver-class-name'}"
+            url = "${environment.spring.datasource.url}"
+            user = "${environment.spring.datasource.username}"
+            password = "${environment.spring.datasource.password}"
         }
         generator {
             name = 'org.jooq.codegen.DefaultGenerator'
@@ -100,8 +99,8 @@ jooq {
                 name = 'org.jooq.codegen.DefaultGeneratorStrategy'
             }
             database {
-                name = 'org.jooq.meta.postgres.PostgresDatabase'
-                inputSchema = 'PUBLIC' // why captain? see https://stackoverflow.com/questions/51414954/new-jooq-gradle-configuration-not-generating-any-jooq-classes
+                name = "${environment.spring.jooq.database.name}"
+                inputSchema = 'PUBLIC'
             }
             generate {
                 relations = true
@@ -115,7 +114,7 @@ jooq {
             }
             target {
                 packageName = 'com.thoughtworks.wallet.gen'
-                directory = 'genrated-sources/jooq'
+                directory = 'build/genrated-sources/jooq'
             }
         }
     }

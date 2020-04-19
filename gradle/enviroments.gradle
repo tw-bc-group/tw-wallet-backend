@@ -1,0 +1,19 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.yaml:snakeyaml:1.17"
+    }
+}
+
+def environment = hasProperty('env') ? env : 'test'
+println "Current Environment: " + environment
+
+InputStream input = new FileInputStream(new File("$projectDir/src/main/resources/application-${environment}.yml"));
+Yaml yaml = new Yaml()
+project.ext.environment = yaml.load(input)

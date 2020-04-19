@@ -3,3 +3,13 @@ server:
 
 swagger:
   enable: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tw_wallet
+    username: postgres
+    password: tw-wallet-2020
+    driver-class-name: org.postgresql.Driver
+  jooq:
+    database:
+      name: org.jooq.meta.postgres.PostgresDatabase

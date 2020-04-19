@@ -3,13 +3,13 @@ swagger:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tw_wallet
-    username: postgres
-    password: tw-wallet-2020
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:~/tw_wallet
+    username: sa
+    password: ''
+    driver-class-name: org.h2.Driver
   jooq:
     database:
-      name: org.jooq.meta.postgres.PostgresDatabase
+      name: org.jooq.meta.h2.H2Database
 
   rabbitmq:
     host: localhost
@@ -27,7 +27,7 @@ spring:
 
 quorum:
   rpc:
-    url: 'http://localhost:22001'
+    url: 'http://quorum.tw-wallet.in2e.com:22001'
   tw-point:
     contract-address: '0x9d13C6D3aFE1721BEef56B55D303B09E021E27ab'
   identity-registry:
