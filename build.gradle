@@ -115,7 +115,7 @@ jooq {
             }
             target {
                 packageName = 'com.thoughtworks.wallet.gen'
-                directory = 'build/genrated-sources/jooq'
+                directory = "$buildDir/genrated-sources/jooq"
             }
         }
     }
