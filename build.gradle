@@ -101,7 +101,7 @@ jooq {
             }
             database {
                 name = 'org.jooq.meta.postgres.PostgresDatabase'
-                inputSchema = 'public'
+                inputSchema = 'PUBLIC' // why captain? see https://stackoverflow.com/questions/51414954/new-jooq-gradle-configuration-not-generating-any-jooq-classes
             }
             generate {
                 relations = true
@@ -115,7 +115,7 @@ jooq {
             }
             target {
                 packageName = 'com.thoughtworks.wallet.gen'
-                directory = 'src/main/java'
+                directory = 'genrated-sources/jooq'
             }
         }
     }
