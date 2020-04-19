@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.unmodifiableMap;
-import static org.hibernate.internal.util.collections.CollectionHelper.isEmpty;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 public abstract class AppException extends RuntimeException {
     private final ErrorCode code;
