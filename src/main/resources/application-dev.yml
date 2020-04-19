@@ -13,3 +13,7 @@ spring:
   jooq:
     database:
       name: org.jooq.meta.postgres.PostgresDatabase
+
+  flyway:
+    enabled: false
+    locations: filesystem:src/main/resources/migration,classpath:migration

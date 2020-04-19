@@ -76,11 +76,11 @@ test {
     useJUnitPlatform()
 }
 
-task migrateH2(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+flyway {
     url = "${environment.spring.datasource.url}"
     user = "${environment.spring.datasource.username}"
     password = "${environment.spring.datasource.password}"
-    locations = ['filesystem:src/main/resources/h2/migration']
+    locations = "${environment.spring.flyway.locations}".split(',')
 }
 
 jooq {

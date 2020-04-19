@@ -24,6 +24,7 @@ spring:
 
   flyway:
     enabled: false
+    locations: filesystem:src/main/resources/h2/migration
 
 quorum:
   rpc:
