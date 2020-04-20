@@ -71,11 +71,4 @@ public class TWWalletApplication {
         return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
             new DefaultGasProvider());
     }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
-        c.setIgnoreUnresolvablePlaceholders(true);
-        return c;
-    }
 }
