@@ -46,7 +46,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     @QuorumRPCUrl
     private String rpcUrl;
 
-    @Value("${quorum.identity-registry.contract-address}")
+    @IdentityRegistryContractAddress
     private String identityRegistryContractAddress;
 
     @Autowired
