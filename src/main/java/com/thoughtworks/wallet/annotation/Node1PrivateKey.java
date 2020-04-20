@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.asset.annotation;
+package com.thoughtworks.wallet.annotation;
 
 import org.springframework.beans.factory.annotation.Value;
 

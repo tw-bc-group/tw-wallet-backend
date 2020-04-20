@@ -33,7 +33,7 @@ jooq usage:
 ```
 docker pull postgres:12.2
 docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tw-wallet-2020 -e POSTGRES_DB=tw_wallet -d postgres:12.2
-./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate
+./gradlew flywayMigrate
 ```
 
 * Install `RabbitMQ` at your `local` environment

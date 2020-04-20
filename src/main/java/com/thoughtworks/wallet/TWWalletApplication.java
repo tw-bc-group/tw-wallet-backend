@@ -1,12 +1,16 @@
 package com.thoughtworks.wallet;
 
-import com.thoughtworks.wallet.asset.annotation.Node1PrivateKey;
-import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
-import com.thoughtworks.wallet.asset.annotation.TWPointContractAddress;
+import com.thoughtworks.wallet.annotation.Node1PrivateKey;
+import com.thoughtworks.wallet.annotation.QuorumRPCUrl;
+import com.thoughtworks.wallet.annotation.TWPointContractAddress;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
+import com.thoughtworks.wallet.scheduler.ISyncJob;
+import com.thoughtworks.wallet.scheduler.SyncJob;
 import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.web3j.contracts.eip20.generated.ERC20;
@@ -19,6 +23,11 @@ import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -61,7 +70,7 @@ public class TWWalletApplication {
         try {
             Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
             log.info("Connected to Quorum client with version: " + web3ClientVersion
-                .getWeb3ClientVersion());
+                    .getWeb3ClientVersion());
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             web3j.shutdown();
@@ -69,6 +78,6 @@ public class TWWalletApplication {
         }
 
         return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
-            new DefaultGasProvider());
+                new DefaultGasProvider());
     }
 }

@@ -1,11 +1,11 @@
-package com.thoughtworks.wallet.asset.annotation;
+package com.thoughtworks.wallet.annotation;
 
 import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Value("${quorum.rpc.url}")
+@Value("${quorum.tw-point.contract-address}")
 @Retention(RetentionPolicy.RUNTIME)
-public @interface QuorumRPCUrl {
+public @interface TWPointContractAddress {
 }
