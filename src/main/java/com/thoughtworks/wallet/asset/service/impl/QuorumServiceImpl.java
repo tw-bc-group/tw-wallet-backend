@@ -40,14 +40,16 @@ public class QuorumServiceImpl implements IBlockchainService {
     private final Web3j web3j;
     private final ERC20 twPoint;
     private final ModelMapper modelMapper = new ModelMapper();
+    private final JacksonUtil jacksonUtil;
 
     @QuorumRPCUrl
     private String rpcUrl;
 
     @Autowired
-    public QuorumServiceImpl(Web3j web3j, ERC20 erc20) {
+    public QuorumServiceImpl(Web3j web3j, ERC20 erc20, JacksonUtil jacksonUtil) {
         this.web3j = web3j;
         this.twPoint = erc20;
+        this.jacksonUtil = jacksonUtil;
     }
 
     @Override
@@ -91,10 +93,10 @@ public class QuorumServiceImpl implements IBlockchainService {
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        final String TWPointContractPath = this.getClass().getResource("/contracts/TWPointERC20.json").getFile();
+        final String TWPointContractPath = "/contracts/TWPointERC20.json";
         final String jsonString;
         try {
-            jsonString = JacksonUtil.readJsonFile(TWPointContractPath);
+            jsonString = jacksonUtil.readJsonFile(TWPointContractPath);
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new ReadFileErrorException(TWPointContractPath);

@@ -3,13 +3,12 @@ package com.thoughtworks.wallet.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -20,6 +19,7 @@ import java.nio.charset.StandardCharsets;
  * @version: $Revision$ $Date$ $LastChangedBy$
  */
 @Slf4j
+@Component
 public final class JacksonUtil {
 
     public static ObjectMapper objectMapper;
@@ -89,19 +89,18 @@ public final class JacksonUtil {
     }
 
 
-    public static String readJsonFile(String fileName) throws IOException {
+    public String readJsonFile(String fileName) throws IOException {
         String jsonStr;
-        File jsonFile = new File(fileName);
-        FileReader fileReader = new FileReader(jsonFile);
 
-        Reader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8);
+        final InputStream resourceAsStream = this.getClass().getResourceAsStream(fileName);
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
+
         int ch;
-        StringBuffer stringBuffer = new StringBuffer();
-        while ((ch = reader.read()) != -1) {
+        StringBuilder stringBuffer = new StringBuilder();
+        while ((ch = bufferedReader.read()) != -1) {
             stringBuffer.append((char) ch);
         }
-        fileReader.close();
-        reader.close();
+        bufferedReader.close();
         jsonStr = stringBuffer.toString();
         return jsonStr;
     }
