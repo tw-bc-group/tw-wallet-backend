@@ -91,7 +91,7 @@ public class QuorumServiceImpl implements IBlockchainService {
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        final String TWPointContractPath = "src/main/resources/contracts/TWPointERC20.json";
+        final String TWPointContractPath = this.getClass().getResource("/contracts/TWPointERC20.json").getFile();
         final String jsonString;
         try {
             jsonString = JacksonUtil.readJsonFile(TWPointContractPath);
