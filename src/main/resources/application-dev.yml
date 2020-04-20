@@ -17,3 +17,13 @@ spring:
   flyway:
     enabled: false
     locations: filesystem:src/main/resources/migration,classpath:migration
+
+quorum:
+  rpc:
+    url: ${RPC_URL}
+  tw-point:
+    contract-address: ${TWPOINT_CONTRACT_ADDRESS}
+  identity-registry:
+    contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
+  node1:
+    private-key: ${NODE1_PRIVATE_KEY}
