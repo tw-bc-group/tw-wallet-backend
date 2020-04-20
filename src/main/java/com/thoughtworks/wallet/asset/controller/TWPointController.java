@@ -2,6 +2,7 @@ package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.request.TWPTransferRequest;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
+import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,12 @@ public class TWPointController {
     @Autowired
     public TWPointController(IBlockchainService quorumService) {
         this.quorumService = quorumService;
+    }
+
+    @GetMapping
+    @ApiOperation(value = "获取 TWPoint 合约的相关信息")
+    public TWPointInfoResponse getContractInfo(){
+        return quorumService.getTWPointInfo();
     }
 
     @GetMapping("/{address}")

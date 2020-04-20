@@ -3,6 +3,7 @@ package com.thoughtworks.wallet.asset.service;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
+import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface IBlockchainService {
     List<TransactionResponse> getTransactionsBy(String address, int limit);
 
     void sendRawTransaction(String signedTransactionData, String address);
+
+    TWPointInfoResponse getTWPointInfo();
 }

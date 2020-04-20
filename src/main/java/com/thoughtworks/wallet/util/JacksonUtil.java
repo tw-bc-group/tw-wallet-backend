@@ -2,6 +2,15 @@ package com.thoughtworks.wallet.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The class JacksonUtil
@@ -9,8 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * json字符与对像转换
  *
  * @version: $Revision$ $Date$ $LastChangedBy$
- *
  */
+@Slf4j
 public final class JacksonUtil {
 
     public static ObjectMapper objectMapper;
@@ -79,4 +88,21 @@ public final class JacksonUtil {
         return null;
     }
 
+
+    public static String readJsonFile(String fileName) throws IOException {
+        String jsonStr;
+        File jsonFile = new File(fileName);
+        FileReader fileReader = new FileReader(jsonFile);
+
+        Reader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8);
+        int ch;
+        StringBuffer stringBuffer = new StringBuffer();
+        while ((ch = reader.read()) != -1) {
+            stringBuffer.append((char) ch);
+        }
+        fileReader.close();
+        reader.close();
+        jsonStr = stringBuffer.toString();
+        return jsonStr;
+    }
 }

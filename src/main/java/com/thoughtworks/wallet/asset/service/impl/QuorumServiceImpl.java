@@ -1,14 +1,19 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
+import com.thoughtworks.wallet.asset.exception.ReadFileErrorException;
 import com.thoughtworks.wallet.asset.model.TWPoint;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
+import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import com.thoughtworks.wallet.util.Identity;
+import com.thoughtworks.wallet.util.JacksonUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -70,6 +75,36 @@ public class QuorumServiceImpl implements IBlockchainService {
 
         return TWPointBalanceResponse
             .of(address, TWPoint.create(twPointName, twPointSymbol, twPointDecimal), new BigDecimal(twPointBalance));
+    }
+
+    @Override
+    public TWPointInfoResponse getTWPointInfo() {
+        final String twPointSymbol;
+        final String twPointName;
+        final BigInteger twPointDecimal;
+        try {
+            twPointSymbol = twPoint.symbol().sendAsync().get();
+            twPointName = twPoint.name().sendAsync().get();
+            twPointDecimal = twPoint.decimals().sendAsync().get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error(e.getMessage());
+            throw new QuorumConnectionErrorException(rpcUrl);
+        }
+
+        final String TWPointContractPath = "src/main/resources/contracts/TWPointERC20.json";
+        final String jsonString;
+        try {
+            jsonString = JacksonUtil.readJsonFile(TWPointContractPath);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new ReadFileErrorException(TWPointContractPath);
+        }
+
+        JSONObject jsonObject = JSON.parseObject(jsonString);
+
+        final String abi = jsonObject.getJSONArray("abi").toJSONString();
+
+        return TWPointInfoResponse.of(twPoint.getContractAddress(), twPointName, twPointSymbol, twPointDecimal, abi);
     }
 
     @SneakyThrows
