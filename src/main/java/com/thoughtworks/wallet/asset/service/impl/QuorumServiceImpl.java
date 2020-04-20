@@ -18,6 +18,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.protocol.Web3j;
@@ -45,7 +46,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     @QuorumRPCUrl
     private String rpcUrl;
 
-    @IdentityRegistryContractAddress
+    @Value("${quorum.identity-registry.contract-address}")
     private String identityRegistryContractAddress;
 
     @Autowired
