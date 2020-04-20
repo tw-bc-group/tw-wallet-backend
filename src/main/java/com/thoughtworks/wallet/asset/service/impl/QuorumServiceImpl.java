@@ -15,11 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
-import org.web3j.crypto.ECDSASignature;
-import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.Sign;
-import org.web3j.crypto.SignedRawTransaction;
-import org.web3j.crypto.TransactionDecoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -32,7 +27,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.toList;
-import static org.web3j.utils.Numeric.hexStringToByteArray;
 
 @Slf4j
 @Service
@@ -111,9 +105,9 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
-    public void sendRawTransaction(String signedTransactionData, String address, String messageHash) {
+    public void sendRawTransaction(String signedTransactionData, String address) {
 
-        if (!Identity.verifySignature(extractEcdsaSignature(signedTransactionData), address, hexStringToByteArray(messageHash))) {
+        if (!Identity.verifySignature(signedTransactionData, address)) {
             throw new ErrorSendTransactionException("Can not verify your signed transaction.");
         }
 
@@ -129,19 +123,6 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         log.info("Transaction hash: {}", transactionResponse.getTransactionHash());
-    }
-
-    private ECDSASignature extractEcdsaSignature(String signedTransactionData) {
-        RawTransaction tx = TransactionDecoder.decode(signedTransactionData);
-
-        if (!(tx instanceof SignedRawTransaction)) {
-            throw new ErrorSendTransactionException("Wrong raw transaction data");
-        }
-
-        final Sign.SignatureData signatureData = ((SignedRawTransaction) tx).getSignatureData();
-        return new ECDSASignature(
-            new BigInteger(1, signatureData.getR()),
-            new BigInteger(1, signatureData.getS()));
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)

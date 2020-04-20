@@ -11,9 +11,6 @@ public class TWPTransferRequest {
     @NotBlank(message = "Signed Transaction should not be blank.")
     String signedTransactionRawData;
 
-    @NotBlank(message = "Message Hash can not be blank.")
-    String messageHash;
-
     @NotBlank(message = "Address can not be blank")
     String fromAddress;
 
@@ -22,12 +19,10 @@ public class TWPTransferRequest {
 
     @JsonCreator
     public TWPTransferRequest(@JsonProperty("signedTransactionRawData") String signedTransactionRawData,
-                              @JsonProperty("messageHash") String messageHash,
                               @JsonProperty("fromAddress") String fromAddress,
                               @JsonProperty("fromPublicKey") String fromPublicKey
     ) {
         this.signedTransactionRawData = signedTransactionRawData;
-        this.messageHash = messageHash;
         this.fromAddress = fromAddress;
         this.fromPublicKey = fromPublicKey;
     }

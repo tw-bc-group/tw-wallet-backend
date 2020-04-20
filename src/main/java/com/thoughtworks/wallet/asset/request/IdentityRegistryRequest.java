@@ -11,9 +11,6 @@ public class IdentityRegistryRequest {
     @NotBlank(message = "Signed Transaction should not be blank.")
     String signedTransactionRawData;
 
-    @NotBlank(message = "Message Hash can not be blank.")
-    String messageHash;
-
     @NotBlank(message = "Address can not be blank")
     String address;
 
@@ -28,13 +25,11 @@ public class IdentityRegistryRequest {
 
     @JsonCreator
     public IdentityRegistryRequest(@JsonProperty("signedTransactionRawData") String signedTransactionRawData,
-                                   @JsonProperty("messageHash") String messageHash,
                                    @JsonProperty("address") String address,
                                    @JsonProperty("did") String did,
                                    @JsonProperty("publicKey") String publicKey,
                                    @JsonProperty("name") String name) {
         this.signedTransactionRawData = signedTransactionRawData;
-        this.messageHash = messageHash;
         this.address = address;
         this.did = did;
         this.publicKey = publicKey;

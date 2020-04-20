@@ -1,24 +1,30 @@
 package com.thoughtworks.wallet.util;
 
-import org.web3j.crypto.ECDSASignature;
-import org.web3j.crypto.Keys;
-import org.web3j.crypto.Sign;
+import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.SignedRawTransaction;
+import org.web3j.crypto.TransactionDecoder;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import static java.lang.String.format;
+import java.security.SignatureException;
 
 public class Identity {
 
     private static final String VALID_ADDRESS_FORMAT = "^0x[0-9a-fA-F]{40}$";
 
-    public static boolean verifySignature(ECDSASignature sig, String address, byte[] messageHash) {
-        return Arrays.stream(new Byte[]{0, 1, 2, 3})
-            .map(recoverId -> Sign.recoverFromSignature(recoverId, sig, messageHash))
-            .filter(Objects::nonNull)
-            .map(publicKey -> format("0x%s", Keys.getAddress(publicKey)))
-            .anyMatch(addressRecovered -> addressRecovered.equalsIgnoreCase(address));
+    public static boolean verifySignature(String signedTransactionData, String address) {
+
+        RawTransaction tx = TransactionDecoder.decode(signedTransactionData);
+
+        if (!(tx instanceof SignedRawTransaction)) {
+            throw new ErrorSendTransactionException("Wrong raw transaction data");
+        }
+
+        try {
+            final String fromAddress = ((SignedRawTransaction) tx).getFrom();
+            return address.equalsIgnoreCase(fromAddress);
+        } catch (SignatureException e) {
+            throw new ErrorSendTransactionException("Can not verify your signature.");
+        }
     }
 
     public static boolean isValidAddress(String addr) {

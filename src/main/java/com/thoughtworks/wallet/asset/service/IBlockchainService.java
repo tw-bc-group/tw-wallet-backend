@@ -14,5 +14,5 @@ public interface IBlockchainService {
 
     List<TransactionResponse> getTransactionsBy(String address, int limit);
 
-    void sendRawTransaction(String signedTransactionData, String address, String messageHash);
+    void sendRawTransaction(String signedTransactionData, String address);
 }
