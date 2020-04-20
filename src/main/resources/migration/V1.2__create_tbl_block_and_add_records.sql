@@ -8,6 +8,6 @@ create table tbl_blocks
     constraint tbl_blocks_pkey
         primary key (height)
 );
---
--- INSERT INTO public.tbl_blocks (height, hash)
--- VALUES (1, 'ed9d02e382b34818e88b88a309c7fe71e65f419d');
+
+INSERT INTO public.tbl_blocks (height, hash)
+VALUES (0, '0');

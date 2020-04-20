@@ -1,6 +1,7 @@
 package com.thoughtworks.wallet.scheduler.eth;
 
 import com.thoughtworks.wallet.annotation.QuorumRPCUrl;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
@@ -17,32 +18,17 @@ import java.math.BigInteger;
 @Slf4j
 @Service
 public class EthClientAdaptor {
+
     private Web3j w3j;
 
-    @QuorumRPCUrl
-    private String rpcUrl;
-
-    public EthClientAdaptor() {
-
-        String nodeEndpoint = rpcUrl;
-        Web3jService web3jService;
-
-        if (nodeEndpoint == null || nodeEndpoint.equals("")) {
-            web3jService = new HttpService();
-        } else if (nodeEndpoint.startsWith("http")) {
-            web3jService = new HttpService(nodeEndpoint);
-        } else if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
-            web3jService = new WindowsIpcService(nodeEndpoint);
-        } else {
-            web3jService = new UnixIpcService(nodeEndpoint);
-        }
-
-        w3j = Web3j.build(web3jService);
+    public EthClientAdaptor(Web3j web3j) {
+        w3j = web3j;
     }
 
-    public BigInteger getLatestBlockNum() throws IOException {
+    @SneakyThrows
+    public long getLatestBlockNum() {
         EthBlockNumber ethBlockNumber = w3j.ethBlockNumber().send();
-        return ethBlockNumber.getBlockNumber();
+        return ethBlockNumber.getBlockNumber().longValue();
     }
 
     public EthBlock.Block getBlockByNumber(long blockNum, boolean returnFullTransactionObjects) throws IOException {

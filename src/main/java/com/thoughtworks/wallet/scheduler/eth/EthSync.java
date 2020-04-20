@@ -2,6 +2,7 @@ package com.thoughtworks.wallet.scheduler.eth;
 
 
 import com.thoughtworks.wallet.scheduler.BaseSync;
+import com.thoughtworks.wallet.scheduler.DbAdptor;
 import com.thoughtworks.wallet.scheduler.ISyncJob;
 import com.thoughtworks.wallet.scheduler.SyncJob;
 import lombok.SneakyThrows;
@@ -20,16 +21,17 @@ public class EthSync extends BaseSync {
     @Autowired
     private EthClientAdaptor ethClientAdaptor;
 
+    @Autowired
+    private DbAdptor dbAdptor;
 
     @Override
     protected long geRemoteBlockNum() {
-//        return ethClientAdaptor.getLatestBlockNum().longValueExact();
-        return 100;
+        return ethClientAdaptor.getLatestBlockNum();
     }
 
     @Override
     protected long getLocalBlockNum() {
-        return 0;
+        return dbAdptor.getLocalBlockHeight();
     }
 
     @SneakyThrows
@@ -43,10 +45,10 @@ public class EthSync extends BaseSync {
         if (height == 50) {
             throw new RuntimeException("haha");
         }
-//        EthBlock.Block block = ethClientAdaptor.getBlockByNumber(height, true);
-//        List<EthBlock.TransactionObject> txs = block.getTransactions().stream()
-//                .map(txResult -> (EthBlock.TransactionObject) txResult.get())
-//                .collect(Collectors.toList());
+        EthBlock.Block block = ethClientAdaptor.getBlockByNumber(height, true);
+        List<EthBlock.TransactionObject> txs = block.getTransactions().stream()
+                .map(txResult -> (EthBlock.TransactionObject) txResult.get())
+                .collect(Collectors.toList());
     }
 
 
