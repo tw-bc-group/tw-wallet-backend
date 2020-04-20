@@ -36,24 +36,22 @@ public class Engine {
                     String name = serviceBean.getClass().getName();
                     ISyncJob handler = (ISyncJob) serviceBean;
                     if (loadJobHandler(name) != null) {
-                        throw new RuntimeException("Engine::run - job handler[" + name + "] naming conflicts.");
+                        throw new RuntimeException("Engine::onstructor - job handler[" + name + "] naming conflicts.");
                     }
                     addJobHandler(name, handler);
                 }
             }
         }
-        //TODO: move to config
-        customThreadPool = new ForkJoinPool(4,
-                ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-                (t, e) -> log.error("Engine::run - ForkJoinPool uncaughtException - id: {}, name: {}, exception: {}", t.getId(), t.getName(), e.getMessage()),
-                false);
         this.applicationContext = applicationContext;
     }
 
     public void run() {
-        customThreadPool.submit(
-                () -> jobHandlerRepository.entrySet().stream().parallel().forEach(syncJobEntry -> {
-                    syncJobEntry.getValue().execute();
-                }));
+        jobHandlerRepository.entrySet().stream().parallel().forEach(syncJobEntry -> {
+            try {
+                syncJobEntry.getValue().execute();
+            } catch (Exception e) {
+                log.error("Engine::run - execute exception: {}", e.getMessage());
+            }
+        });
     }
 }

@@ -13,30 +13,33 @@ import java.util.stream.Collectors;
 import static java.util.stream.LongStream.range;
 
 @Slf4j
-public abstract class BaseSync {
-
+public abstract class BaseSync implements ISyncJob {
 
     //TODO: config parallelism
-    protected static final ForkJoinPool SYNC_EXECUTOR = new ForkJoinPool(4,
-            ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-            (t, e) -> log.error("BaseSync::run - ForkJoinPool uncaughtException - id: {}, name: {}, exception: {}", t.getId(), t.getName(), e.getMessage()),
-            false);
+    protected static final ForkJoinPool SYNC_EXECUTOR = new ForkJoinPool(4);
 
     @Autowired
     private ApplicationContext applicationContext;
 
-    public void run() {
+    @Override
+    public void execute() {
+
+        log.info("\n\n------------------Eth Sync Job Start------------------\n\n");
 
         long remoteBlockNum = geRemoteBlockNum();
         long localBlockNum = getLocalBlockNum();
 
-        log.info("localBlockNum:{}, remoteBlockNum:{}", localBlockNum, remoteBlockNum);
+        log.info("{}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
 
         SYNC_EXECUTOR.submit(
                 () -> range(localBlockNum, remoteBlockNum)
                         .parallel()
                         .forEach((blockNum) -> {
-                            this.parseBlock(blockNum);
+                            try {
+                                this.parseBlock(blockNum);
+                            } catch (Exception e) {
+                                log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
+                            }
                         }));
     }
 
