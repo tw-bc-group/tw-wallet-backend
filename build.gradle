@@ -56,7 +56,6 @@ dependencies {
     implementation "org.modelmapper:modelmapper:2.3.7"
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
-    implementation 'com.alibaba:fastjson:1.2.68'
 
     implementation('org.web3j:core:4.2.0')
     implementation('org.web3j:contracts:4.2.0')

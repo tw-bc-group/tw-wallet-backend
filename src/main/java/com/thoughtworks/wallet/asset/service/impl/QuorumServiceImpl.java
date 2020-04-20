@@ -1,7 +1,5 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
@@ -95,16 +93,14 @@ public class QuorumServiceImpl implements IBlockchainService {
 
         final String TWPointContractPath = "/contracts/TWPointERC20.json";
         final String jsonString;
+        String abi;
         try {
             jsonString = jacksonUtil.readJsonFile(TWPointContractPath);
+            abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new ReadFileErrorException(TWPointContractPath);
         }
-
-        JSONObject jsonObject = JSON.parseObject(jsonString);
-
-        final String abi = jsonObject.getJSONArray("abi").toJSONString();
 
         return TWPointInfoResponse.of(twPoint.getContractAddress(), twPointName, twPointSymbol, twPointDecimal, abi);
     }

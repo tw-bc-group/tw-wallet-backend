@@ -1,6 +1,8 @@
 package com.thoughtworks.wallet.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -88,6 +90,14 @@ public final class JacksonUtil {
         return null;
     }
 
+    public String parsePropertyFromJson(String json, String property) throws JsonProcessingException {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
+
+        final JsonNode jsonNode = objectMapper.readTree(json);
+        return jsonNode.get(property).toString();
+    }
 
     public String readJsonFile(String fileName) throws IOException {
         String jsonStr;
