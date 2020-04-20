@@ -11,7 +11,7 @@ buildscript {
     }
 }
 
-def environment = hasProperty('env') ? env : 'test'
+def environment = hasProperty('env') ? env : 'local'
 println "Current Environment: " + environment
 
 InputStream input = new FileInputStream(new File("$projectDir/src/main/resources/application-${environment}.yml"));

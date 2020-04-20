@@ -23,7 +23,7 @@ spring:
         prefetch: 5
 
   flyway:
-    enabled: false
+    enabled: true
     locations: filesystem:src/main/resources/migration,classpath:migration
 
 quorum:

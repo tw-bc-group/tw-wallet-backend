@@ -84,7 +84,7 @@ flyway {
 jooq {
     version = '3.13.1'
     edition = 'OSS'
-    generateSchemaSourceOnCompilation = false //TODO: turn it on after removing generated source code from our codebase.
+    generateSchemaSourceOnCompilation = true //TODO: turn it on after removing generated source code from our codebase.
     wallet(sourceSets.main) {
         jdbc {
             driver = "${environment.spring.datasource.'driver-class-name'}"
@@ -99,7 +99,7 @@ jooq {
             }
             database {
                 name = "${environment.spring.jooq.database.name}"
-                inputSchema = 'PUBLIC' //why captain? see https://stackoverflow.com/questions/51414954/new-jooq-gradle-configuration-not-generating-any-jooq-classes
+                inputSchema = 'public'
             }
             generate {
                 relations = true
