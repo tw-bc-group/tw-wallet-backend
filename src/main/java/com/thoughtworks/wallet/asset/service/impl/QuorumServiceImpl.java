@@ -1,7 +1,7 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
-import com.thoughtworks.wallet.asset.exception.ErrorIdentityCreationException;
+import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.model.TWPoint;
@@ -111,21 +111,21 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
-    public void createIdentity(String signedTransactionData, String address, String messageHash) {
+    public void sendRawTransaction(String signedTransactionData, String address, String messageHash) {
 
         if (!Identity.verifySignature(extractEcdsaSignature(signedTransactionData), address, hexStringToByteArray(messageHash))) {
-            throw new ErrorIdentityCreationException("Can not verify your signed transaction.");
+            throw new ErrorSendTransactionException("Can not verify your signed transaction.");
         }
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
         try {
             transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
             if (transactionResponse.hasError()) {
-                throw new ErrorIdentityCreationException(transactionResponse.getError().getMessage());
+                throw new ErrorSendTransactionException(transactionResponse.getError().getMessage());
             }
         } catch (IOException e) {
             log.error("Cannot send transaction", e);
-            throw new ErrorIdentityCreationException(e.getMessage());
+            throw new ErrorSendTransactionException(e.getMessage());
         }
 
         log.info("Transaction hash: {}", transactionResponse.getTransactionHash());
@@ -135,7 +135,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         RawTransaction tx = TransactionDecoder.decode(signedTransactionData);
 
         if (!(tx instanceof SignedRawTransaction)) {
-            throw new ErrorIdentityCreationException("Wrong raw transaction data");
+            throw new ErrorSendTransactionException("Wrong raw transaction data");
         }
 
         final Sign.SignatureData signatureData = ((SignedRawTransaction) tx).getSignatureData();

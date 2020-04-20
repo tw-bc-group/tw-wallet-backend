@@ -32,6 +32,6 @@ public class IdentityController {
     @PostMapping
     @ApiOperation(value = "注册身份")
     public void identityRegistry(@Valid @RequestBody IdentityRegistryRequest request) {
-        quorumService.createIdentity(request.getSignedTransactionRawData(), request.getAddress(), request.getMessageHash());
+        quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getAddress(), request.getMessageHash());
     }
 }

@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.wallet.common.exception.AppException;
 import com.thoughtworks.wallet.common.exception.ErrorCode;
 
-public class ErrorIdentityCreationException extends AppException {
-    public ErrorIdentityCreationException(String errorMessage) {
-        super(ErrorCode.IDENTITY_CREATE_ERROR, ImmutableMap.of("error", errorMessage));
+public class ErrorSendTransactionException extends AppException {
+    public ErrorSendTransactionException(String errorMessage) {
+        super(ErrorCode.SEND_TRANSACTION_ERROR, ImmutableMap.of("error", errorMessage));
     }
 }

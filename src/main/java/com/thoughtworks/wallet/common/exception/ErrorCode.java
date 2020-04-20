@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public enum ErrorCode {
     QUORUM_CONNECTION_ERROR(INTERNAL_SERVER_ERROR, 500_00, "Quorum 连接错误"),
     INVALID_ADDRESS(BAD_REQUEST, 400_00, "用户地址格式有误"),
-    IDENTITY_CREATE_ERROR(INTERNAL_SERVER_ERROR, 500_00, "用户身份创建错误");
+    SEND_TRANSACTION_ERROR(INTERNAL_SERVER_ERROR, 500_00, "交易发送失败");
 
     @NonNull
     private HttpStatus status;
