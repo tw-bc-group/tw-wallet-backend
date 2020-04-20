@@ -1,11 +1,13 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
+import com.thoughtworks.wallet.asset.annotation.IdentityRegistryContractAddress;
 import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
 import com.thoughtworks.wallet.asset.exception.ReadFileErrorException;
 import com.thoughtworks.wallet.asset.model.TWPoint;
+import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
 import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
@@ -42,6 +44,9 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     @QuorumRPCUrl
     private String rpcUrl;
+
+    @IdentityRegistryContractAddress
+    private String identityRegistryContractAddress;
 
     @Autowired
     public QuorumServiceImpl(Web3j web3j, ERC20 erc20, JacksonUtil jacksonUtil) {
@@ -103,6 +108,25 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         return TWPointInfoResponse.of(twPoint.getContractAddress(), twPointName, twPointSymbol, twPointDecimal, abi);
+    }
+
+    @Override
+    public IdentityRegistryInfoResponse getIdentityRegistryInfo() {
+        final String identityRegistryContractPath = "/contracts/IdentityRegistry.json";
+
+        final String name;
+        final String abi;
+        final String jsonString;
+        try {
+            jsonString = jacksonUtil.readJsonFile(identityRegistryContractPath);
+            name = jacksonUtil.parsePropertyFromJson(jsonString, "contractName");
+            abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new ReadFileErrorException(identityRegistryContractPath);
+        }
+
+        return IdentityRegistryInfoResponse.of(name, identityRegistryContractAddress, abi);
     }
 
     @SneakyThrows

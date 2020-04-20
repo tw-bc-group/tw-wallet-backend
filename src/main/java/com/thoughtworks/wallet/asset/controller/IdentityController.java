@@ -2,12 +2,14 @@ package com.thoughtworks.wallet.asset.controller;
 
 
 import com.thoughtworks.wallet.asset.request.IdentityRegistryRequest;
+import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,12 @@ public class IdentityController {
     @Autowired
     public IdentityController(IBlockchainService quorumService) {
         this.quorumService = quorumService;
+    }
+
+    @GetMapping
+    @ApiOperation(value = "获取 IdentityRegistry 合约的相关信息")
+    public IdentityRegistryInfoResponse  getContractInfo(){
+        return quorumService.getIdentityRegistryInfo();
     }
 
     @PostMapping

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -96,7 +97,13 @@ public final class JacksonUtil {
         }
 
         final JsonNode jsonNode = objectMapper.readTree(json);
-        return jsonNode.get(property).toString();
+        final JsonNode node = jsonNode.get(property);
+
+        if (node instanceof TextNode) {
+            return node.textValue();
+        }
+
+        return node.toString();
     }
 
     public String readJsonFile(String fileName) throws IOException {
