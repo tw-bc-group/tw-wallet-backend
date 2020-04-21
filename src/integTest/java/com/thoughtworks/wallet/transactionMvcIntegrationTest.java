@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("integ")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TransactionMvcIntegrationTest {
+public class transactionMvcIntegrationTest {
     /**
      * @LocalServerPort 提供了 @Value("${local.server.port}") 的代替
      */

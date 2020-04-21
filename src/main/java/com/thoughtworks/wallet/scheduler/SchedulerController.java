@@ -18,8 +18,6 @@ import java.util.List;
 @Validated
 @RequestMapping(value = "/v1/scheduler")
 public class SchedulerController {
-
-
     Engine engine;
 
     @Autowired
@@ -30,7 +28,9 @@ public class SchedulerController {
     @ApiOperation(value = "Start Sync Block")
     @GetMapping
     public boolean run() {
+        log.info("engine.run() start");
         engine.run();
+        log.info("engine.run() end");
         return true;
     }
 }

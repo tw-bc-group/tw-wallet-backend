@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.util;
+package com.thoughtworks.wallet.unit;
 
 import org.junit.jupiter.api.Test;
 
