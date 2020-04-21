@@ -1,7 +1,6 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
 import com.thoughtworks.wallet.asset.annotation.IdentityRegistryContractAddress;
-import com.thoughtworks.wallet.asset.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.asset.exception.ErrorSendTransactionException;
 import com.thoughtworks.wallet.asset.exception.InvalidAddressErrorException;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
@@ -43,7 +42,6 @@ public class QuorumServiceImpl implements IBlockchainService {
     private final ModelMapper modelMapper = new ModelMapper();
     private final JacksonUtil jacksonUtil;
 
-    @QuorumRPCUrl
     private String rpcUrl;
 
     @IdentityRegistryContractAddress
