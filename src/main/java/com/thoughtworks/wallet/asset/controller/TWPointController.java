@@ -41,6 +41,7 @@ public class TWPointController {
     @PostMapping(value = "/transfer")
     @ApiOperation(value = "TWP 转账")
     public void transfer(@Valid @RequestBody TWPTransferRequest request) {
+        log.info("TWPoint transfer: " + request.toString());
         quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getFromAddress());
     }
 }
