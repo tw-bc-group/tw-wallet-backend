@@ -32,12 +32,6 @@ public class TWPointController {
         this.quorumService = quorumService;
     }
 
-    @GetMapping
-    @ApiOperation(value = "获取 TWPoint 合约的相关信息")
-    public TWPointInfoResponse getContractInfo(){
-        return quorumService.getTWPointInfo();
-    }
-
     @GetMapping("/{address}")
     @ApiOperation(value = "根据用户的 quorum 地址获取 TW Point 余额")
     public TWPointBalanceResponse getBalanceByAddress(@PathVariable("address") String address) {
