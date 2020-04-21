@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS tbl_transactions;
 -- auto-generated definition
 create table tbl_transactions
 (
-    hash          varchar(64)              default ''''::character varying not null,
+    hash          varchar(255)              default ''''::character varying not null,
     tx_type       varchar(255)                                              ,
     create_time   timestamp with time zone default CURRENT_TIMESTAMP       ,
     height        bigint                                                  not null,
@@ -12,7 +12,7 @@ create table tbl_transactions
     to_address    varchar(255)             default ''''::character varying not null,
     tx_index      bigint                                                  ,
     event_type    smallint                                                 ,
-    contract_hash varchar(64)              default ''''::character varying ,
+    contract_hash varchar(255)              default ''''::character varying ,
     constraint tbl_transactions_pkey
         primary key (height, tx_index)
 );

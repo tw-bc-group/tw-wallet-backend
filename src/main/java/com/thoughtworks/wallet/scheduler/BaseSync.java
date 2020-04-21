@@ -26,11 +26,6 @@ public abstract class BaseSync implements ISyncJob {
     @Override
     public void execute() {
 
-        if (!SYNC_EXECUTOR.awaitQuiescence(1, TimeUnit.SECONDS)) {
-            log.info("------------------Eth Sync Job is Running------------------ \n\n");
-            return;
-        }
-
         long remoteBlockNum = geRemoteBlockNum();
         long localBlockNum = getLocalBlockNum();
 
@@ -38,15 +33,14 @@ public abstract class BaseSync implements ISyncJob {
 
 //        this.test();
 
-        SYNC_EXECUTOR.submit(() -> range(localBlockNum, remoteBlockNum)
-                .parallel()
+        range(localBlockNum, remoteBlockNum)
                 .forEach((blockNumber) -> {
                     try {
                         this.parseBlock(blockNumber);
                     } catch (Exception e) {
                         log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
                     }
-                }));
+                });
     }
 
     private void test() {

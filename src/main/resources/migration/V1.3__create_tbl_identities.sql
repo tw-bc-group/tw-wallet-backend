@@ -12,7 +12,7 @@ create table tbl_identities
     public_key    varchar(255)             default ''''::character varying not null,
     name          varchar(255)             default ''''::character varying not null,
     tx_index      bigint,
-    contract_hash varchar(64)              default ''''::character varying,
+    contract_hash varchar(255)              default ''''::character varying,
     constraint tbl_identities_pkey
         primary key (height, tx_index)
 );
