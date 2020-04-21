@@ -26,7 +26,7 @@ public class EthClientAdaptor {
     }
 
     @SneakyThrows
-    public long getLatestBlockNum() {
+    public long getRemoteBlockNum() {
         EthBlockNumber ethBlockNumber = w3j.ethBlockNumber().send();
         return ethBlockNumber.getBlockNumber().longValue();
     }

@@ -7,7 +7,6 @@ import com.thoughtworks.wallet.scheduler.SyncJob;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -18,20 +17,20 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.LongStream.range;
-
 @Slf4j
 @SyncJob
 public class EthSync extends BaseSync {
+
+    final static String TRANSFER = "Transfer";
+    final static String IDENTITY_CREATED = "IdentityCreated";
+
 
     @Autowired
     private EthClientAdaptor ethClientAdaptor;
@@ -41,7 +40,7 @@ public class EthSync extends BaseSync {
 
     @Override
     protected long geRemoteBlockNum() {
-        return ethClientAdaptor.getLatestBlockNum();
+        return ethClientAdaptor.getRemoteBlockNum();
     }
 
     @Override
@@ -51,9 +50,50 @@ public class EthSync extends BaseSync {
 
     @SneakyThrows
     @Override
-    public void parseTx(String hash) {
-        this.saveTransaction(hash);
+    public void parseTx(String txHash) {
+        // save to transaction table
+        TransactionReceipt receipt = ethClientAdaptor.getTransactionReceipt(txHash);
+        List<Log> logs = receipt.getLogs();
+        Log logTx = logs.get(0);
+        List<String> topics = logTx.getTopics();
+
+        Event transferEvent = transferEvent();
+        String encodedTransferEventSignature = EventEncoder.encode(transferEvent);
+
+        Event createIdentityEvent = createIdentityEvent();
+        String encodedCreateIdentityEventSignature = EventEncoder.encode(createIdentityEvent);
+
+        if (topics.get(0).equals(encodedTransferEventSignature)) {
+
+            Address fromAddr = new Address(topics.get(1));
+            Address toAddr = new Address(topics.get(2));
+
+            // verify qty transferred
+            List<Type> results = FunctionReturnDecoder.decode(logTx.getData(), transferEvent.getNonIndexedParameters());
+
+            BigInteger value = (BigInteger) results.get(0).getValue();
+
+            log.info("fromAddr:{}, toAddr:{}, value:{}", fromAddr.getValue(), toAddr.getValue(), value);
+
+            dbAdptor.SaveTWPTransaction(TWPoint.of(fromAddr.getValue(), toAddr.getValue(), receipt.getTransactionHash(), receipt.getBlockNumber(), receipt.getTransactionIndex(), value, TRANSFER));
+        } else if (topics.get(0).equals(encodedCreateIdentityEventSignature)) {
+            // verify qty transferred
+            List<Type> results = FunctionReturnDecoder.decode(logTx.getData(), createIdentityEvent.getParameters());
+
+            String initiator = (String) results.get(0).getValue();
+            String ownerAddress = (String) results.get(1).getValue();
+            String did = (String) results.get(2).getValue();
+            String publicKey = (String) results.get(3).getValue();
+            String name = (String) results.get(4).getValue();
+
+            log.info("initiator:{}, ownerAddress:{}, did:{}, publicKey:{}, name:{}",
+                    initiator, ownerAddress, did, publicKey, name);
+
+            dbAdptor.SaveDIDCreateTransaction(Identity.of(initiator, ownerAddress, did, publicKey, name, receipt.getTransactionHash(), receipt.getBlockNumber(), receipt.getTransactionIndex(), IDENTITY_CREATED));
+        }
+
     }
+
 
     @SneakyThrows
     @Override
@@ -68,14 +108,17 @@ public class EthSync extends BaseSync {
 
         if (hasTx) {
             SYNC_EXECUTOR.submit(
-                    () -> transactionObjects.stream().parallel().forEach(tx -> this.saveTransaction(tx.getHash()))
+                    () -> transactionObjects.stream().parallel().forEach(tx -> this.parseTx(tx.getHash()))
             );
+
+            // save block
+            dbAdptor.SaveBlock(height, block.getHash());
         }
     }
 
     private Event transferEvent() {
         return new Event(
-                "Transfer",
+                TRANSFER,
                 Arrays.asList(
                         new TypeReference<Address>(true) {
                         },
@@ -87,44 +130,20 @@ public class EthSync extends BaseSync {
 
     private Event createIdentityEvent() {
         return new Event(
-                "createIdentity",
+                IDENTITY_CREATED,
                 Arrays.asList(
                         new TypeReference<Address>(true) {
                         },
-                        new TypeReference<Address>(true) {
+                        new TypeReference<Address>(false) {
                         },
-                        new TypeReference<Uint256>() {
-                        }));
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        },
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        },
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        }
+                ));
     }
 
-    @SneakyThrows
-    public void saveTransaction(String txHash) {
-        // save to transaction table
-        TransactionReceipt receipt = ethClientAdaptor.getTransactionReceipt(txHash);
-        List<Log> logs = receipt.getLogs();
-        Event transferEvent = transferEvent();
-        Log logTx = logs.get(0);
-
-        // verify the event was called with the function parameters
-        List<String> topics = logTx.getTopics();
-
-        // check function signature - we only have a single topic our event signature,
-        // there are no indexed parameters in this example
-        String encodedEventSignature = EventEncoder.encode(transferEvent);
-
-        Address fromAddr = new Address(topics.get(1));
-        Address toAddr = new Address(topics.get(2));
-
-        if (!topics.get(0).equals(encodedEventSignature)) {
-            log.error("saveTransaction - topic is not transfer - topics.get(0): {}", topics.get(0));
-        }
-
-        // verify qty transferred
-        List<Type> results = FunctionReturnDecoder.decode(logTx.getData(), transferEvent.getNonIndexedParameters());
-
-        BigInteger value = (BigInteger) results.get(0).getValue();
-
-        log.info("fromAddr:{}, toAddr:{}, value:{}", fromAddr, toAddr, value);
-    }
 
 }

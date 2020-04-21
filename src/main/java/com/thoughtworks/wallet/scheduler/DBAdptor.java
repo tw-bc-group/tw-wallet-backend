@@ -1,24 +1,23 @@
 package com.thoughtworks.wallet.scheduler;
 
 
-import com.thoughtworks.wallet.asset.model.Transaction;
+import com.thoughtworks.wallet.scheduler.eth.Identity;
+import com.thoughtworks.wallet.scheduler.eth.TWPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
-import org.web3j.protocol.core.methods.response.EthBlock;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Optional;
 
-import static com.thoughtworks.wallet.gen.Tables.TBL_BLOCKS;
-import static com.thoughtworks.wallet.gen.Tables.TBL_TRANSACTIONS;
+import static com.thoughtworks.wallet.gen.Tables.*;
 
 @Slf4j
 @Service
 public class DBAdptor {
 
+    final static String ASSET_NAME = "TWP";
     private final DSLContext dslContext;
 
     public DBAdptor(DSLContext dslContext) {
@@ -26,36 +25,73 @@ public class DBAdptor {
     }
 
     public long getLocalBlockHeight() {
-        return dslContext
+        return Optional.ofNullable(dslContext
                 .select(DSL.max(TBL_BLOCKS.HEIGHT))
                 .from(TBL_BLOCKS)
-                .fetchOne(Record1::value1).longValue();
+                .fetchOne(Record1::value1)).orElse((long) 0);
+    }
+
+    public void SaveDIDCreateTransaction(Identity identity) {
+        dslContext.insertInto(TBL_IDENTITIES,
+                TBL_IDENTITIES.INITIATOR,
+                TBL_IDENTITIES.OWNER_ADDRESS,
+                TBL_IDENTITIES.DID,
+                TBL_IDENTITIES.PUBLIC_KEY,
+                TBL_IDENTITIES.NAME,
+                TBL_IDENTITIES.HASH,
+                TBL_IDENTITIES.HEIGHT,
+                TBL_IDENTITIES.TX_INDEX,
+                TBL_IDENTITIES.TX_TYPE
+        ).values(
+                identity.getInitiator(),
+                identity.getOwnerAddress(),
+                identity.getDid(),
+                identity.getPublicKey(),
+                identity.getName(),
+                identity.getHash(),
+                identity.getHeight().longValueExact(),
+                identity.getTxIndex().longValueExact(),
+                identity.getTxType()
+        )
+                .onDuplicateKeyIgnore()
+                .execute();
     }
 
     /**
      * AMOUNT has * 10^18
-     * @param transactionObject
-     * @param assetName
+     *
+     * @param TWPoint
      */
-    public void SaveTransaction(EthBlock.TransactionObject transactionObject, String assetName) {
+    public void SaveTWPTransaction(TWPoint TWPoint) {
 
         dslContext.insertInto(TBL_TRANSACTIONS,
                 TBL_TRANSACTIONS.ASSET_NAME,
                 TBL_TRANSACTIONS.FROM_ADDRESS,
+                TBL_TRANSACTIONS.TO_ADDRESS,
                 TBL_TRANSACTIONS.HASH,
                 TBL_TRANSACTIONS.HEIGHT,
-                TBL_TRANSACTIONS.TO_ADDRESS,
                 TBL_TRANSACTIONS.TX_INDEX,
-                TBL_TRANSACTIONS.AMOUNT)
-                .values(assetName,
-                        transactionObject.getFrom(),
-                        transactionObject.getHash(),
-                        transactionObject.getBlockNumber().intValue(),
-                        transactionObject.getTo(),
-                        transactionObject.getTransactionIndex().intValue(),
-                        transactionObject.getValue()
-                )
+                TBL_TRANSACTIONS.AMOUNT,
+                TBL_TRANSACTIONS.TX_TYPE)
+                .values(ASSET_NAME,
+                        TWPoint.getFromAddr(),
+                        TWPoint.getToAddr(),
+                        TWPoint.getTxHash(),
+                        TWPoint.getHeight().longValueExact(),
+                        TWPoint.getIndex().longValueExact(),
+                        TWPoint.getValue(),
+                        TWPoint.getTxType())
                 .onDuplicateKeyIgnore()
                 .execute();
+    }
+
+    public void SaveBlock(long height, String hash) {
+        dslContext.insertInto(TBL_BLOCKS,
+                TBL_BLOCKS.HEIGHT,
+                TBL_BLOCKS.HASH)
+                .values(height, hash)
+                .onDuplicateKeyIgnore()
+                .execute();
+
     }
 }

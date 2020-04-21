@@ -31,36 +31,32 @@ public abstract class BaseSync implements ISyncJob {
             return;
         }
 
-//        long remoteBlockNum = geRemoteBlockNum();
-//        long localBlockNum = getLocalBlockNum();
-
-        long remoteBlockNum = 1;
-        long localBlockNum = 0;
+        long remoteBlockNum = geRemoteBlockNum();
+        long localBlockNum = getLocalBlockNum();
 
         log.info("Eth Sync Job Start- {}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
 
-        SYNC_EXECUTOR.submit(
-                () -> range(localBlockNum, remoteBlockNum)
-                        .parallel()
-                        .forEach((blockNumber) -> {
-                            try {
-                                this.test();
-//                                this.parseBlock(blockNumber);
-                            } catch (Exception e) {
-                                log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
-                            }
-                        }));
+//        this.test();
+
+        SYNC_EXECUTOR.submit(() -> range(localBlockNum, remoteBlockNum)
+                .parallel()
+                .forEach((blockNumber) -> {
+                    try {
+                        this.parseBlock(blockNumber);
+                    } catch (Exception e) {
+                        log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
+                    }
+                }));
     }
 
     private void test() {
 
         long blockNumber = 15566;
-        String txHash = "0xac64a6426f5b56f25bcdc0c5c0ea1599c1ebff3bbafa588807af289a0be4ccdf";
-
+        String txHashTWP = "0xac64a6426f5b56f25bcdc0c5c0ea1599c1ebff3bbafa588807af289a0be4ccdf";
+        String txHashDID = "0x05841b5fd5a3dc4a4d88e6177cdcdd4e89cdfc4b14df0da266ed502e194fd51f";
         try {
 //            this.parseBlock(blockNumber);
-            this.parseTx(txHash);
-
+            this.parseTx(txHashDID);
         } catch (Exception e) {
             log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
         }

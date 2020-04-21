@@ -59,7 +59,7 @@ public class Engine {
                     try {
                         syncJobEntry.getValue().execute();
                     } catch (Exception e) {
-                        log.error("Engine::run - execute exception: {}", e.getMessage());
+                        log.error("Engine::run - execute exception: {}", e.getMessage(), e);
                     }
                 })
         );
