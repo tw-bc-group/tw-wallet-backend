@@ -29,7 +29,7 @@ public abstract class BaseSync implements ISyncJob {
         long remoteBlockNum = geRemoteBlockNum();
         long localBlockNum = getLocalBlockNum();
 
-        log.info("Eth Sync Job Start- {}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
+        log.info("Sync Job Start- {}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
 
 //        this.test();
 
@@ -38,7 +38,7 @@ public abstract class BaseSync implements ISyncJob {
                     try {
                         this.parseBlock(blockNumber);
                     } catch (Exception e) {
-                        log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
+                        log.error("{}::parseBlock - exception: ", this.getClass().getName(), e);
                     }
                 });
     }
@@ -52,7 +52,7 @@ public abstract class BaseSync implements ISyncJob {
 //            this.parseBlock(blockNumber);
             this.parseTx(txHashDID);
         } catch (Exception e) {
-            log.error("{}::parseBlock - exception: {}", this.getClass().getName(), e.getMessage());
+            log.error("{}::parseBlock - exception", this.getClass().getName(), e);
         }
     }
 
