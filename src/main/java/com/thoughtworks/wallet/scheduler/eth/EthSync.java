@@ -110,10 +110,9 @@ public class EthSync extends BaseSync {
             SYNC_EXECUTOR.submit(
                     () -> transactionObjects.stream().parallel().forEach(tx -> this.parseTx(tx.getHash()))
             );
-
-            // save block
-            dbAdptor.SaveBlock(height, block.getHash());
         }
+        // save block
+        dbAdptor.SaveBlock(height, block.getHash());
     }
 
     private Event transferEvent() {
