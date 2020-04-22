@@ -78,13 +78,14 @@ public class EthSync extends BaseSync {
             dbAdptor.SaveTWPTransaction(TWPoint.of(fromAddr.getValue(), toAddr.getValue(), receipt.getTransactionHash(), receipt.getBlockNumber(), receipt.getTransactionIndex(), value, TRANSFER));
         } else if (topics.get(0).equals(encodedCreateIdentityEventSignature)) {
             // verify qty transferred
-            List<Type> results = FunctionReturnDecoder.decode(logTx.getData(), createIdentityEvent.getParameters());
+            List<Type> resultsIndexed = FunctionReturnDecoder.decode(logTx.getData(), createIdentityEvent.getIndexedParameters());
+            List<Type> results = FunctionReturnDecoder.decode(logTx.getData(), createIdentityEvent.getNonIndexedParameters());
 
-            String initiator = (String) results.get(0).getValue();
-            String ownerAddress = (String) results.get(1).getValue();
-            String did = (String) results.get(2).getValue();
-            String publicKey = (String) results.get(3).getValue();
-            String name = (String) results.get(4).getValue();
+            String initiator = (String) resultsIndexed.get(0).getValue();
+            String ownerAddress = (String) results.get(0).getValue();
+            String did = (String) results.get(1).getValue();
+            String publicKey = (String) results.get(2).getValue();
+            String name = (String) results.get(3).getValue();
 
             log.info("initiator:{}, ownerAddress:{}, did:{}, publicKey:{}, name:{}",
                     initiator, ownerAddress, did, publicKey, name);
@@ -133,13 +134,13 @@ public class EthSync extends BaseSync {
                 Arrays.asList(
                         new TypeReference<Address>(true) {
                         },
-                        new TypeReference<Address>(false) {
+                        new TypeReference<Address>() {
                         },
-                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>() {
                         },
-                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>() {
                         },
-                        new TypeReference<org.web3j.abi.datatypes.Utf8String>(false) {
+                        new TypeReference<org.web3j.abi.datatypes.Utf8String>() {
                         }
                 ));
     }
