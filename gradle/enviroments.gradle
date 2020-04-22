@@ -1,3 +1,4 @@
+import groovy.text.SimpleTemplateEngine
 import org.yaml.snakeyaml.Yaml
 
 buildscript {
@@ -14,6 +15,13 @@ buildscript {
 def environment = hasProperty('env') ? env : 'local'
 println "Current Environment: " + environment
 
-InputStream input = new FileInputStream(new File("$projectDir/src/main/resources/application-${environment}.yml"));
-Yaml yaml = new Yaml()
-project.ext.environment = yaml.load(input)
+def engine = new SimpleTemplateEngine()
+
+def binding = [
+        DB_USERNAME: System.getenv('DB_USERNAME') ?: "",
+        DB_URL     : System.getenv('DB_URL') ?: "",
+        DB_PASSWORD: System.getenv('DB_PASSWORD') ?: "",
+]
+def config = new File("$projectDir/src/main/resources/application-${environment}.yml")
+def template = engine.createTemplate(config).make(binding).toString()
+project.ext.environment = new Yaml().load(template)
