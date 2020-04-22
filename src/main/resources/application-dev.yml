@@ -6,9 +6,9 @@ swagger:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tw_wallet
-    username: postgres
-    password: tw-wallet-2020
+    url: jdbc:postgresql://${DB_URL}:5432/tw_wallet
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jooq:
     database:
