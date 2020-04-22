@@ -13,6 +13,7 @@ spring:
   jooq:
     database:
       name: org.jooq.meta.postgres.PostgresDatabase
+      inputSchema: public
 
   flyway:
     enabled: false

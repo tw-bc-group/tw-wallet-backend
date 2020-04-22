@@ -10,6 +10,7 @@ spring:
   jooq:
     database:
       name: org.jooq.meta.postgres.PostgresDatabase
+      inputSchema: public
 
   rabbitmq:
     host: localhost

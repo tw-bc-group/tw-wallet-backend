@@ -10,6 +10,7 @@ spring:
   jooq:
     database:
       name: org.jooq.meta.h2.H2Database
+      inputSchema: PUBLIC
 
   rabbitmq:
     host: localhost

@@ -86,7 +86,7 @@ flyway {
 jooq {
     version = '3.13.1'
     edition = 'OSS'
-    generateSchemaSourceOnCompilation = true //TODO: turn it on after removing generated source code from our codebase.
+    generateSchemaSourceOnCompilation = true
     wallet(sourceSets.main) {
         jdbc {
             driver = "${environment.spring.datasource.'driver-class-name'}"
@@ -101,7 +101,7 @@ jooq {
             }
             database {
                 name = "${environment.spring.jooq.database.name}"
-                inputSchema = 'public'
+                inputSchema = "${environment.spring.jooq.database.inputSchema}"
             }
             generate {
                 relations = true
