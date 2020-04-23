@@ -1,9 +1,9 @@
 package com.thoughtworks.wallet.scheduler.eth;
 
 
-import com.thoughtworks.wallet.scheduler.BaseSync;
-import com.thoughtworks.wallet.scheduler.DBAdptor;
-import com.thoughtworks.wallet.scheduler.SyncJob;
+import com.thoughtworks.wallet.scheduler.base.BaseSync;
+import com.thoughtworks.wallet.scheduler.util.DBAdptor;
+import com.thoughtworks.wallet.scheduler.base.SyncJob;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,6 +46,11 @@ public class EthSync extends BaseSync {
     @Override
     protected long getLocalBlockNum() {
         return dbAdptor.getLocalBlockHeight();
+    }
+
+    @Override
+    public void switchNode() {
+        ethClientAdaptor.switchNode();
     }
 
     @SneakyThrows

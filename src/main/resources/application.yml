@@ -41,3 +41,14 @@ quorum:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
   node1:
     private-key: ${NODE1_PRIVATE_KEY}
+
+
+sync:
+  interval: 3000
+  block-stop-increase: 10
+  url0: ${RPC_URL}
+  url1: ${RPC_URL}
+  url2: ${RPC_URL}
+  url3: ${RPC_URL}
+
+

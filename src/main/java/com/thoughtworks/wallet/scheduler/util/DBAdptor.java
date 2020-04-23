@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.scheduler;
+package com.thoughtworks.wallet.scheduler.util;
 
 
 import com.thoughtworks.wallet.scheduler.eth.Identity;

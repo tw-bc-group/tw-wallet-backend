@@ -4,15 +4,10 @@ import com.thoughtworks.wallet.annotation.Node1PrivateKey;
 import com.thoughtworks.wallet.annotation.QuorumRPCUrl;
 import com.thoughtworks.wallet.annotation.TWPointContractAddress;
 import com.thoughtworks.wallet.asset.exception.QuorumConnectionErrorException;
-import com.thoughtworks.wallet.scheduler.ISyncJob;
-import com.thoughtworks.wallet.scheduler.SyncJob;
 import lombok.extern.slf4j.Slf4j;
-import org.reflections.Reflections;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -23,11 +18,6 @@ import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j

@@ -30,7 +30,6 @@ public class SchedulerController {
     public boolean run() {
         log.info("engine.run() start");
         engine.run();
-        log.info("engine.run() end");
         return true;
     }
 }

@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.scheduler;
+package com.thoughtworks.wallet.scheduler.base;
 
 import org.springframework.stereotype.Component;
 

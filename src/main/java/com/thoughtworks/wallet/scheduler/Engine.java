@@ -1,5 +1,7 @@
 package com.thoughtworks.wallet.scheduler;
 
+import com.thoughtworks.wallet.scheduler.base.ISyncJob;
+import com.thoughtworks.wallet.scheduler.base.SyncJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,10 @@ import java.util.concurrent.ForkJoinPool;
  * 5. 重试机制
  * 6. 如何结合调度
  * 7. 线程中的网络请求的超时时间需要设置
+ * 8. 如果某个节点长时间不出块，需要切换节点
  */
 
-@Service
+@Service("Engine")
 @Slf4j
 public class Engine {
     private final ApplicationContext applicationContext;

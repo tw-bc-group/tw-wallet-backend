@@ -46,4 +46,8 @@ public class EthClientAdaptor {
         return transactionReceipt.getResult();
 
     }
+
+    public void switchNode() {
+        log.info("switchNode , create web3j with another url");
+    }
 }
