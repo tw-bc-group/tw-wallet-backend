@@ -34,7 +34,7 @@ public class TransactionController {
     @GetMapping
     public List<Transaction> getTxHistory(@RequestParam(name = "from_addr") String fromAddr,
         @RequestParam(name = "limit", defaultValue = "10") int limit) {
-        return transactionService.listByFromAddress(fromAddr, limit);
+        return transactionService.listByFromAddress(fromAddr.toLowerCase(), limit);
     }
 
 
