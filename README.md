@@ -62,3 +62,4 @@ docker run -d --name rabbitmq --publish 5671:5671  --publish 5672:5672 --publish
 * refactor: refactor the code with no behavior changed
 * chore: changes about utilization and tools, no business logic
 * revert: revert the previous commit
+
