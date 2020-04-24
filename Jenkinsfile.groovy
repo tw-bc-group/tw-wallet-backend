@@ -9,6 +9,7 @@ pipeline {
     IDENTITY_REGISTRY_CONTRACT_ADDRESS = "${IDENTITY_REGISTRY_CONTRACT_ADDRESS}"
     RPC_URL = "${RPC_URL}"
     DOCKER_REG = "${DOCKER_REG}"
+    LOG_DIR = "${LOG_DIR}"
     TW_WALLET_IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
   }
   stages {
