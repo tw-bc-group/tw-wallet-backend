@@ -28,7 +28,7 @@ services:
     image: ${TW_WALLET_IMAGE}
     user: root
     volumes:
-      - ${LOG_DIR:-./logs}:/app/logs
+      - ${LOG_DIR}:/app/logs
     environment:
       PROJECT_ENV: dev
       DB_URL: postgres
