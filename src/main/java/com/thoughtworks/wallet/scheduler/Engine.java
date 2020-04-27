@@ -20,6 +20,7 @@ import java.util.concurrent.ForkJoinPool;
  * 6. 如何结合调度
  * 7. 线程中的网络请求的超时时间需要设置
  * 8. 如果某个节点长时间不出块，需要切换节点
+ * 9. w3j超时了，会在engine::run异常，如何切换节点
  */
 
 @Service("Engine")
