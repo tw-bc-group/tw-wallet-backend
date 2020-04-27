@@ -1,6 +1,7 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
 import com.thoughtworks.wallet.asset.exception.HealthVerificationNotFoundException;
+import com.thoughtworks.wallet.asset.request.HealthVerificationRequest;
 import com.thoughtworks.wallet.asset.response.HealthVerificationResponse;
 import com.thoughtworks.wallet.asset.service.IHealthyVerifierService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,15 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         }
 
         return healthVerification;
+    }
+
+    @Override
+    public void createHealthVerification(HealthVerificationRequest healthVerification) {
+        dslContext
+            .insertInto(TBL_HEALTHY_VERIFICATION)
+            .set(TBL_HEALTHY_VERIFICATION.PHONE, healthVerification.getPhone())
+            .set(TBL_HEALTHY_VERIFICATION.STATUS, healthVerification.getStatus())
+            .execute();
     }
 
     private boolean healthVerificationNotFound(HealthVerificationResponse healthVerification) {
