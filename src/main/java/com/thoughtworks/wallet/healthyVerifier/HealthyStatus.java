@@ -1,16 +1,15 @@
 package com.thoughtworks.wallet.healthyVerifier;
 
+import lombok.Getter;
+
 public enum HealthyStatus {
     HEALTHY("healthy"),
-    UN_HEALTHY("unhealthy");
+    UNHEALTHY("unhealthy");
 
+    @Getter
     private String status;
 
     HealthyStatus(String status) {
         this.status = status;
-    }
-
-    public static boolean isValid(String status) {
-        return HEALTHY.status.equals(status) || UN_HEALTHY.status.equals(status);
     }
 }

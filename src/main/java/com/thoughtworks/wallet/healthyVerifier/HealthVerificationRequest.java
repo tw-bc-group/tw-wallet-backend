@@ -14,16 +14,19 @@ public class HealthVerificationRequest {
     String phone;
 
     @NotBlank
-    String status;
+    HealthyStatus status;
 
     @JsonCreator
     public HealthVerificationRequest(@JsonProperty("phone") String phone,
                                      @JsonProperty("status") String status) {
-        if (!HealthyStatus.isValid(status)) {
+        HealthyStatus healthyStatus;
+        try {
+            healthyStatus = HealthyStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new InvalidHealthyStatusException(status);
         }
 
         this.phone = phone;
-        this.status = status;
+        this.status = healthyStatus;
     }
 }

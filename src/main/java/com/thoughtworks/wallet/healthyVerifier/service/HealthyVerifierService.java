@@ -39,7 +39,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         dslContext
             .insertInto(TBL_HEALTHY_VERIFICATION)
             .set(TBL_HEALTHY_VERIFICATION.PHONE, healthVerification.getPhone())
-            .set(TBL_HEALTHY_VERIFICATION.STATUS, healthVerification.getStatus())
+            .set(TBL_HEALTHY_VERIFICATION.STATUS, healthVerification.getStatus().getStatus())
             .execute();
     }
 
