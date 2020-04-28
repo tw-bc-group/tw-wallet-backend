@@ -1,9 +1,8 @@
-package com.thoughtworks.wallet.asset.service.impl;
+package com.thoughtworks.wallet.healthyVerifier.service;
 
-import com.thoughtworks.wallet.asset.exception.HealthVerificationNotFoundException;
-import com.thoughtworks.wallet.asset.request.HealthVerificationRequest;
-import com.thoughtworks.wallet.asset.response.HealthVerificationResponse;
-import com.thoughtworks.wallet.asset.service.IHealthyVerifierService;
+import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
+import com.thoughtworks.wallet.healthyVerifier.HealthVerificationResponse;
+import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Service;

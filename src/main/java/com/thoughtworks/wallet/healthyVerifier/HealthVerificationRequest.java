@@ -1,9 +1,8 @@
-package com.thoughtworks.wallet.asset.request;
+package com.thoughtworks.wallet.healthyVerifier;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.thoughtworks.wallet.asset.exception.InvalidHealthyStatusException;
-import com.thoughtworks.wallet.asset.model.HealthyStatus;
+import com.thoughtworks.wallet.healthyVerifier.exception.InvalidHealthyStatusException;
 import lombok.Value;
 import org.hibernate.validator.constraints.Length;
 

@@ -1,5 +1,6 @@
 package com.thoughtworks.wallet.asset.model;
 
+import com.thoughtworks.wallet.healthyVerifier.HealthyStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

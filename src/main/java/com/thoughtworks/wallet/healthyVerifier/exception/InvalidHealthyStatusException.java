@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.asset.exception;
+package com.thoughtworks.wallet.healthyVerifier.exception;
 
 import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.wallet.common.exception.AppException;

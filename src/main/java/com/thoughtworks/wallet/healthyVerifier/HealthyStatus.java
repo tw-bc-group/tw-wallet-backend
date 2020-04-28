@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.asset.model;
+package com.thoughtworks.wallet.healthyVerifier;
 
 public enum HealthyStatus {
     HEALTHY("healthy"),

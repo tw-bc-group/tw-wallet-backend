@@ -1,6 +1,7 @@
 package com.thoughtworks.wallet.asset.request;
 
-import com.thoughtworks.wallet.asset.exception.InvalidHealthyStatusException;
+import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
+import com.thoughtworks.wallet.healthyVerifier.exception.InvalidHealthyStatusException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

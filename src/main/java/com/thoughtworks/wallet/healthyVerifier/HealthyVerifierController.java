@@ -1,8 +1,6 @@
-package com.thoughtworks.wallet.asset.controller;
+package com.thoughtworks.wallet.healthyVerifier;
 
-import com.thoughtworks.wallet.asset.request.HealthVerificationRequest;
-import com.thoughtworks.wallet.asset.response.HealthVerificationResponse;
-import com.thoughtworks.wallet.asset.service.IHealthyVerifierService;
+import com.thoughtworks.wallet.healthyVerifier.service.IHealthyVerifierService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
