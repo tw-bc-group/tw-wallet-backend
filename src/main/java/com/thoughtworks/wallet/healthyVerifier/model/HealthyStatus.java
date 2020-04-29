@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier;
+package com.thoughtworks.wallet.healthyVerifier.model;
 
 import lombok.Getter;
 

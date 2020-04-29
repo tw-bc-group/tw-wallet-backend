@@ -1,6 +1,6 @@
 package com.thoughtworks.wallet.healthyVerifier.validator;
 
-import com.thoughtworks.wallet.healthyVerifier.HealthyStatus;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.ConstraintValidator;

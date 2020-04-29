@@ -1,23 +1,25 @@
 package com.thoughtworks.wallet.healthyVerifier;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HealthVerificationResponse {
-    @NonNull
-    private String phone;
-
-    @NonNull
-    private String status;
-
-    @NonNull
-    private Date verificationTime;
+    @JsonProperty(value = "@context")
+    List<String> context;
+    String id;
+    String ver;
+    String iss;
+    long iat;
+    long exp;
+    List<String> typ;
+    HealthyCredential sub;
 }
