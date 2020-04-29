@@ -17,8 +17,9 @@ import org.jooq.DSLContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
+import java.time.Instant;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.thoughtworks.wallet.gen.Tables.TBL_HEALTHY_VERIFICATION_CLAIM;
 
@@ -83,11 +84,11 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
         final String claimId = claimIdUtil.generateClaimId(did, VER);
 
-        final Calendar calendar = Calendar.getInstance();
-        final long currentTime = calendar.getTimeInMillis();
+        final Instant instant = Instant.now();
+        final long currentTime = instant.getEpochSecond();
 
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + expireHours);
-        final long expireTime = calendar.getTime().getTime();
+        final Instant expireInstant = instant.plusMillis(TimeUnit.HOURS.toMillis(expireHours));
+        final long expireTime = expireInstant.getEpochSecond();
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus();
         return HealthVerificationClaim.of(
