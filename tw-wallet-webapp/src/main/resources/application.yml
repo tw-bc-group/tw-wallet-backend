@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: ${PROJECT_ENV:local}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    name: service-contract
+    url: jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+    hikari:
+      connection-timeout: 20000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+
+  flyway:
+    enabled: false
+
+  rabbitmq:
+    host: ${RABBIT_MQ_URL}
+    port: ${RABBIT_MQ_PORT}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 20
+        prefetch: 5
+
+quorum:
+  rpc:
+    url: ${RPC_URL}
+  tw-point:
+    contract-address: ${TWPOINT_CONTRACT_ADDRESS}
+  identity-registry:
+    contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
+  node1:
+    private-key: ${NODE1_PRIVATE_KEY}
+
+
+sync:
+  interval: 3000
+  block-stop-increase: 10
+  url0: ${RPC_URL}
+  url1: ${RPC_URL}
+  url2: ${RPC_URL}
+  url3: ${RPC_URL}
+
+

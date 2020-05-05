@@ -1,0 +1,113 @@
+buildscript {
+    dependencies {
+        classpath 'org.jooq:jooq-codegen:3.13.1'
+        classpath 'com.h2database:h2:1.4.200'
+    }
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "6.3.2"
+    id 'nu.studer.jooq' version '4.1'
+    id 'java'
+}
+
+
+dependencies {
+    compile project(':tw-wallet-common')
+    implementation deps.springBootStarterAmqp
+    implementation deps.springBootStarterDataJdbc
+    implementation deps.springBootStarterWeb
+    implementation deps.springfoxSwagger2
+    implementation deps.springfoxSwaggerUI
+    implementation deps.slf4j
+    implementation deps.logbackCore
+    implementation deps.logbackClassic
+    implementation deps.jacksonCore
+    implementation deps.jacksonDatabind
+    implementation deps.jacksonAnnotations
+    implementation deps.jacksonDatatypeJdk8
+    implementation deps.jacksonDatatypeJsr310
+    implementation deps.metricsCore
+    implementation deps.metricsJvm
+    implementation deps.metricsJson
+    implementation deps.metricsLogback
+    implementation deps.metricsHealthchecks
+    implementation deps.metricsGraphite
+    implementation deps.guava
+    implementation deps.postgresql
+    implementation deps.jooq
+    implementation deps.jooqCodegen
+    implementation deps.modelmapper
+    implementation deps.modelmapperJooq
+    implementation deps.w3j
+    implementation deps.w3jContract
+    implementation deps.flyway
+    implementation deps.commonsLang3
+    implementation deps.commonsCollections4
+    implementation deps.okhttp
+    implementation deps.okhttpUrlConnection
+    implementation deps.loggingInterceptor
+    implementation deps.failsafe
+    compileOnly deps.lombok
+    annotationProcessor deps.lombok
+    annotationProcessor deps.springBootConfigurationProcessor
+    testImplementation deps.springRabbitTest
+    testImplementation deps.h2
+
+    jooqRuntime deps.postgresql
+    jooqRuntime deps.h2
+}
+
+test {
+    useJUnitPlatform()
+}
+
+apply from: 'gradle/integration-test.gradle'
+apply from: "gradle/enviroments.gradle"
+
+flyway {
+    url = "${environment.spring.datasource.url}"
+    user = "${environment.spring.datasource.username}"
+    password = "${environment.spring.datasource.password}"
+    locations = "${environment.spring.flyway.locations}".split(',')
+}
+
+jooq {
+    version = '3.13.1'
+    edition = 'OSS'
+    generateSchemaSourceOnCompilation = true
+    wallet(sourceSets.main) {
+        jdbc {
+            driver = "${environment.spring.datasource.'driver-class-name'}"
+            url = "${environment.spring.datasource.url}"
+            user = "${environment.spring.datasource.username}"
+            password = "${environment.spring.datasource.password}"
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = "${environment.spring.jooq.database.name}"
+                inputSchema = "${environment.spring.jooq.database.inputSchema}"
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = false
+                fluentSetters = true
+                daos = false
+                pojosEqualsAndHashCode = false
+                javaTimeTypes = true
+            }
+            target {
+                packageName = 'com.thoughtworks.wallet.gen'
+                directory = "src/generated/java"
+            }
+        }
+    }
+}
+
+generateWalletJooqSchemaSource.dependsOn flywayMigrate

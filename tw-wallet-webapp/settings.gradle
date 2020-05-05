@@ -1,0 +1,2 @@
+rootProject.name = 'tw-wallet-webapp'
+include ':tw-wallet-common'

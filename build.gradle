@@ -1,122 +1,61 @@
 buildscript {
     repositories {
         mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply from: "gradle/dependencies.gradle"
+
+allprojects {
+    // Apply the java plugin to add support for Java
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+
+    group = 'com.thoughtworks'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        jcenter()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'org.jooq:jooq-codegen:3.13.1'
-        classpath 'com.h2database:h2:1.4.200'
-    }
-}
-
-plugins {
-    id 'org.springframework.boot' version '2.2.5.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id "org.flywaydb.flyway" version "6.3.2"
-    id 'nu.studer.jooq' version '4.1'
-    id 'java'
-}
-
-group = 'com.thoughtworks'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-apply from: 'gradle/enviroments.gradle'
-apply from: 'gradle/integration-test.gradle'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
-
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-    jooqRuntime group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
-    jooqRuntime group: 'com.h2database', name: 'h2', version: '1.4.200'
-    implementation 'org.jooq:jooq:3.13.1'
-    implementation 'org.jooq:jooq-codegen:3.13.1'
-    implementation "org.modelmapper.extensions:modelmapper-jooq:2.3.0"
-    implementation "org.modelmapper:modelmapper:2.3.7"
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
-    implementation('org.web3j:core:4.2.0')
-    implementation('org.web3j:contracts:4.2.0')
-    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    implementation 'org.flywaydb:flyway-core'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
-    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.springframework.amqp:spring-rabbit-test'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-flyway {
-    url = "${environment.spring.datasource.url}"
-    user = "${environment.spring.datasource.username}"
-    password = "${environment.spring.datasource.password}"
-    locations = "${environment.spring.flyway.locations}".split(',')
-}
-
-jooq {
-    version = '3.13.1'
-    edition = 'OSS'
-    generateSchemaSourceOnCompilation = true
-    wallet(sourceSets.main) {
-        jdbc {
-            driver = "${environment.spring.datasource.'driver-class-name'}"
-            url = "${environment.spring.datasource.url}"
-            user = "${environment.spring.datasource.username}"
-            password = "${environment.spring.datasource.password}"
+        testImplementation(deps.springBootStarterTest) {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
-        generator {
-            name = 'org.jooq.codegen.DefaultGenerator'
-            strategy {
-                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+    }
+
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "src/generated/java"]
             }
-            database {
-                name = "${environment.spring.jooq.database.name}"
-                inputSchema = "${environment.spring.jooq.database.inputSchema}"
-            }
-            generate {
-                relations = true
-                deprecated = false
-                records = true
-                immutablePojos = false
-                fluentSetters = true
-                daos = false
-                pojosEqualsAndHashCode = false
-                javaTimeTypes = true
-            }
-            target {
-                packageName = 'com.thoughtworks.wallet.gen'
-                directory = "$buildDir/genrated-sources/jooq"
+            resources {
+                srcDirs = ["src/main/resources"]
             }
         }
     }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    jar { enabled = true }
+    bootJar { enabled = false }
 }

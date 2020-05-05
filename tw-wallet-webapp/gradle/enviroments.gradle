@@ -1,0 +1,37 @@
+import groovy.text.SimpleTemplateEngine
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.yaml:snakeyaml:1.26"
+    }
+}
+
+def environment = hasProperty('env') ? env : 'local'
+println "Current Environment: " + environment
+
+def engine = new SimpleTemplateEngine()
+
+def binding = [
+        DB_USERNAME: System.getenv('DB_USERNAME') ?: "",
+        DB_URL     : System.getenv('DB_URL') ?: "",
+        DB_PASSWORD: System.getenv('DB_PASSWORD') ?: "",
+
+        RPC_URL: System.getenv('RPC_URL') ?: "",
+        TWPOINT_CONTRACT_ADDRESS: System.getenv('TWPOINT_CONTRACT_ADDRESS') ?: "",
+        IDENTITY_REGISTRY_CONTRACT_ADDRESS: System.getenv('IDENTITY_REGISTRY_CONTRACT_ADDRESS') ?: "",
+        NODE1_PRIVATE_KEY: System.getenv('NODE1_PRIVATE_KEY') ?: "",
+
+        RABBIT_MQ_URL: System.getenv('RABBIT_MQ_URL') ?: "",
+        RABBIT_MQ_PORT: System.getenv('RABBIT_MQ_PORT') ?: "",
+        RABBIT_MQ_USERNAME: System.getenv('RABBIT_MQ_USERNAME') ?: "",
+        RABBIT_MQ_PASSWORD: System.getenv('RABBIT_MQ_PASSWORD') ?: ""
+]
+def config = new File("$projectDir/src/main/resources/application-${environment}.yml")
+def template = engine.createTemplate(config).make(binding).toString()
+project.ext.environment = new Yaml().load(template)
