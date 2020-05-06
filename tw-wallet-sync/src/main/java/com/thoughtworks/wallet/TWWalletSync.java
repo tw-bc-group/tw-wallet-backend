@@ -20,7 +20,7 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.thoughtworks.common","com.thoughtworks.wallet"})
 public class TWWalletSync {
 
     @QuorumRPCUrl
