@@ -111,3 +111,11 @@ jooq {
 }
 
 generateWalletJooqSchemaSource.dependsOn flywayMigrate
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.thoughtworks.wallet.TWWalletWebApp'
+        )
+    }
+}
