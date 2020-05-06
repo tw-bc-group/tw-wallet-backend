@@ -6,6 +6,7 @@ buildscript {
 }
 
 plugins {
+    id "org.springframework.boot"
     id 'nu.studer.jooq' version '4.1'
     id 'java'
 }
@@ -94,11 +95,6 @@ jooq {
     }
 }
 
-jar {
-    manifest {
-        attributes(
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'com.thoughtworks.wallet.TWWalletSync'
-        )
-    }
+springBoot {
+    mainClassName = 'com.thoughtworks.wallet.TWWalletSync'
 }

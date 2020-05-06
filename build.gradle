@@ -16,7 +16,6 @@ allprojects {
     // Apply the java plugin to add support for Java
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
 
@@ -56,6 +55,15 @@ allprojects {
         }
     }
 
-    jar { enabled = true }
-    bootJar { enabled = false }
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+    }
+
+    //打包源码
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
 }
