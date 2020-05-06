@@ -1,17 +1,6 @@
 ---
 version: '2'
 services:
-  postgres:
-    image: postgres:12.2
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=tw_wallet
-    ports:
-      - "5432:5432"
-    networks:
-      - backend
-
   rabbitMQ:
     image: rabbitmq:management
     ports:
@@ -48,12 +37,10 @@ services:
       RABBIT_MQ_USERNAME: guest
       RABBIT_MQ_PASSWORD: guest
     depends_on:
-      - postgres
       - rabbitMQ
     ports:
       - "80:8080"
     links:
-      - postgres
       - rabbitMQ
     networks:
       - backend
@@ -83,11 +70,9 @@ services:
       RABBIT_MQ_USERNAME: guest
       RABBIT_MQ_PASSWORD: guest
     depends_on:
-      - postgres
       - backend
       - rabbitMQ
     links:
-      - postgres
       - rabbitMQ
     networks:
       - backend
