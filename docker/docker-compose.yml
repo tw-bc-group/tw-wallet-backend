@@ -20,7 +20,7 @@ services:
       - ${LOG_DIR}/backend:/app/logs
     environment:
       PROJECT_ENV: dev
-      DB_URL: postgres
+      DB_URL: localhost
       DB_PORT: 5432
       DB_NAME: tw_wallet
       DB_USERNAME: ${DB_USERNAME}
@@ -53,7 +53,7 @@ services:
     command: ["java", "-jar", "tw-wallet-sync.jar"]
     environment:
       PROJECT_ENV: dev
-      DB_URL: postgres
+      DB_URL: localhost
       DB_PORT: 5432
       DB_NAME: tw_wallet
       DB_USERNAME: ${DB_USERNAME}
