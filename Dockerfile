@@ -13,5 +13,4 @@ RUN apk add curl
 
 USER 1000
 
-CMD ["java", "-jar", "tw-wallet-sync.jar"]
 CMD ["java", "-jar", "tw-wallet-webapp.jar"]
