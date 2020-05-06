@@ -27,7 +27,7 @@ clean:
 
 build:
 	@echo build start
-	$(gradle) clean build -x test -x generateWalletJooqSchemaSource
+	$(gradle) clean build -x integTest
 	@echo build done
 
 image:

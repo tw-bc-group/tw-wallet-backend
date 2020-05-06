@@ -13,6 +13,12 @@ pipeline {
     TW_WALLET_IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
   }
   stages {
+    stage('Migration') {
+      steps {
+        sh './gradlew flywayMigrate'
+      }
+    }
+
     stage('Build') {
       steps {
         // sh 'make cache'
