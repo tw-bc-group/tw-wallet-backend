@@ -4,6 +4,7 @@ swagger:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/tw_wallet
+    name: pg-sync
     username: postgres
     password: tw-wallet-2020
     driver-class-name: org.postgresql.Driver

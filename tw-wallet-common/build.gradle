@@ -13,14 +13,11 @@ dependencies {
     implementation deps.jacksonDatatypeJdk8
     implementation deps.jacksonDatatypeJsr310
     implementation deps.guava
-    implementation deps.postgresql
     implementation deps.jooq
-    implementation deps.jooqCodegen
     implementation deps.modelmapper
     implementation deps.modelmapperJooq
     implementation deps.w3j
     implementation deps.w3jContract
-    implementation deps.flyway
     implementation deps.commonsLang3
     implementation deps.commonsCollections4
     implementation deps.okhttp
@@ -32,9 +29,6 @@ dependencies {
     annotationProcessor deps.lombok
     annotationProcessor deps.springBootConfigurationProcessor
     testImplementation deps.springRabbitTest
-    testImplementation deps.h2
-    implementation deps.postgresql
-
 }
 
 test {
