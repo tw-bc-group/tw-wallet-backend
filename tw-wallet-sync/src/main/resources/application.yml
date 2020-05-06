@@ -18,9 +18,6 @@ spring:
       max-lifetime: 1800000
       auto-commit: true
 
-  flyway:
-    enabled: false
-
   rabbitmq:
     host: ${RABBIT_MQ_URL}
     port: ${RABBIT_MQ_PORT}

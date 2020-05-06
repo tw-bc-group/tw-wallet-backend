@@ -15,9 +15,6 @@ spring:
       name: org.jooq.meta.postgres.PostgresDatabase
       inputSchema: public
 
-  flyway:
-    enabled: false
-    locations: filesystem:src/main/resources/migration,classpath:migration
 
 quorum:
   rpc:

@@ -23,10 +23,6 @@ spring:
         max-concurrency: 20
         prefetch: 5
 
-  flyway:
-    enabled: false
-    locations: filesystem:src/main/resources/h2/migration
-
 quorum:
   rpc:
     url: 'http://quorum.tw-wallet.in2e.com:22001'

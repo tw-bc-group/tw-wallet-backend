@@ -6,7 +6,6 @@ buildscript {
 }
 
 plugins {
-    id "org.flywaydb.flyway" version "6.3.2"
     id 'nu.studer.jooq' version '4.1'
     id 'java'
 }
@@ -34,7 +33,6 @@ dependencies {
     implementation deps.modelmapperJooq
     implementation deps.w3j
     implementation deps.w3jContract
-    implementation deps.flyway
     implementation deps.commonsLang3
     implementation deps.commonsCollections4
     implementation deps.okhttp
