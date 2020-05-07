@@ -41,6 +41,7 @@ quorum:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
   health-verification-claim:
     contract-address: ${HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS}
+    issuer-address: ${HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS}
   node1:
     private-key: ${NODE1_PRIVATE_KEY}
 

@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier;
+package com.thoughtworks.wallet.healthyVerifier.annotation;
 
 import org.springframework.beans.factory.annotation.Value;
 
