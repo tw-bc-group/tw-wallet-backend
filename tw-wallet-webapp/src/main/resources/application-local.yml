@@ -34,5 +34,7 @@ quorum:
     contract-address: '0x624d400315312c6280F6dB7683ACf2128EbB9d46'
   identity-registry:
     contract-address: '0x11aC39ac7D780a6b9DdfC8687831e25B655884c7'
+  health-verification-claim:
+    contract-address: '0x81845481fD51Efd88fd44e8983a60CEcF3886552'
   node1:
     private-key: '0x4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377'
