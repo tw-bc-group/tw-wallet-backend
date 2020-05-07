@@ -10,6 +10,7 @@ pipeline {
     RPC_URL = "${RPC_URL}"
     DOCKER_REG = "${DOCKER_REG}"
     LOG_DIR = "${LOG_DIR}"
+    HOST_IP = "${HOST_IP}"
     TW_WALLET_IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
   }
   stages {
