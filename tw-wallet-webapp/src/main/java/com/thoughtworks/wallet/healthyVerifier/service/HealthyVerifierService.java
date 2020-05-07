@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationResponse;
+import com.thoughtworks.wallet.healthyVerifier.annotation.HealthVerificationClaimIssuerAddress;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaim;
@@ -28,17 +29,25 @@ import static com.thoughtworks.wallet.gen.Tables.TBL_HEALTHY_VERIFICATION_CLAIM;
 public class HealthyVerifierService implements IHealthyVerifierService {
     private final DSLContext dslContext;
     private final ClaimIdUtil claimIdUtil;
+    private final HealthyClaimContractService healthyClaimContractService;
 
+    @HealthVerificationClaimIssuerAddress
+    private String issuerAddress;
+
+    final String didSchema = "did:tw:";
     private final String VER = "0.1";
-    private final String issuerDid = "did:tw:849E687Bda2B7E89868646f39BB01AE070ADf3f7";
     final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
+
+    private String issuerDid = didSchema + issuerAddress;
+
     // 假设 claim 30 天后过期
     final int expireHours = 30 * 24;
 
-    public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil) {
+    public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService) {
         this.dslContext = dslContext;
         this.claimIdUtil = claimIdUtil;
+        this.healthyClaimContractService = healthyClaimContractService;
     }
 
     @Override
@@ -68,6 +77,8 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             log.error("Insert into database error: can not insert healthy verification of owner: {}.", healthVerification.getDid());
             throw new InsertIntoDatabaseErrorException(healthVerification.getDid());
         }
+
+        healthyClaimContractService.createHealthVerification(issuerAddress, claim.getId(), healthVerification.getDid(), issuerDid);
 
         return HealthVerificationResponse.of(
             claim.getContext(),
