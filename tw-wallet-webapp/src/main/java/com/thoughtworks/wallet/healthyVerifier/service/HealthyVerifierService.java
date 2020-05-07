@@ -101,7 +101,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final Instant expireInstant = instant.plusMillis(TimeUnit.HOURS.toMillis(expireHours));
         final long expireTime = expireInstant.getEpochSecond();
 
-        final HealthyStatusWrapper healthyStatus = generateHealthyStatus();
+        final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone);
         return HealthVerificationClaim.of(
             context,
             claimId,
@@ -113,10 +113,12 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             HealthyCredential.of(did, phone, healthyStatus));
     }
 
-    private HealthyStatusWrapper generateHealthyStatus() {
-        // TODO: mock healthy status: random between healthy and unhealthy
+    private HealthyStatusWrapper generateHealthyStatus(String phone) {
+        // TODO: mock healthy status: last number of phone is odd number, then it's UNHEALTHY, Otherwise its HEALTHY
         Map<Integer, String> healthyStatus = ImmutableMap.of(0, HealthyStatus.HEALTHY.getStatus(), 1, HealthyStatus.UNHEALTHY.getStatus());
-        int no = (int) (Math.random() * 2);
+        String lastChar = phone.substring(phone.length() - 1);
+        final int lastNumber = Integer.parseInt(lastChar);
+        int no = lastNumber % 2;
         return HealthyStatusWrapper.of(healthyStatus.get(no));
     }
 }
