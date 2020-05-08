@@ -15,6 +15,7 @@ import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
 import com.thoughtworks.wallet.healthyVerifier.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,7 +54,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     @Override
     public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
         HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification.getDid(), healthVerification.getPhone());
-        String issuerDid = DIDSchema + healthVerificationClaimContract.getIssuerAddress();
+        String issuerDid = generateIssuerDid();
 
         final int insertedNumber;
         try {
@@ -116,7 +117,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
         final String claimId = claimIdUtil.generateClaimId(did, VER);
-        String issuerDid = DIDSchema + healthVerificationClaimContract.getIssuerAddress();
+        String issuerDid = generateIssuerDid();
 
         final Instant instant = Instant.now();
         final long currentTime = instant.getEpochSecond();
@@ -134,6 +135,11 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             expireTime,
             credentialType,
             HealthyCredential.of(did, phone, healthyStatus));
+    }
+
+    @NotNull
+    private String generateIssuerDid() {
+        return DIDSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
     }
 
     private HealthyStatusWrapper generateHealthyStatus(String phone) {
