@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.thoughtworks.wallet.healthyVerifier.service.HealthyVerifierService.DIDSchema;
+
 
 @Slf4j
 @Component
@@ -38,14 +40,13 @@ public class ClaimIdUtil {
      * @throws Exception
      */
     public String generateClaimId(String did, String ver) {
-        final String prefix = "did:tw:";
         final String address = getAddressFromDid(did);
         final byte[] h = Hash.sha256hash160(address.getBytes());
         final String data = ver.concat(Arrays.toString(h));
         final String checkSum = Arrays.toString(Hash.sha256(Hash.sha256(data.getBytes()))).substring(0, 4);
         final String idString = Base58.encode(checkSum.concat(data).getBytes()).substring(0, 40);
 
-        return prefix.concat(idString);
+        return DIDSchema.concat(idString);
     }
 
     BigInteger getNonce(String address) {

@@ -35,12 +35,12 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     @HealthVerificationClaimIssuerAddress
     private String issuerAddress;
 
-    final String didSchema = "did:tw:";
+    public final static String DIDSchema = "DID:TW:";
     private final String VER = "0.1";
     final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
 
-    private String issuerDid = didSchema + issuerAddress;
+    private String issuerDid = DIDSchema + issuerAddress;
 
     // 假设 claim 30 天后过期
     final int expireHours = 30 * 24;
