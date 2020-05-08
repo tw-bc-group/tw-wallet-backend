@@ -20,7 +20,7 @@ public class HealthVerificationClaim {
     HealthyCredential sub;
 
     // deserialize the JSON string from database of table tbl_healthy_verification_claim
-    public HealthVerificationClaim(String context, String id, String ver, String iss, long iat, long exp, String typ, String sub, String owner) {
+    public HealthVerificationClaim(String id, String ver, String context, String iss, long iat, long exp, String typ, String sub, String owner) {
         this.context = ImmutableList.of(context);
         this.id = id;
         this.ver = ver;
