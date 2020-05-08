@@ -26,7 +26,7 @@ public class ClaimIdUtil {
 
     /**
      * 参考生成规则：(https://github.com/ontio/ontology-DID/blob/master/docs/cn/ONTID_protocol_spec_cn.md)
-     * 1. 根据链上指定地址最新的交易信息获取 nonce，计算 h = sha256hash160(nonce），data = VER || h；
+     * 1. 根据用户的地址，计算 h = sha256hash160(address），data = VER || h；
      * 2. 对 data 计算两次 sha256，并取结果哈希的前 4 字节作为校验，即 checksum = sha256(sha256(data))[0:4]；
      * 3. 令 idString = base58(data || checksum)[0, 40]；
      * 4. 将 "did:tw:" 与 idString 拼接，即 ID = "did:tw:" || idString；
@@ -40,8 +40,7 @@ public class ClaimIdUtil {
     public String generateClaimId(String did, String ver) {
         final String prefix = "did:tw:";
         final String address = getAddressFromDid(did);
-        final BigInteger nonce = getNonce(address);
-        final byte[] h = Hash.sha256hash160(nonce.toByteArray());
+        final byte[] h = Hash.sha256hash160(address.getBytes());
         final String data = ver.concat(Arrays.toString(h));
         final String checkSum = Arrays.toString(Hash.sha256(Hash.sha256(data.getBytes()))).substring(0, 4);
         final String idString = Base58.encode(checkSum.concat(data).getBytes()).substring(0, 40);
