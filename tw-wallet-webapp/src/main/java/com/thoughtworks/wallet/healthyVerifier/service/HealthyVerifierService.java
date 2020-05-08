@@ -15,6 +15,7 @@ import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
 import com.thoughtworks.wallet.healthyVerifier.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.jooq.JSON;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +66,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.IAT, claim.getIat())
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.EXP, claim.getExp())
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.TYP, claim.getTyp().get(0))
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JacksonUtil.beanToJSonStr(claim.getSub()))
+                .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JSON.valueOf(JacksonUtil.beanToJSonStr(claim.getSub())))
                 .execute();
 
         } catch (DataIntegrityViolationException e) {
