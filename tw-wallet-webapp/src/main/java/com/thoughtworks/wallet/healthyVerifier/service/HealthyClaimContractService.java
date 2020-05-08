@@ -1,7 +1,7 @@
 package com.thoughtworks.wallet.healthyVerifier.service;
 
 import com.google.common.collect.ImmutableList;
-import com.thoughtworks.wallet.healthyVerifier.annotation.HealthVerificationClaimContractAddress;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaimContract;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
@@ -21,11 +21,11 @@ public class HealthyClaimContractService {
 
     private final Web3j web3j;
 
-    @HealthVerificationClaimContractAddress
-    private String healthVerificationClaimContractAddress;
+    private final HealthVerificationClaimContract healthVerificationClaimContract;
 
-    public HealthyClaimContractService(Web3j web3j) {
+    public HealthyClaimContractService(Web3j web3j, HealthVerificationClaimContract healthVerificationClaimContract) {
         this.web3j = web3j;
+        this.healthVerificationClaimContract = healthVerificationClaimContract;
     }
 
     public void createHealthVerification(String issuerAddress, String claimId, String ownerId, String issuerId) {
@@ -33,7 +33,7 @@ public class HealthyClaimContractService {
 
         String responseValue = null;
         try {
-            responseValue = callSmartContractFunction(createHealthVerificationFunction, healthVerificationClaimContractAddress, issuerAddress);
+            responseValue = callSmartContractFunction(createHealthVerificationFunction, healthVerificationClaimContract.getAddress(), issuerAddress);
         } catch (Exception e) {
             e.printStackTrace();
         }

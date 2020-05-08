@@ -5,11 +5,11 @@ import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationResponse;
-import com.thoughtworks.wallet.healthyVerifier.annotation.HealthVerificationClaimIssuerAddress;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaim;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaimContract;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
@@ -33,29 +33,27 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     private final DSLContext dslContext;
     private final ClaimIdUtil claimIdUtil;
     private final HealthyClaimContractService healthyClaimContractService;
-
-    @HealthVerificationClaimIssuerAddress
-    private String issuerAddress;
+    private final HealthVerificationClaimContract healthVerificationClaimContract;
 
     public final static String DIDSchema = "DID:TW:";
     private final String VER = "0.1";
     final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
 
-    private String issuerDid = DIDSchema + issuerAddress;
-
     // 假设 claim 30 天后过期
     final int expireHours = 30 * 24;
 
-    public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService) {
+    public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract) {
         this.dslContext = dslContext;
         this.claimIdUtil = claimIdUtil;
         this.healthyClaimContractService = healthyClaimContractService;
+        this.healthVerificationClaimContract = healthVerificationClaimContract;
     }
 
     @Override
     public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
         HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification.getDid(), healthVerification.getPhone());
+        String issuerDid = DIDSchema + healthVerificationClaimContract.getIssuerAddress();
 
         final int insertedNumber;
         try {
@@ -81,7 +79,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             throw new InsertIntoDatabaseErrorException(healthVerification.getDid());
         }
 
-        healthyClaimContractService.createHealthVerification(issuerAddress, claim.getId(), healthVerification.getDid(), issuerDid);
+        healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
 
         return HealthVerificationResponse.of(
             claim.getContext(),
@@ -118,6 +116,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
         final String claimId = claimIdUtil.generateClaimId(did, VER);
+        String issuerDid = DIDSchema + healthVerificationClaimContract.getIssuerAddress();
 
         final Instant instant = Instant.now();
         final long currentTime = instant.getEpochSecond();
