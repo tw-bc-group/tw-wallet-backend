@@ -7,6 +7,7 @@ import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationResponse;
 import com.thoughtworks.wallet.healthyVerifier.annotation.HealthVerificationClaimIssuerAddress;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
+import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaim;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.thoughtworks.wallet.gen.Tables.TBL_HEALTHY_VERIFICATION_CLAIM;
@@ -80,6 +82,27 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         }
 
         healthyClaimContractService.createHealthVerification(issuerAddress, claim.getId(), healthVerification.getDid(), issuerDid);
+
+        return HealthVerificationResponse.of(
+            claim.getContext(),
+            claim.getId(),
+            claim.getVer(),
+            claim.getIss(),
+            claim.getIat(),
+            claim.getExp(),
+            claim.getTyp(),
+            claim.getSub()
+        );
+    }
+
+    @Override
+    public HealthVerificationResponse getHealthVerification(String ownerId) {
+        final HealthVerificationClaim claim =
+            Optional.ofNullable(dslContext
+                                    .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
+                                    .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
+                                    .fetchOneInto(HealthVerificationClaim.class))
+                    .orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         return HealthVerificationResponse.of(
             claim.getContext(),
