@@ -40,8 +40,8 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
 
-    // 假设 claim 30 天后过期
-    final int expireHours = 30 * 24;
+    // 假设 claim 5 mins 过期
+    final int expireMinutes = 5;
 
     public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract) {
         this.dslContext = dslContext;
@@ -121,7 +121,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final Instant instant = Instant.now();
         final long currentTime = instant.getEpochSecond();
 
-        final Instant expireInstant = instant.plusMillis(TimeUnit.HOURS.toMillis(expireHours));
+        final Instant expireInstant = instant.plusMillis(TimeUnit.MINUTES.toMillis(expireMinutes));
         final long expireTime = expireInstant.getEpochSecond();
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone);
