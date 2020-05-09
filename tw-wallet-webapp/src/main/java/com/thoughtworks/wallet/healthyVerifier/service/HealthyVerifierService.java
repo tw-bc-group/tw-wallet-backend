@@ -21,10 +21,10 @@ import org.jooq.JSON;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static com.thoughtworks.wallet.gen.Tables.TBL_HEALTHY_VERIFICATION_CLAIM;
 
@@ -42,7 +42,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
 
     // TODO 目前假设 claim 5 mins 过期
-    final long expireTime = TimeUnit.MINUTES.toMillis(5);
+    Duration expiredDuration = Duration.ofMinutes(5);
 
     public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract) {
         this.dslContext = dslContext;
@@ -98,10 +98,10 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     public HealthVerificationResponse getHealthVerification(String ownerId) {
         final HealthVerificationClaim claim =
             Optional.ofNullable(dslContext
-                                    .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
-                                    .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
-                                    .fetchOneInto(HealthVerificationClaim.class))
-                    .orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
+                .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
+                .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
+                .fetchOneInto(HealthVerificationClaim.class))
+                .orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         return HealthVerificationResponse.of(
             claim.getContext(),
@@ -119,20 +119,19 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final String claimId = claimIdUtil.generateClaimId(did, VER);
         String issuerDid = generateIssuerDid();
 
-        final Instant instant = Instant.now();
-        final long currentTime = instant.getEpochSecond();
-
-        final Instant expireInstant = instant.plusMillis(expireTime);
-        final long expireTime = expireInstant.getEpochSecond();
+        final Instant now = Instant.now();
+        final long currentTime = now.getEpochSecond();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone);
+
         return HealthVerificationClaim.of(
             context,
             claimId,
             VER,
             issuerDid,
             currentTime,
-            expireTime,
+            expiredTime,
             credentialType,
             HealthyCredential.of(did, phone, healthyStatus));
     }
