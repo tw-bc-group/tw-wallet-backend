@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HealthVerificationResponse {

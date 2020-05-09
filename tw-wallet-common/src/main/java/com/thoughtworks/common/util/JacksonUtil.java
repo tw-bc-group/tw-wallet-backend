@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-/**
- * The class JacksonUtil
- * <p>
- * json字符与对像转换
- *
- * @version: $Revision$ $Date$ $LastChangedBy$
- */
 @Slf4j
 @Component
 public final class JacksonUtil {
@@ -62,14 +56,10 @@ public final class JacksonUtil {
      * @param valueType
      * @return
      */
+    @SneakyThrows
     public static <T> T jsonStrToBean(String jsonStr, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(jsonStr, valueType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return objectMapper.readValue(jsonStr, valueType);
 
-        return null;
     }
 
     /**
@@ -79,14 +69,10 @@ public final class JacksonUtil {
      * @param valueTypeRef
      * @return
      */
+    @SneakyThrows
     public static <T> T jsonStrToBean(String jsonStr, TypeReference<T> valueTypeRef) {
-        try {
-            return objectMapper.readValue(jsonStr, valueTypeRef);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return objectMapper.readValue(jsonStr, valueTypeRef);
 
-        return null;
     }
 
     /**
@@ -95,14 +81,10 @@ public final class JacksonUtil {
      * @param object
      * @return
      */
+    @SneakyThrows
     public static String beanToJSonStr(Object object) {
-        try {
-            return objectMapper.writeValueAsString(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return objectMapper.writeValueAsString(object);
 
-        return null;
     }
 
     public String parsePropertyFromJson(String json, String property) throws JsonProcessingException {
@@ -131,4 +113,21 @@ public final class JacksonUtil {
         jsonStr = stringBuffer.toString();
         return jsonStr;
     }
+
+    @SneakyThrows
+    static public <T> T fromJsonNode(JsonNode node, TypeReference<T> typeRef) {
+        return objectMapper.readValue(node.toString(), typeRef);
+    }
+
+    @SneakyThrows
+    static public <T> T fromJsonNode(JsonNode node,  Class<T> valueType) {
+        return objectMapper.readValue(node.toString(), valueType);
+    }
+
+
+    @SneakyThrows
+    static public JsonNode toJsonNode(Object object) {
+        return objectMapper.valueToTree(object);
+    }
+
 }

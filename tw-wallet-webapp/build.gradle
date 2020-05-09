@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.jooq:jooq-codegen:3.13.1'
+        classpath deps.jooqCodegen
         classpath 'com.h2database:h2:1.4.200'
     }
 }
@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id "org.springframework.boot"
     id "org.flywaydb.flyway" version "6.3.2"
-    id 'nu.studer.jooq' version '4.1'
+    id 'nu.studer.jooq' version '4.2'
     id 'java'
 }
 
@@ -28,18 +28,11 @@ dependencies {
     implementation deps.jacksonAnnotations
     implementation deps.jacksonDatatypeJdk8
     implementation deps.jacksonDatatypeJsr310
-    implementation deps.metricsCore
-    implementation deps.metricsJvm
-    implementation deps.metricsJson
-    implementation deps.metricsLogback
-    implementation deps.metricsHealthchecks
-    implementation deps.metricsGraphite
+    implementation deps.modelmapper
+    implementation deps.modelmapperJooq
     implementation deps.guava
     implementation deps.postgresql
     implementation deps.jooq
-    implementation deps.jooqCodegen
-    implementation deps.modelmapper
-    implementation deps.modelmapperJooq
     implementation deps.w3j
     implementation deps.w3jContract
     implementation deps.flyway
@@ -92,6 +85,14 @@ jooq {
             database {
                 name = "${environment.spring.jooq.database.name}"
                 inputSchema = "${environment.spring.jooq.database.inputSchema}"
+                forcedTypes {
+                    forcedType {
+                        userType='com.fasterxml.jackson.databind.JsonNode'
+                        binding='com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
+                        includeExpression = '.*\\.sub.*'
+                        includeTypes='.*'
+                    }
+                }
             }
             generate {
                 relations = true

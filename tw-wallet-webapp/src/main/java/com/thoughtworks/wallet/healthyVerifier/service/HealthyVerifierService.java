@@ -1,8 +1,10 @@
 package com.thoughtworks.wallet.healthyVerifier.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.thoughtworks.common.util.JacksonUtil;
+import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.HealthVerificationResponse;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -59,16 +62,16 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final int insertedNumber;
         try {
             insertedNumber = dslContext
-                .insertInto(TBL_HEALTHY_VERIFICATION_CLAIM)
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.CONTEXT, claim.getContext().get(0))
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.VER, claim.getVer())
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.ID, claim.getId())
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.ISS, claim.getIss())
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.IAT, claim.getIat())
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.EXP, claim.getExp())
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.TYP, claim.getTyp().get(0))
-                .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JSON.valueOf(JacksonUtil.beanToJSonStr(claim.getSub())))
-                .execute();
+                    .insertInto(TBL_HEALTHY_VERIFICATION_CLAIM)
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.CONTEXT, claim.getContext().get(0))
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.VER, claim.getVer())
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.ID, claim.getId())
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.ISS, claim.getIss())
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.IAT, claim.getIat())
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.EXP, claim.getExp())
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.TYP, claim.getTyp().get(0))
+                    .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JacksonUtil.toJsonNode(claim.getSub()))
+                    .execute();
 
         } catch (DataIntegrityViolationException e) {
             log.error("Healthy verification of owner:{} is already existed.", healthVerification.getDid());
@@ -83,36 +86,28 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
 
         return HealthVerificationResponse.of(
-            claim.getContext(),
-            claim.getId(),
-            claim.getVer(),
-            claim.getIss(),
-            claim.getIat(),
-            claim.getExp(),
-            claim.getTyp(),
-            claim.getSub()
+                claim.getContext(),
+                claim.getId(),
+                claim.getVer(),
+                claim.getIss(),
+                claim.getIat(),
+                claim.getExp(),
+                claim.getTyp(),
+                claim.getSub()
         );
     }
 
     @Override
     public HealthVerificationResponse getHealthVerification(String ownerId) {
-        final HealthVerificationClaim claim =
-            Optional.ofNullable(dslContext
+        TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
-                .fetchOneInto(HealthVerificationClaim.class))
-                .orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
+                .fetchOne();
 
-        return HealthVerificationResponse.of(
-            claim.getContext(),
-            claim.getId(),
-            claim.getVer(),
-            claim.getIss(),
-            claim.getIat(),
-            claim.getExp(),
-            claim.getTyp(),
-            claim.getSub()
-        );
+        HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
+        //TODO: why use HealthVerificationResponse?
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(claim, HealthVerificationResponse.class);
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
@@ -126,14 +121,14 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone);
 
         return HealthVerificationClaim.of(
-            context,
-            claimId,
-            version,
-            issuerDid,
-            currentTime,
-            expiredTime,
-            credentialType,
-            HealthyCredential.of(did, phone, healthyStatus));
+                context,
+                claimId,
+                version,
+                issuerDid,
+                currentTime,
+                expiredTime,
+                credentialType,
+                HealthyCredential.of(did, phone, healthyStatus));
     }
 
     @NotNull

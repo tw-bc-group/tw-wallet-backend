@@ -2,6 +2,7 @@ package com.thoughtworks.wallet.healthyVerifier.model;
 
 import com.google.common.collect.ImmutableList;
 import com.thoughtworks.common.util.JacksonUtil;
+import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -20,14 +21,14 @@ public class HealthVerificationClaim {
     HealthyCredential sub;
 
     // deserialize the JSON string from database of table tbl_healthy_verification_claim
-    public HealthVerificationClaim(String id, String ver, String context, String iss, long iat, long exp, String typ, String sub, String owner) {
-        this.context = ImmutableList.of(context);
-        this.id = id;
-        this.ver = ver;
-        this.iss = iss;
-        this.iat = iat;
-        this.exp = exp;
-        this.typ = ImmutableList.of(typ);
-        this.sub = JacksonUtil.jsonStrToBean(sub, HealthyCredential.class);
+    public HealthVerificationClaim(TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord) {
+        this.context = ImmutableList.of(tblHealthyVerificationClaimRecord.getContext());
+        this.id = tblHealthyVerificationClaimRecord.getId();
+        this.ver = tblHealthyVerificationClaimRecord.getVer();
+        this.iss = tblHealthyVerificationClaimRecord.getIss();
+        this.iat = tblHealthyVerificationClaimRecord.getIat();
+        this.exp = tblHealthyVerificationClaimRecord.getExp();
+        this.typ = ImmutableList.of(tblHealthyVerificationClaimRecord.getTyp());
+        this.sub = JacksonUtil.fromJsonNode(tblHealthyVerificationClaimRecord.getSub(), HealthyCredential.class);
     }
 }

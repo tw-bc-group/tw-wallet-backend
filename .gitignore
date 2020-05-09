@@ -40,4 +40,6 @@ gradle/wrapper/
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 .gradletasknamecache
-/bin/
+
+*.class
+**/bin/**
