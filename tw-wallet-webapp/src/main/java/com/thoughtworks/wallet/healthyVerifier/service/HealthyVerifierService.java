@@ -36,8 +36,8 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     private final HealthyClaimContractService healthyClaimContractService;
     private final HealthVerificationClaimContract healthVerificationClaimContract;
 
-    public final static String DIDSchema = "DID:TW:";
-    private final String VER = "0.1";
+    public final static String didSchema = "DID:TW:";
+    private final String version = "0.1";
     final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
     final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
 
@@ -116,7 +116,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
-        final String claimId = claimIdUtil.generateClaimId(did, VER);
+        final String claimId = claimIdUtil.generateClaimId(did, version);
         String issuerDid = generateIssuerDid();
 
         final Instant now = Instant.now();
@@ -128,7 +128,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         return HealthVerificationClaim.of(
             context,
             claimId,
-            VER,
+            version,
             issuerDid,
             currentTime,
             expiredTime,
@@ -138,7 +138,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @NotNull
     private String generateIssuerDid() {
-        return DIDSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
+        return didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
     }
 
     private HealthyStatusWrapper generateHealthyStatus(String phone) {
