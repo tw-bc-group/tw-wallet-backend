@@ -29,6 +29,7 @@ spring:
 
 quorum:
   rpc:
+#    url: 'http://quorum.tw-wallet.in2e.com:22001'
     url: 'http://127.0.0.1:22001'
   tw-point:
     contract-address: '0x624d400315312c6280F6dB7683ACf2128EbB9d46'
