@@ -38,5 +38,6 @@ quorum:
   health-verification-claim:
     contract-address: '0x81845481fD51Efd88fd44e8983a60CEcF3886552'
     issuer-address: '0xcA843569e3427144cEad5e4d5999a3D0cCF92B8e'
+    issuer-private-key: '4762e04d10832808a0aebdaa79c12de54afbe006bfffd228b3abcc494fe986f9'
   node1:
     private-key: '0x4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377'
