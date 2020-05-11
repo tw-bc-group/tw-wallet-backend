@@ -13,41 +13,41 @@ plugins {
 
 dependencies {
     compile project(':tw-wallet-common')
-    implementation deps.springBootStarterAmqp
-    implementation deps.springBootStarterDataJdbc
-    implementation deps.springBootStarterWeb
-    implementation deps.springfoxSwagger2
-    implementation deps.springfoxSwaggerUI
-    implementation deps.slf4j
-    implementation deps.logbackCore
-    implementation deps.logbackClassic
-    implementation deps.jacksonCore
-    implementation deps.jacksonDatabind
-    implementation deps.jacksonAnnotations
-    implementation deps.jacksonDatatypeJdk8
-    implementation deps.jacksonDatatypeJsr310
-    implementation deps.guava
-    implementation deps.postgresql
-    implementation deps.jooq
-    implementation deps.jooqCodegen
-    implementation deps.modelmapper
-    implementation deps.modelmapperJooq
-    implementation deps.w3j
-    implementation deps.w3jContract
-    implementation deps.commonsLang3
-    implementation deps.commonsCollections4
-    implementation deps.okhttp
-    implementation deps.okhttpUrlConnection
-    implementation deps.loggingInterceptor
-    implementation deps.failsafe
-    compileOnly deps.lombok
-    annotationProcessor deps.lombok
-    annotationProcessor deps.springBootConfigurationProcessor
-    testImplementation deps.springRabbitTest
-    testImplementation deps.h2
+    implementation Deps.springBootStarterAmqp
+    implementation Deps.springBootStarterDataJdbc
+    implementation Deps.springBootStarterWeb
+    implementation Deps.springfoxSwagger2
+    implementation Deps.springfoxSwaggerUI
+    implementation Deps.slf4j
+    implementation Deps.logbackCore
+    implementation Deps.logbackClassic
+    implementation Deps.jacksonCore
+    implementation Deps.jacksonDatabind
+    implementation Deps.jacksonAnnotations
+    implementation Deps.jacksonDatatypeJdk8
+    implementation Deps.jacksonDatatypeJsr310
+    implementation Deps.guava
+    implementation Deps.postgresql
+    implementation Deps.jooq
+    implementation Deps.jooqCodegen
+    implementation Deps.modelmapper
+    implementation Deps.modelmapperJooq
+    implementation Deps.w3j
+    implementation Deps.w3jContract
+    implementation Deps.commonsLang3
+    implementation Deps.commonsCollections4
+    implementation Deps.okhttp
+    implementation Deps.okhttpUrlConnection
+    implementation Deps.loggingInterceptor
+    implementation Deps.failsafe
+    compileOnly Deps.lombok
+    annotationProcessor Deps.lombok
+    annotationProcessor Deps.springBootConfigurationProcessor
+    testImplementation Deps.springRabbitTest
+    testImplementation Deps.h2
 
-    jooqRuntime deps.postgresql
-    jooqRuntime deps.h2
+    jooqRuntime Deps.postgresql
+    jooqRuntime Deps.h2
 }
 
 test {
@@ -76,6 +76,14 @@ jooq {
             database {
                 name = "${environment.spring.jooq.database.name}"
                 inputSchema = "${environment.spring.jooq.database.inputSchema}"
+                forcedTypes {
+                    forcedType {
+                        userType='com.fasterxml.jackson.databind.JsonNode'
+                        binding='com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
+                        includeExpression = '.*\\.sub.*'
+                        includeTypes='.*'
+                    }
+                }
             }
             generate {
                 relations = true

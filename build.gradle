@@ -10,8 +10,6 @@ buildscript {
     }
 }
 
-apply from: "gradle/dependencies.gradle"
-
 allprojects {
     // Apply the java plugin to add support for Java
     apply plugin: 'java'
@@ -32,7 +30,7 @@ allprojects {
     }
 
     dependencies {
-        testImplementation(deps.springBootStarterTest) {
+        testImplementation(Deps.springBootStarterTest) {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
     }

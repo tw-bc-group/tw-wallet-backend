@@ -4,6 +4,8 @@
 package com.thoughtworks.wallet.gen.tables;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding;
 import com.thoughtworks.wallet.gen.Keys;
 import com.thoughtworks.wallet.gen.Public;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
@@ -15,7 +17,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -31,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblHealthyVerificationClaim extends TableImpl<TblHealthyVerificationClaimRecord> {
 
-    private static final long serialVersionUID = 1541780801;
+    private static final long serialVersionUID = 1523248536;
 
     /**
      * The reference instance of <code>public.tbl_healthy_verification_claim</code>
@@ -84,7 +86,12 @@ public class TblHealthyVerificationClaim extends TableImpl<TblHealthyVerificatio
     /**
      * The column <code>public.tbl_healthy_verification_claim.sub</code>.
      */
-    public final TableField<TblHealthyVerificationClaimRecord, String> SUB = createField(DSL.name("sub"), org.jooq.impl.SQLDataType.VARCHAR(512).nullable(false), this, "");
+    public final TableField<TblHealthyVerificationClaimRecord, JsonNode> SUB = createField(DSL.name("sub"), org.jooq.impl.SQLDataType.JSON.nullable(false), this, "", new PostgresJSONJacksonJsonNodeBinding());
+
+    /**
+     * The column <code>public.tbl_healthy_verification_claim.owner</code>.
+     */
+    public final TableField<TblHealthyVerificationClaimRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(64), this, "");
 
     /**
      * Create a <code>public.tbl_healthy_verification_claim</code> table reference
@@ -161,11 +168,11 @@ public class TblHealthyVerificationClaim extends TableImpl<TblHealthyVerificatio
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, String, Long, Long, String, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<String, String, String, String, Long, Long, String, JsonNode, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }
