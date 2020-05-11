@@ -20,14 +20,14 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @Validated
-@RequestMapping(value = "/v1/dc-ep")
+@RequestMapping(value = "/v1/token")
 @Api(tags = "DC/EP 相关操作")
-public class DCEPController {
+public class TokenController {
 
     private final IBlockchainService quorumService;
 
     @Autowired
-    public DCEPController(IBlockchainService quorumService) {
+    public TokenController(IBlockchainService quorumService) {
         this.quorumService = quorumService;
     }
 
