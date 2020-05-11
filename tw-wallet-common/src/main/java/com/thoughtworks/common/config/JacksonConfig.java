@@ -1,5 +1,6 @@
 package com.thoughtworks.common.config;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -24,9 +25,10 @@ public class JacksonConfig {
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         return JsonMapper.builder() // or different mapper for other format
-                         .addModule(new ParameterNamesModule())
-                         .addModule(new Jdk8Module())
-                         .addModule(javaTimeModule)
-                         .build();
+                .addModule(new ParameterNamesModule())
+                .addModule(new Jdk8Module())
+                .addModule(javaTimeModule)
+                .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+                .build();
     }
 }

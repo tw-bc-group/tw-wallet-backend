@@ -36,6 +36,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     private final HealthyClaimContractService healthyClaimContractService;
     private final HealthVerificationClaimContract healthVerificationClaimContract;
     private final HealthVerificationDAO healthVerificationDAO;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public final static String didSchema = "DID:TW:";
     private final String version = "0.1";
@@ -60,7 +61,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         final int insertedNumber;
         try {
-            insertedNumber = this.healthVerificationDAO.insertHealthVerificationClaim(claim);
+            insertedNumber = healthVerificationDAO.insertHealthVerificationClaim(claim);
 
         } catch (DataIntegrityViolationException e) {
             log.error("Healthy verification of owner:{} is already existed.", healthVerification.getDid());
@@ -96,7 +97,6 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
         //TODO: why use HealthVerificationResponse?
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(claim, HealthVerificationResponse.class);
     }
 
@@ -104,10 +104,15 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     public HealthVerificationResponse changeHealthVerification(ChangeHealthVerificationRequest changeHealthVerificationRequest) {
         TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
-                .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getDid()))
+                .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getOwnerId()))
                 .fetchOne();
+
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
-        return createHealthVerification(new HealthVerificationRequest(changeHealthVerificationRequest.getDid(), claim.getSub().getPhone()));
+
+        claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
+        healthVerificationDAO.updateHealthVerificationClaim(claim);
+        return modelMapper.map(claim, HealthVerificationResponse.class);
+
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {

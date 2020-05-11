@@ -1,8 +1,10 @@
 package com.thoughtworks.wallet.healthyVerifier.dto;
 
-import lombok.Getter;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
+import lombok.Data;
 
-@Getter
+@Data
 public class ChangeHealthVerificationRequest {
-    String did;
+    String ownerId;
+    HealthyStatus healthyStatus;
 }

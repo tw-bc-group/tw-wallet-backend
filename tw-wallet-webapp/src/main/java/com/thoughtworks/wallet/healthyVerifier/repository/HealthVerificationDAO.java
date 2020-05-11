@@ -30,4 +30,13 @@ public class HealthVerificationDAO {
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JacksonUtil.toJsonNode(claim.getSub()))
                 .execute();
     }
+
+    public int updateHealthVerificationClaim(HealthVerificationClaim claim) {
+        return dslContext
+                .update(TBL_HEALTHY_VERIFICATION_CLAIM)
+                .set(TBL_HEALTHY_VERIFICATION_CLAIM.EXP, claim.getExp())
+                .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JacksonUtil.toJsonNode(claim.getSub()))
+                .where(TBL_HEALTHY_VERIFICATION_CLAIM.ID.eq(claim.getId()))
+                .execute();
+    }
 }
