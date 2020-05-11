@@ -53,9 +53,9 @@ public class HealthyClaimContractService {
 
         TransactionReceipt transferTransactionReceipt = quorumUtils.waitForTransactionReceipt(transactionHash);
         List<Log> receiptLogs = Objects.requireNonNull(transferTransactionReceipt).getLogs();
+        log.info("Receipt logs are: {}.", receiptLogs.toString());
 
         if (receiptLogs.isEmpty()) {
-            log.info("Receipt logs are: {}.", receiptLogs.toString());
             throw new HealthyVerificationCreateFailedException(ownerId);
         }
     }

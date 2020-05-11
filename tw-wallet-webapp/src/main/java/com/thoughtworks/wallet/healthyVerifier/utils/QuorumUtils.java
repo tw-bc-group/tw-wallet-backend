@@ -44,15 +44,17 @@ public class QuorumUtils {
     }
 
     public TransactionReceipt waitForTransactionReceipt(String transactionHash) {
-        Optional<TransactionReceipt> transactionReceiptOptional = Optional.empty();
+        Optional<TransactionReceipt> transactionReceiptOptional;
         try {
             transactionReceiptOptional = getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Transaction receipt not generated after " + ATTEMPTS + " attempts");
+            throw new ErrorSendTransactionException(e.getLocalizedMessage());
         }
 
         if (!transactionReceiptOptional.isPresent()) {
             log.error("Transaction receipt not generated after " + ATTEMPTS + " attempts");
+            throw new ErrorSendTransactionException("Transaction receipt not generated.");
         }
 
         return transactionReceiptOptional.get();
