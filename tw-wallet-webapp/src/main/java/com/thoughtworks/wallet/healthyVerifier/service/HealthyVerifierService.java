@@ -7,12 +7,9 @@ import com.thoughtworks.wallet.healthyVerifier.dto.ChangeHealthVerificationReque
 import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationResponse;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
+import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaim;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaimContract;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
+import com.thoughtworks.wallet.healthyVerifier.model.*;
 import com.thoughtworks.wallet.healthyVerifier.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthyVerifier.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.thoughtworks.wallet.gen.Tables.TBL_HEALTHY_VERIFICATION_CLAIM;
 
@@ -62,7 +60,6 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         final int insertedNumber;
         try {
             insertedNumber = healthVerificationDAO.insertHealthVerificationClaim(claim);
-
         } catch (DataIntegrityViolationException e) {
             log.error("Healthy verification of owner:{} is already existed.", healthVerification.getDid());
             throw new HealthVerificationAlreadyExistException(healthVerification.getDid());
@@ -102,10 +99,10 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @Override
     public HealthVerificationResponse changeHealthVerification(ChangeHealthVerificationRequest changeHealthVerificationRequest) {
-        TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = dslContext
+        TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getOwnerId()))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new HealthVerificationNotFoundException(changeHealthVerificationRequest.getOwnerId()));
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
         claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
