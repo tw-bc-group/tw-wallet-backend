@@ -3,22 +3,22 @@ package com.thoughtworks.wallet.healthyVerifier.model;
 import com.google.common.collect.ImmutableList;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
-@Value
-@RequiredArgsConstructor(staticName = "of")
+@Data
+@Builder
+@AllArgsConstructor
 public class HealthVerificationClaim {
-    List<String> context;
-    String id;
-    String ver;
-    String iss;
-    long iat;
-    long exp;
-    List<String> typ;
-    HealthyCredential sub;
+    private List<String> context;
+    private String id;
+    private String ver;
+    private String iss;
+    private long iat;
+    private long exp;
+    private List<String> typ;
+    private HealthyCredential sub;
 
     // deserialize the JSON string from database of table tbl_healthy_verification_claim
     public HealthVerificationClaim(TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord) {

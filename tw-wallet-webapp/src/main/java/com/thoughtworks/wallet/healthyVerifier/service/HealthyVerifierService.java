@@ -108,8 +108,10 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .fetchOne();
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
-
         claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
+        final Instant now = Instant.now();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        claim.setExp(expiredTime);
         healthVerificationDAO.updateHealthVerificationClaim(claim);
         return modelMapper.map(claim, HealthVerificationResponse.class);
 
@@ -126,15 +128,16 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone);
 
-        return HealthVerificationClaim.of(
-                context,
-                claimId,
-                version,
-                issuerDid,
-                currentTime,
-                expiredTime,
-                credentialType,
-                HealthyCredential.of(did, phone, healthyStatus));
+        return HealthVerificationClaim.builder()
+                .context(context)
+                .id(claimId)
+                .ver(version)
+                .iss(issuerDid)
+                .iat(currentTime)
+                .exp(expiredTime)
+                .typ(credentialType)
+                .sub(HealthyCredential.of(did, phone, healthyStatus))
+                .build();
     }
 
     @NotNull
