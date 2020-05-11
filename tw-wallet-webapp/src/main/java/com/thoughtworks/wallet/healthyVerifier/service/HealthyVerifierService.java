@@ -93,7 +93,6 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .fetchOne();
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
-        //TODO: why use HealthVerificationResponse?
         return modelMapper.map(claim, HealthVerificationResponse.class);
     }
 
