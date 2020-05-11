@@ -13,7 +13,6 @@ import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
 import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +126,6 @@ public class QuorumServiceImpl implements IBlockchainService {
         return IdentityRegistryInfoResponse.of(name, identityRegistryContractAddress, abi);
     }
 
-    @SneakyThrows
     public List<TransactionResponse> getTransactionsBy(String address, int limit) {
         log.info("getTransactionsBy:" + address);
         int blockLimit = 1000;
@@ -136,24 +134,28 @@ public class QuorumServiceImpl implements IBlockchainService {
         if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);
         }
+        try {
+            BigInteger ethBlockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
 
-        BigInteger ethBlockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
+            for (int i = 0; i < blockLimit; i++) {
+                log.debug("fetching block number: {}", ethBlockNumber);
+                if (countBlockTransactions(ethBlockNumber).compareTo(BigInteger.ZERO) > 0) {
+                    final List<Transaction> transactions = fetchBlockTransactions(address,
+                        ethBlockNumber);
 
-        for (int i = 0; i < blockLimit; i++) {
-            log.debug("fetching block number: {}", ethBlockNumber);
-            if (countBlockTransactions(ethBlockNumber).compareTo(BigInteger.ZERO) > 0) {
-                final List<Transaction> transactions = fetchBlockTransactions(address,
-                    ethBlockNumber);
-
-                for (int j = 0; j < Math.max(limit, transactions.size()); j++) {
-                    responses.add(modelMapper.map(transactions.get(j), TransactionResponse.class));
-                    if (responses.size() >= limit) {
-                        return responses;
+                    for (int j = 0; j < Math.max(limit, transactions.size()); j++) {
+                        responses.add(modelMapper.map(transactions.get(j), TransactionResponse.class));
+                        if (responses.size() >= limit) {
+                            return responses;
+                        }
                     }
-                }
 
+                }
+                ethBlockNumber = ethBlockNumber.subtract(BigInteger.ONE);
             }
-            ethBlockNumber = ethBlockNumber.subtract(BigInteger.ONE);
+        } catch (InterruptedException | ExecutionException e) {
+            log.error(e.getMessage());
+            throw new QuorumConnectionErrorException(rpcUrl);
         }
 
         return responses;
