@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier;
+package com.thoughtworks.wallet.healthyVerifier.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
