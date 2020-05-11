@@ -2,7 +2,6 @@ package com.thoughtworks.wallet;
 
 import com.thoughtworks.common.annotation.Node1PrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
-import com.thoughtworks.common.annotation.TWPointContractAddress;
 import com.thoughtworks.common.exception.QuorumConnectionErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -30,8 +29,8 @@ public class TWWalletWebApp {
     @Node1PrivateKey
     private String privateKey;
 
-    @TWPointContractAddress
-    private String TWPointContractAddress;
+    @com.thoughtworks.common.annotation.DCEPContractAddress
+    private String DCEPContractAddress;
 
     public static void main(String[] args) {
         SpringApplication.run(TWWalletWebApp.class, args);
@@ -67,7 +66,7 @@ public class TWWalletWebApp {
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
+        return ERC20.load(DCEPContractAddress, web3j, Credentials.create(privateKey),
                 new DefaultGasProvider());
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Value("${quorum.tw-point.contract-address}")
+@Value("${quorum.dc-ep.contract-address}")
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TWPointContractAddress {
+public @interface DCEPContractAddress {
 }

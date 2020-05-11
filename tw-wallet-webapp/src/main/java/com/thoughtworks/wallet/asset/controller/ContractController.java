@@ -1,7 +1,7 @@
 package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
-import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
+import com.thoughtworks.wallet.asset.response.DECPInfoResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,9 +31,9 @@ public class ContractController {
         return quorumService.getIdentityRegistryInfo();
     }
 
-    @GetMapping(value = "/tw-point")
-    @ApiOperation(value = "获取 TWPoint 合约的相关信息")
-    public TWPointInfoResponse getTWPointContractInfo() {
-        return quorumService.getTWPointInfo();
+    @GetMapping(value = "/token")
+    @ApiOperation(value = "获取 DC/EP 合约的相关信息")
+    public DECPInfoResponse getDCEPContractInfo() {
+        return quorumService.getDCEPInfo();
     }
 }

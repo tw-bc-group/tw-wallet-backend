@@ -1,7 +1,7 @@
 package com.thoughtworks.wallet.asset.controller;
 
 import com.thoughtworks.wallet.asset.request.TWPTransferRequest;
-import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
+import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,27 +20,27 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @Validated
-@RequestMapping(value = "/v1/tw-points")
-@Api(tags = "TW Point 相关操作")
-public class TWPointController {
+@RequestMapping(value = "/v1/dc-ep")
+@Api(tags = "DC/EP 相关操作")
+public class DCEPController {
 
     private final IBlockchainService quorumService;
 
     @Autowired
-    public TWPointController(IBlockchainService quorumService) {
+    public DCEPController(IBlockchainService quorumService) {
         this.quorumService = quorumService;
     }
 
     @GetMapping("/{address}")
-    @ApiOperation(value = "根据用户的 quorum 地址获取 TW Point 余额")
-    public TWPointBalanceResponse getBalanceByAddress(@PathVariable("address") String address) {
-        return quorumService.getTWPointBalanceBy(address);
+    @ApiOperation(value = "根据用户的 quorum 地址获取 DC/EP 余额")
+    public DECPBalanceResponse getBalanceByAddress(@PathVariable("address") String address) {
+        return quorumService.getDCEPBalanceBy(address);
     }
 
     @PostMapping(value = "/transfer")
-    @ApiOperation(value = "TWP 转账")
+    @ApiOperation(value = "DC/EP 转账")
     public void transfer(@Valid @RequestBody TWPTransferRequest request) {
-        log.info("TWPoint transfer: " + request.toString());
+        log.info("DC/EP transfer: " + request.toString());
         quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getFromAddress());
     }
 }

@@ -2,7 +2,7 @@ package com.thoughtworks.wallet;
 
 import com.thoughtworks.common.annotation.Node1PrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
-import com.thoughtworks.common.annotation.TWPointContractAddress;
+import com.thoughtworks.common.annotation.DCEPContractAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,7 +29,7 @@ public class TWWalletSync {
     @Node1PrivateKey
     private String privateKey;
 
-    @TWPointContractAddress
+    @DCEPContractAddress
     private String TWPointContractAddress;
 
     public static void main(String[] args) {

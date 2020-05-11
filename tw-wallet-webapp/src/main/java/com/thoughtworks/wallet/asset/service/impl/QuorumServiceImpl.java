@@ -7,10 +7,10 @@ import com.thoughtworks.common.exception.ReadFileErrorException;
 import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.asset.annotation.IdentityRegistryContractAddress;
-import com.thoughtworks.wallet.asset.model.TWPoint;
+import com.thoughtworks.wallet.asset.model.DECP;
 import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
-import com.thoughtworks.wallet.asset.response.TWPointBalanceResponse;
-import com.thoughtworks.wallet.asset.response.TWPointInfoResponse;
+import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
+import com.thoughtworks.wallet.asset.response.DECPInfoResponse;
 import com.thoughtworks.wallet.asset.response.TransactionResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 public class QuorumServiceImpl implements IBlockchainService {
 
     private final Web3j web3j;
-    private final ERC20 twPoint;
+    private final ERC20 decp;
     private final ModelMapper modelMapper = new ModelMapper();
     private final JacksonUtil jacksonUtil;
 
@@ -48,12 +48,12 @@ public class QuorumServiceImpl implements IBlockchainService {
     @Autowired
     public QuorumServiceImpl(Web3j web3j, ERC20 erc20, JacksonUtil jacksonUtil) {
         this.web3j = web3j;
-        this.twPoint = erc20;
+        this.decp = erc20;
         this.jacksonUtil = jacksonUtil;
     }
 
     @Override
-    public TWPointBalanceResponse getTWPointBalanceBy(String address)
+    public DECPBalanceResponse getDCEPBalanceBy(String address)
         throws InvalidAddressErrorException, QuorumConnectionErrorException {
         log.info("The address of this request is " + address);
 
@@ -61,50 +61,50 @@ public class QuorumServiceImpl implements IBlockchainService {
             throw new InvalidAddressErrorException(address);
         }
 
-        final String twPointSymbol;
-        final String twPointName;
-        final BigInteger twPointDecimal;
-        final BigInteger twPointBalance;
+        final String decpSymbol;
+        final String decpName;
+        final BigInteger decpDecimal;
+        final BigInteger decpBalance;
         try {
-            twPointSymbol = twPoint.symbol().sendAsync().get();
-            twPointName = twPoint.name().sendAsync().get();
-            twPointDecimal = twPoint.decimals().sendAsync().get();
-            twPointBalance = twPoint.balanceOf(address).sendAsync().get();
+            decpSymbol = decp.symbol().sendAsync().get();
+            decpName = decp.name().sendAsync().get();
+            decpDecimal = decp.decimals().sendAsync().get();
+            decpBalance = decp.balanceOf(address).sendAsync().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        return TWPointBalanceResponse
-            .of(address, TWPoint.create(twPointName, twPointSymbol, twPointDecimal), new BigDecimal(twPointBalance));
+        return DECPBalanceResponse
+            .of(address, DECP.create(decpName, decpSymbol, decpDecimal), new BigDecimal(decpBalance));
     }
 
     @Override
-    public TWPointInfoResponse getTWPointInfo() {
-        final String twPointSymbol;
-        final String twPointName;
-        final BigInteger twPointDecimal;
+    public DECPInfoResponse getDCEPInfo() {
+        final String decpSymbol;
+        final String decpName;
+        final BigInteger decpDecimal;
         try {
-            twPointSymbol = twPoint.symbol().sendAsync().get();
-            twPointName = twPoint.name().sendAsync().get();
-            twPointDecimal = twPoint.decimals().sendAsync().get();
+            decpSymbol = decp.symbol().sendAsync().get();
+            decpName = decp.name().sendAsync().get();
+            decpDecimal = decp.decimals().sendAsync().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        final String TWPointContractPath = "/contracts/TWPointERC20.json";
+        final String decpContractPath = "/contracts/DC_EP_ERC20.json";
         final String jsonString;
         String abi;
         try {
-            jsonString = jacksonUtil.readJsonFile(TWPointContractPath);
+            jsonString = jacksonUtil.readJsonFile(decpContractPath);
             abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new ReadFileErrorException(TWPointContractPath);
+            throw new ReadFileErrorException(decpContractPath);
         }
 
-        return TWPointInfoResponse.of(twPoint.getContractAddress(), twPointName, twPointSymbol, twPointDecimal, abi);
+        return DECPInfoResponse.of(decp.getContractAddress(), decpName, decpSymbol, decpDecimal, abi);
     }
 
     @Override

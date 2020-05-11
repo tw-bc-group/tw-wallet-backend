@@ -35,7 +35,7 @@ spring:
 quorum:
   rpc:
     url: ${RPC_URL}
-  tw-point:
+  dc-ep:
     contract-address: ${TWPOINT_CONTRACT_ADDRESS}
   identity-registry:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}

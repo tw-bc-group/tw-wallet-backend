@@ -10,7 +10,7 @@ import java.math.BigInteger;
 @Data
 @AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class TWPointInfoResponse {
+public class DECPInfoResponse {
     private String address;
     private String name;
     private String symbol;
