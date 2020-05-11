@@ -1,30 +1,20 @@
 package com.thoughtworks.wallet.healthyVerifier.utils;
 
 import com.thoughtworks.wallet.healthyVerifier.crypto.Base58;
-import com.thoughtworks.wallet.healthyVerifier.exception.QuorumConnectionErrorException;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.web3j.crypto.Hash;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import static com.thoughtworks.wallet.healthyVerifier.service.HealthyVerifierService.didSchema;
 
 
 @Slf4j
 @Component
+@NoArgsConstructor
 public class ClaimIdUtil {
-    private final Web3j web3j;
-
-    public ClaimIdUtil(Web3j web3j) {
-        this.web3j = web3j;
-    }
 
     /**
      * 参考生成规则：(https://github.com/ontio/ontology-DID/blob/master/docs/cn/ONTID_protocol_spec_cn.md)
@@ -47,20 +37,6 @@ public class ClaimIdUtil {
         final String idString = Base58.encode(checkSum.concat(data).getBytes()).substring(0, 40);
 
         return didSchema.concat(idString);
-    }
-
-    BigInteger getNonce(String address) {
-        EthGetTransactionCount ethGetTransactionCount;
-        try {
-            ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameterName.LATEST)
-                                          .sendAsync()
-                                          .get();
-        } catch (InterruptedException | ExecutionException e) {
-            log.error("Quorum connection error!");
-            throw new QuorumConnectionErrorException();
-        }
-
-        return Objects.requireNonNull(ethGetTransactionCount).getTransactionCount();
     }
 
     String getAddressFromDid(String did) {

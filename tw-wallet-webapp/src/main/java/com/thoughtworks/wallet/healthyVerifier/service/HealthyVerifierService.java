@@ -117,6 +117,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
         final String claimId = claimIdUtil.generateClaimId(did, version);
+        log.info("Claim Id of did:{} is {}.", did, claimId);
         String issuerDid = generateIssuerDid();
 
         final Instant now = Instant.now();
