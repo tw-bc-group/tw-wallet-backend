@@ -12,19 +12,11 @@ dependencies {
     implementation Deps.jacksonAnnotations
     implementation Deps.jacksonDatatypeJdk8
     implementation Deps.jacksonDatatypeJsr310
-    implementation Deps.guava
-    implementation Deps.jooq
-    implementation Deps.modelmapper
-    implementation Deps.modelmapperJooq
     implementation Deps.w3j
     implementation Deps.w3jContract
-    implementation Deps.commonsLang3
-    implementation Deps.commonsCollections4
-    implementation Deps.okhttp
-    implementation Deps.okhttpUrlConnection
-    implementation Deps.loggingInterceptor
-    implementation Deps.failsafe
-    implementation Deps.snakeyaml
+    implementation Deps.jooq
+    implementation Deps.guava
+    implementation Deps.bouncycastle
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

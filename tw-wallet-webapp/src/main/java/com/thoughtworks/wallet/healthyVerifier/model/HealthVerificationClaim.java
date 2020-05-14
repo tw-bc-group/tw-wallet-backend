@@ -11,16 +11,20 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class HealthVerificationClaim {
-    private List<String> context;
-    private String id;
-    private String ver;
-    private String iss;
-    private long iat;
-    private long exp;
-    private List<String> typ;
+    private List<String>      context;
+    private String            id;
+    private String            ver;
+    private String            iss;
+    private long              iat;
+    private long              exp;
+    private List<String>      typ;
     private HealthyCredential sub;
+    private String            signature;
 
-    // deserialize the JSON string from database of table tbl_healthy_verification_claim
+    /**
+     * deserialize the JSON string from database of table tbl_healthy_verification_claim
+     * @param tblHealthyVerificationClaimRecord
+     */
     public HealthVerificationClaim(TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord) {
         this.context = ImmutableList.of(tblHealthyVerificationClaimRecord.getContext());
         this.id = tblHealthyVerificationClaimRecord.getId();
@@ -30,5 +34,6 @@ public class HealthVerificationClaim {
         this.exp = tblHealthyVerificationClaimRecord.getExp();
         this.typ = ImmutableList.of(tblHealthyVerificationClaimRecord.getTyp());
         this.sub = JacksonUtil.fromJsonNode(tblHealthyVerificationClaimRecord.getSub(), HealthyCredential.class);
+        this.signature = tblHealthyVerificationClaimRecord.getSignature();
     }
 }

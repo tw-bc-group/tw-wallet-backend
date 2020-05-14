@@ -54,5 +54,3 @@ sync:
   url1: ${RPC_URL}
   url2: ${RPC_URL}
   url3: ${RPC_URL}
-
-

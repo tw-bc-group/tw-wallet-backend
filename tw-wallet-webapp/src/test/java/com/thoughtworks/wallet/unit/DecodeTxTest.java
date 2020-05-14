@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 // "blockNumber": 15566,
 
 
-class decodeTxTest {
+class DecodeTxTest {
 
     @Test
     void test_decode_tx() {
