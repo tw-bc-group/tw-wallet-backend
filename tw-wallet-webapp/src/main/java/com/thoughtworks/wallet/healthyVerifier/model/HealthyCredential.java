@@ -12,5 +12,8 @@ import lombok.Setter;
 public class HealthyCredential {
     String id;
     String phone;
+    float temperature;
+    Result contact;
+    Result symptoms;
     HealthyStatusWrapper healthyStatus;
 }

@@ -9,7 +9,12 @@ import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationResponse;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
-import com.thoughtworks.wallet.healthyVerifier.model.*;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaim;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthVerificationClaimContract;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
+import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
+import com.thoughtworks.wallet.healthyVerifier.model.Result;
 import com.thoughtworks.wallet.healthyVerifier.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthyVerifier.service.IHealthyVerifierService;
 import com.thoughtworks.wallet.healthyVerifier.utils.ClaimIdUtil;
@@ -55,7 +60,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @Override
     public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
-        HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification.getDid(), healthVerification.getPhone());
+        HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification);
         String issuerDid = generateIssuerDid();
 
         final int insertedNumber;
@@ -114,7 +119,13 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     }
 
-    private HealthVerificationClaim generateHealthyVerificationClaim(String did, String phone) {
+    private HealthVerificationClaim generateHealthyVerificationClaim(HealthVerificationRequest healthVerification) {
+        final String did = healthVerification.getDid();
+        final String phone = healthVerification.getPhone();
+        final float temperature = healthVerification.getTemperature();
+        final String contact = healthVerification.getContact();
+        final String symptoms = healthVerification.getSymptoms();
+
         final String claimId = claimIdUtil.generateClaimId(did, version);
         log.info("Claim Id of did:{} is {}.", did, claimId);
         String issuerDid = generateIssuerDid();
@@ -133,7 +144,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .iat(currentTime)
                 .exp(expiredTime)
                 .typ(credentialType)
-                .sub(HealthyCredential.of(did, phone, healthyStatus))
+                .sub(HealthyCredential.of(did, phone, temperature, Result.of(contact), Result.of(symptoms), healthyStatus))
                 .build();
     }
 

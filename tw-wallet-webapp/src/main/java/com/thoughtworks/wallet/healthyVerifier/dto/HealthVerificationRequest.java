@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 public class HealthVerificationRequest {
     @Getter
     String did;
@@ -13,10 +17,29 @@ public class HealthVerificationRequest {
     @Getter
     String phone;
 
+    @Getter
+    @Max(value = 50, message = "Please input valid temperature")
+    @Min(value = 30, message = "Please input valid temperature")
+    float temperature;
+
+    @NotBlank
+    @Getter
+    String contact;
+
+    @NotBlank
+    @Getter
+    String symptoms;
+
     @JsonCreator
     public HealthVerificationRequest(@JsonProperty("phone") String phone,
-                                     @JsonProperty("did") String did) {
+                                     @JsonProperty("did") String did,
+                                     @JsonProperty("temperature") float temperature,
+                                     @JsonProperty("contact") String contact,
+                                     @JsonProperty("symptoms") String symptoms) {
         this.did = did;
         this.phone = phone;
+        this.temperature = temperature;
+        this.contact = contact;
+        this.symptoms = symptoms;
     }
 }
