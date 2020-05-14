@@ -8,7 +8,7 @@ import org.web3j.crypto.Hash;
 
 import java.util.Arrays;
 
-import static com.thoughtworks.wallet.healthyVerifier.service.HealthyVerifierService.didSchema;
+import static com.thoughtworks.wallet.healthyVerifier.service.impl.HealthyVerifierService.didSchema;
 
 
 @Slf4j

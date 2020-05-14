@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier.service;
+package com.thoughtworks.wallet.healthyVerifier.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthyVerificationCreateFailedException;

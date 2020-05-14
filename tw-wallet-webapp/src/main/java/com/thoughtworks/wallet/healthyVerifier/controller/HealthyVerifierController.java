@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier;
+package com.thoughtworks.wallet.healthyVerifier.controller;
 
 import com.thoughtworks.wallet.healthyVerifier.dto.ChangeHealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationRequest;

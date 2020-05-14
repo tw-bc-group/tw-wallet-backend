@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthyVerifier.service;
+package com.thoughtworks.wallet.healthyVerifier.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -11,6 +11,7 @@ import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFo
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
 import com.thoughtworks.wallet.healthyVerifier.model.*;
 import com.thoughtworks.wallet.healthyVerifier.repository.HealthVerificationDAO;
+import com.thoughtworks.wallet.healthyVerifier.service.IHealthyVerifierService;
 import com.thoughtworks.wallet.healthyVerifier.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
