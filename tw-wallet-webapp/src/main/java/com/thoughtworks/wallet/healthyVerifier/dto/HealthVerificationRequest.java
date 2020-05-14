@@ -18,8 +18,8 @@ public class HealthVerificationRequest {
     String phone;
 
     @Getter
-    @Max(value = 50, message = "Please input valid temperature")
-    @Min(value = 30, message = "Please input valid temperature")
+    @Max(value = 50, message = "Please input valid temperature, should between 30° to 50°")
+    @Min(value = 30, message = "Please input valid temperature, should between 30° to 50°")
     float temperature;
 
     @NotBlank
