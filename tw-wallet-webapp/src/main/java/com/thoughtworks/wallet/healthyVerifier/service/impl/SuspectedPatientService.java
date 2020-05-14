@@ -5,8 +5,9 @@ import com.thoughtworks.wallet.healthyVerifier.model.SuspectedPatientInfo;
 import com.thoughtworks.wallet.healthyVerifier.service.ISuspectedPatientService;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 import static com.thoughtworks.wallet.gen.Tables.TBL_SUSPECTED_PATIENTS_PHONE_LIST;
 
@@ -21,9 +22,9 @@ public class SuspectedPatientService implements ISuspectedPatientService {
 
     @Override
     public SuspectedPatientInfo addSuspectedPatient(String phone) {
-        final Result<TblSuspectedPatientsPhoneListRecord> suspectedPatientRecord = getSuspectedPatientRecordByPhone(phone);
+        final TblSuspectedPatientsPhoneListRecord suspectedPatientRecord = getSuspectedPatientRecordByPhone(phone);
 
-        if (suspectedPatientRecord.isEmpty()) {
+        if (Objects.isNull(suspectedPatientRecord)) {
             dslContext
                 .insertInto(TBL_SUSPECTED_PATIENTS_PHONE_LIST)
                 .set(TBL_SUSPECTED_PATIENTS_PHONE_LIST.PHONE, phone)
@@ -35,8 +36,8 @@ public class SuspectedPatientService implements ISuspectedPatientService {
 
     @Override
     public boolean isSuspectedPatient(String phone) {
-        final Result<TblSuspectedPatientsPhoneListRecord> suspectedPatientRecord = getSuspectedPatientRecordByPhone(phone);
-        return !suspectedPatientRecord.isEmpty();
+        final TblSuspectedPatientsPhoneListRecord suspectedPatientRecord = getSuspectedPatientRecordByPhone(phone);
+        return !Objects.isNull(suspectedPatientRecord);
     }
 
     @Override
@@ -49,9 +50,9 @@ public class SuspectedPatientService implements ISuspectedPatientService {
         return SuspectedPatientInfo.of(phone);
     }
 
-    private Result<TblSuspectedPatientsPhoneListRecord> getSuspectedPatientRecordByPhone(String phone) {
+    private TblSuspectedPatientsPhoneListRecord getSuspectedPatientRecordByPhone(String phone) {
         return dslContext.selectFrom(TBL_SUSPECTED_PATIENTS_PHONE_LIST)
                          .where(TBL_SUSPECTED_PATIENTS_PHONE_LIST.PHONE.eq(phone))
-                         .fetch();
+                         .fetchOne();
     }
 }
