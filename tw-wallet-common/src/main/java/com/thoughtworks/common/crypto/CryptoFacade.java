@@ -42,7 +42,7 @@ public class CryptoFacade {
         parsePublicKey(publicKeyBytes);
     }
 
-//    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
+    //    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
 //    ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
     private void parsePublicKey(byte[] data) throws CryptoException, InvalidKeySpecException, NoSuchProviderException, NoSuchAlgorithmException {
         if (data == null) {
@@ -83,54 +83,6 @@ public class CryptoFacade {
 
         }
     }
-
-    public static final X9ECParameters     CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
-    static final        ECDomainParameters CURVE        =
-            new ECDomainParameters(
-                    CURVE_PARAMS.getCurve(),
-                    CURVE_PARAMS.getG(),
-                    CURVE_PARAMS.getN(),
-                    CURVE_PARAMS.getH());
-
-//    static X9ECParametersHolder secp256k1 = new X9ECParametersHolder()
-//    {
-//        protected X9ECParameters createParameters()
-//        {
-//            byte[] S = null;
-//            GLVTypeBParameters glv = new GLVTypeBParameters(
-//                    new BigInteger("7ae96a2b657c07106e64479eac3434e99cf0497512f58995c1396c28719501ee", 16),
-//                    new BigInteger("5363ad4cc05c30e0a5261c028812645a122e22ea20816678df02967c1b23bd72", 16),
-//                    new ScalarSplitParameters(
-//                            new BigInteger[]{
-//                                    new BigInteger("3086d221a7d46bcde86c90e49284eb15", 16),
-//                                    new BigInteger("-e4437ed6010e88286f547fa90abfe4c3", 16) },
-//                            new BigInteger[]{
-//                                    new BigInteger("114ca50f7a8e2f3f657c1108d9d44cfd8", 16),
-//                                    new BigInteger("3086d221a7d46bcde86c90e49284eb15", 16) },
-//                            new BigInteger("3086d221a7d46bcde86c90e49284eb153dab", 16),
-//                            new BigInteger("e4437ed6010e88286f547fa90abfe4c42212", 16),
-//                            272));
-//            ECCurve curve = configureCurveGLV(new SecP256K1Curve(), glv);
-//            X9ECPoint G = configureBasepoint(curve,
-//                    "0479BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8");
-//            return new X9ECParameters(curve, G, curve.getOrder(), curve.getCofactor(), S);
-//        }
-//    };
-
-//    private static ECNamedCurveParameterSpec getParameterSpec(String curveName, boolean custom) {
-//        if (custom) {
-//            X9ECParameters ecP = CustomNamedCurves.getByName(curveName);
-//            ECParameterSpec ecParameterSpec = new ECParameterSpec(
-//                    ecP.getCurve(),
-//                    ecP.getG(),
-//                    ecP.getN(),
-//                    ecP.getH(),
-//                    ecP.getSeed());
-//            return ecParameterSpec;
-//
-//        }
-//        return ECNamedCurveTable.getParameterSpec(curveName);
-//    }
 
     public CryptoFacade(String privateKeyString, SignatureScheme scheme) throws CryptoException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] privateKey = ByteHelper.hexToBytes(privateKeyString);
