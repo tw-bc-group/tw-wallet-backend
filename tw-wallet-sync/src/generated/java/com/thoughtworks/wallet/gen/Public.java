@@ -9,6 +9,7 @@ import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
+import com.thoughtworks.wallet.gen.tables.TblUnhealthyPhoneBlacklist;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 568077612;
+    private static final long serialVersionUID = -1641702642;
 
     /**
      * The reference instance of <code>public</code>
@@ -57,6 +58,11 @@ public class Public extends SchemaImpl {
     public final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
 
     /**
+     * The table <code>public.tbl_unhealthy_phone_blacklist</code>.
+     */
+    public final TblUnhealthyPhoneBlacklist TBL_UNHEALTHY_PHONE_BLACKLIST = TblUnhealthyPhoneBlacklist.TBL_UNHEALTHY_PHONE_BLACKLIST;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -76,6 +82,7 @@ public class Public extends SchemaImpl {
             TblBlocks.TBL_BLOCKS,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
             TblIdentities.TBL_IDENTITIES,
-            TblTransactions.TBL_TRANSACTIONS);
+            TblTransactions.TBL_TRANSACTIONS,
+            TblUnhealthyPhoneBlacklist.TBL_UNHEALTHY_PHONE_BLACKLIST);
     }
 }

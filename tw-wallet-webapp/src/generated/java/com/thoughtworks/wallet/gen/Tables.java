@@ -8,6 +8,7 @@ import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 
 
@@ -36,6 +37,11 @@ public class Tables {
      * The table <code>public.tbl_identities</code>.
      */
     public static final TblIdentities TBL_IDENTITIES = TblIdentities.TBL_IDENTITIES;
+
+    /**
+     * The table <code>public.tbl_suspected_patients_phone_list</code>.
+     */
+    public static final TblSuspectedPatientsPhoneList TBL_SUSPECTED_PATIENTS_PHONE_LIST = TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST;
 
     /**
      * The table <code>public.tbl_transactions</code>.

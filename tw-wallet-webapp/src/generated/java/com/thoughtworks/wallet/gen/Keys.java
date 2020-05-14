@@ -8,11 +8,13 @@ import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblBlocksRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblIdentitiesRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblSuspectedPatientsPhoneListRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
 
 import org.jooq.TableField;
@@ -40,6 +42,7 @@ public class Keys {
     public static final UniqueKey<TblBlocksRecord> TBL_BLOCKS_PKEY = UniqueKeys0.TBL_BLOCKS_PKEY;
     public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = UniqueKeys0.TBL_HEALTHY_VERIFICATION_CLAIM_PKEY;
     public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = UniqueKeys0.TBL_IDENTITIES_PKEY;
+    public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = UniqueKeys0.TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY;
     public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = UniqueKeys0.TBL_TRANSACTIONS_PKEY;
 
     // -------------------------------------------------------------------------
@@ -56,6 +59,7 @@ public class Keys {
         public static final UniqueKey<TblBlocksRecord> TBL_BLOCKS_PKEY = Internal.createUniqueKey(TblBlocks.TBL_BLOCKS, "tbl_blocks_pkey", new TableField[] { TblBlocks.TBL_BLOCKS.HEIGHT }, true);
         public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = Internal.createUniqueKey(TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM, "tbl_healthy_verification_claim_pkey", new TableField[] { TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM.ID }, true);
         public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = Internal.createUniqueKey(TblIdentities.TBL_IDENTITIES, "tbl_identities_pkey", new TableField[] { TblIdentities.TBL_IDENTITIES.HEIGHT, TblIdentities.TBL_IDENTITIES.TX_INDEX }, true);
+        public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = Internal.createUniqueKey(TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST, "tbl_suspected_patients_phone_list_pkey", new TableField[] { TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST.PHONE }, true);
         public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = Internal.createUniqueKey(TblTransactions.TBL_TRANSACTIONS, "tbl_transactions_pkey", new TableField[] { TblTransactions.TBL_TRANSACTIONS.HEIGHT, TblTransactions.TBL_TRANSACTIONS.TX_INDEX }, true);
     }
 }
