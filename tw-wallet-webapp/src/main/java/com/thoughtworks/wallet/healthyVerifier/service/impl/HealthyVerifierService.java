@@ -34,19 +34,18 @@ import static com.thoughtworks.wallet.healthyVerifier.model.Result.YES;
 @Slf4j
 @Service
 public class HealthyVerifierService implements IHealthyVerifierService {
-    private final DSLContext dslContext;
-    private final ClaimIdUtil claimIdUtil;
-    private final HealthyClaimContractService healthyClaimContractService;
-    private final HealthVerificationClaimContract healthVerificationClaimContract;
-    private final SuspectedPatientService suspectedPatientService;
-    private final HealthVerificationDAO healthVerificationDAO;
-    private final ModelMapper modelMapper = new ModelMapper();
-
-    public final static String didSchema = "DID:TW:";
-    private final String version = "0.1";
-    private final float maxHealthyTemperature = 37.3F;
-    final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
-    final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
+    private final       DSLContext                      dslContext;
+    private final       ClaimIdUtil                     claimIdUtil;
+    private final       HealthyClaimContractService     healthyClaimContractService;
+    private final       HealthVerificationClaimContract healthVerificationClaimContract;
+    private final       SuspectedPatientService         suspectedPatientService;
+    private final       HealthVerificationDAO           healthVerificationDAO;
+    private final       ModelMapper                     modelMapper           = new ModelMapper();
+    public final static String                          didSchema             = "DID:TW:";
+    private final       String                          version               = "0.1";
+    private final       float                           maxHealthyTemperature = 37.3F;
+    final               ImmutableList<String>           context               = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
+    final               ImmutableList<String>           credentialType        = ImmutableList.of("HealthyCredential");
 
     // TODO 目前假设 claim 5 mins 过期
     Duration expiredDuration = Duration.ofMinutes(5);
@@ -62,8 +61,8 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @Override
     public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
-        HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification);
-        String issuerDid = generateIssuerDid();
+        HealthVerificationClaim claim     = generateHealthyVerificationClaim(healthVerification);
+        String                  issuerDid = generateIssuerDid();
 
         final int insertedNumber;
         try {
@@ -94,11 +93,11 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @Override
     public HealthVerificationResponse getHealthVerification(String ownerId) {
-        TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = dslContext
+        TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
                 .orderBy(TBL_HEALTHY_VERIFICATION_CLAIM.IAT.desc())
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
         return modelMapper.map(claim, HealthVerificationResponse.class);
@@ -113,8 +112,8 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
         claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
-        final Instant now = Instant.now();
-        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        final Instant now         = Instant.now();
+        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
         claim.setExp(expiredTime);
         healthVerificationDAO.updateHealthVerificationClaim(claim);
         return modelMapper.map(claim, HealthVerificationResponse.class);
@@ -122,19 +121,19 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(HealthVerificationRequest healthVerification) {
-        final String did = healthVerification.getDid();
-        final String phone = healthVerification.getPhone();
-        final float temperature = healthVerification.getTemperature();
-        final Result contact = Result.of(healthVerification.getContact());
-        final Result symptoms = Result.of(healthVerification.getSymptoms());
+        final String did         = healthVerification.getDid();
+        final String phone       = healthVerification.getPhone();
+        final float  temperature = healthVerification.getTemperature();
+        final Result contact     = Result.of(healthVerification.getContact());
+        final Result symptoms    = Result.of(healthVerification.getSymptoms());
 
         final String claimId = claimIdUtil.generateClaimId(did, version);
         log.info("Claim Id of did:{} is {}.", did, claimId);
         String issuerDid = generateIssuerDid();
 
-        final Instant now = Instant.now();
-        final long currentTime = now.getEpochSecond();
-        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        final Instant now         = Instant.now();
+        final long    currentTime = now.getEpochSecond();
+        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone, temperature, symptoms);
 
@@ -167,7 +166,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         final boolean hasSymptoms = symptoms.equals(YES);
 
-        if(isHighTemperature || isSuspectedPatient || hasSymptoms){
+        if (isHighTemperature || isSuspectedPatient || hasSymptoms) {
             return HealthyStatusWrapper.of(HealthyStatus.UNHEALTHY.getStatus());
         }
         return HealthyStatusWrapper.of(HealthyStatus.HEALTHY.getStatus());
