@@ -9,13 +9,11 @@ import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
-import com.thoughtworks.wallet.gen.tables.TblUnhealthyPhoneBlacklist;
 import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblBlocksRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblIdentitiesRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblUnhealthyPhoneBlacklistRecord;
 
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -43,7 +41,6 @@ public class Keys {
     public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = UniqueKeys0.TBL_HEALTHY_VERIFICATION_CLAIM_PKEY;
     public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = UniqueKeys0.TBL_IDENTITIES_PKEY;
     public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = UniqueKeys0.TBL_TRANSACTIONS_PKEY;
-    public static final UniqueKey<TblUnhealthyPhoneBlacklistRecord> TBL_UNHEALTHY_PHONE_BLACKLIST_PKEY = UniqueKeys0.TBL_UNHEALTHY_PHONE_BLACKLIST_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -60,6 +57,5 @@ public class Keys {
         public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = Internal.createUniqueKey(TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM, "tbl_healthy_verification_claim_pkey", new TableField[] { TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM.ID }, true);
         public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = Internal.createUniqueKey(TblIdentities.TBL_IDENTITIES, "tbl_identities_pkey", new TableField[] { TblIdentities.TBL_IDENTITIES.HEIGHT, TblIdentities.TBL_IDENTITIES.TX_INDEX }, true);
         public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = Internal.createUniqueKey(TblTransactions.TBL_TRANSACTIONS, "tbl_transactions_pkey", new TableField[] { TblTransactions.TBL_TRANSACTIONS.HEIGHT, TblTransactions.TBL_TRANSACTIONS.TX_INDEX }, true);
-        public static final UniqueKey<TblUnhealthyPhoneBlacklistRecord> TBL_UNHEALTHY_PHONE_BLACKLIST_PKEY = Internal.createUniqueKey(TblUnhealthyPhoneBlacklist.TBL_UNHEALTHY_PHONE_BLACKLIST, "tbl_unhealthy_phone_blacklist_pkey", new TableField[] { TblUnhealthyPhoneBlacklist.TBL_UNHEALTHY_PHONE_BLACKLIST.PHONE }, true);
     }
 }

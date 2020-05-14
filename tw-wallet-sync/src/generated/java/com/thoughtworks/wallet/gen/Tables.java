@@ -9,7 +9,6 @@ import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
-import com.thoughtworks.wallet.gen.tables.TblUnhealthyPhoneBlacklist;
 
 
 /**
@@ -42,9 +41,4 @@ public class Tables {
      * The table <code>public.tbl_transactions</code>.
      */
     public static final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
-
-    /**
-     * The table <code>public.tbl_unhealthy_phone_blacklist</code>.
-     */
-    public static final TblUnhealthyPhoneBlacklist TBL_UNHEALTHY_PHONE_BLACKLIST = TblUnhealthyPhoneBlacklist.TBL_UNHEALTHY_PHONE_BLACKLIST;
 }
