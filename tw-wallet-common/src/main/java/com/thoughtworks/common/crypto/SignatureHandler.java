@@ -50,12 +50,12 @@ public class SignatureHandler {
         ctx.initSign(priKey);
         ctx.update(msg);
         byte[] sig = ctx.sign();
-//        switch (type) {
-//            case ECDSA:
-//            case SM2:
-//                sig = DSADERtoPlain(sig);
-//                break;
-//        }
+        switch (type) {
+            case ECDSA:
+            case SM2:
+                sig = DSADERtoPlain(sig);
+                break;
+        }
 
         return sig;
     }
@@ -67,8 +67,8 @@ public class SignatureHandler {
         switch (type) {
             case ECDSA:
             case SM2:
-//                v = DSAPlaintoDER(sig);
-                v = sig;
+                v = DSAPlaintoDER(sig);
+//                v = sig;
 
                 break;
             default:
