@@ -95,6 +95,11 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .fetchOne()).orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
+
+        if (suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())) {
+            claim.getSub().setHealthyStatus(HealthyStatusWrapper.of(HealthyStatus.UNHEALTHY.getStatus()));
+        }
+
         return modelMapper.map(claim, HealthVerificationResponse.class);
     }
 
