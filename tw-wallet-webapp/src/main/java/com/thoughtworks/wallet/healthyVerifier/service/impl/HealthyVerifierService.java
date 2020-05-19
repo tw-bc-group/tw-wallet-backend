@@ -18,6 +18,7 @@ import org.jooq.DSLContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -54,6 +55,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         this.healthVerificationDAO = healthVerificationDAO;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
         HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification);

@@ -9,6 +9,8 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 import javax.sql.DataSource;
@@ -25,13 +27,10 @@ public class PersistenceConfig {
                 (new TransactionAwareDataSourceProxy(dataSource));
     }
 
-
-    @Bean
     public JOOQToSpringExceptionTransformer jooqToSpringExceptionTransformer() {
         return new JOOQToSpringExceptionTransformer();
     }
 
-    @Bean
     public DefaultConfiguration configuration() {
         DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
 

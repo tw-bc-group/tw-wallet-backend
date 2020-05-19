@@ -47,12 +47,16 @@
     </root>
 
     <!-- SQL execution logging is logged to the LoggerListener logger at DEBUG level -->
-    <Logger name="org.jooq.tools.LoggerListener" level="debug" additivity="false">
+    <Logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </Logger>
 
-     Other jOOQ related debug log output
+    <Logger name="org.jooq.tools.LoggerListener" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </Logger>
+
     <Logger name="org.jooq" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
