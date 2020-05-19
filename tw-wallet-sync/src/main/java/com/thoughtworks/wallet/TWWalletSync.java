@@ -26,12 +26,6 @@ public class TWWalletSync {
     @QuorumRPCUrl
     private String rpcUrl;
 
-    @Node1PrivateKey
-    private String privateKey;
-
-    @DCEPContractAddress
-    private String TWPointContractAddress;
-
     public static void main(String[] args) {
         SpringApplication.run(TWWalletSync.class, args);
     }
@@ -52,20 +46,5 @@ public class TWWalletSync {
         }
 
         return Web3j.build(web3jService);
-    }
-
-    @Bean
-    ERC20 erc20(Web3j web3j) {
-        try {
-            Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-            log.info("Connected to Quorum client with version: " + web3ClientVersion
-                    .getWeb3ClientVersion());
-        } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-            web3j.shutdown();
-        }
-
-        return ERC20.load(TWPointContractAddress, web3j, Credentials.create(privateKey),
-                new DefaultGasProvider());
     }
 }
