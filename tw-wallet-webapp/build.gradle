@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
         classpath Deps.jooqCodegen
-        classpath 'com.h2database:h2:1.4.200'
+        classpath Deps.h2
     }
 }
 
@@ -41,7 +41,7 @@ dependencies {
     implementation Deps.okhttp
     implementation Deps.okhttpUrlConnection
     implementation Deps.loggingInterceptor
-    implementation Deps.failsafe
+    implementation Deps.jwt
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

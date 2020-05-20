@@ -8,7 +8,7 @@ import java.util.Map;
 public class CryptoError {
 
     public static String getError(int code, String msg) {
-        Map map = new HashMap();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("Code", code);
         map.put("Message", msg);
         return JacksonUtil.beanToJSonStr(map);

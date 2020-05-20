@@ -2,6 +2,9 @@ package com.thoughtworks.common.crypto;
 
 import org.bouncycastle.crypto.CryptoException;
 
+/**
+ * 可以把label加到公钥前面，标识公钥的类型，这里没有使用
+ */
 public enum KeyType {
     ECDSA(0x12),
     SM2(0x13),

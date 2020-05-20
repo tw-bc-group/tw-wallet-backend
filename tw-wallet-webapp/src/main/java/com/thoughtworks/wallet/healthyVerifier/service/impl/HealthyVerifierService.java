@@ -1,13 +1,19 @@
 package com.thoughtworks.wallet.healthyVerifier.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.thoughtworks.common.crypto.CryptoFacade;
+import com.thoughtworks.common.crypto.Curve;
+import com.thoughtworks.common.crypto.SignatureScheme;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import com.thoughtworks.wallet.healthyVerifier.dto.ChangeHealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationResponse;
+import com.thoughtworks.common.util.Jwt;
+import com.thoughtworks.wallet.healthyVerifier.dto.JwtResponse;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationAlreadyExistException;
 import com.thoughtworks.wallet.healthyVerifier.exception.HealthVerificationNotFoundException;
 import com.thoughtworks.wallet.healthyVerifier.exception.InsertIntoDatabaseErrorException;
+import com.thoughtworks.wallet.healthyVerifier.exception.SignJwtException;
 import com.thoughtworks.wallet.healthyVerifier.model.*;
 import com.thoughtworks.wallet.healthyVerifier.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthyVerifier.service.IHealthyVerifierService;
@@ -30,18 +36,18 @@ import static com.thoughtworks.wallet.healthyVerifier.model.Result.YES;
 @Slf4j
 @Service
 public class HealthyVerifierService implements IHealthyVerifierService {
-    private final DSLContext dslContext;
-    private final ClaimIdUtil claimIdUtil;
-    private final HealthyClaimContractService healthyClaimContractService;
-    private final HealthVerificationClaimContract healthVerificationClaimContract;
-    private final SuspectedPatientService suspectedPatientService;
-    private final HealthVerificationDAO healthVerificationDAO;
-    private final ModelMapper modelMapper = new ModelMapper();
-    public final static String didSchema = "DID:TW:";
-    private final String version = "0.1";
-    private final float maxHealthyTemperature = 37.3F;
-    final ImmutableList<String> context = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
-    final ImmutableList<String> credentialType = ImmutableList.of("HealthyCredential");
+    private final       DSLContext                      dslContext;
+    private final       ClaimIdUtil                     claimIdUtil;
+    private final       HealthyClaimContractService     healthyClaimContractService;
+    private final       HealthVerificationClaimContract healthVerificationClaimContract;
+    private final       SuspectedPatientService         suspectedPatientService;
+    private final       HealthVerificationDAO           healthVerificationDAO;
+    private final       ModelMapper                     modelMapper           = new ModelMapper();
+    public final static String                          didSchema             = "DID:TW:";
+    private final       String                          version               = "0.1";
+    private final       float                           maxHealthyTemperature = 37.3F;
+    final               ImmutableList<String>           context               = ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/");
+    final               ImmutableList<String>           credentialType        = ImmutableList.of("HealthyCredential");
 
     // TODO 目前假设 claim 5 mins 过期
     Duration expiredDuration = Duration.ofMinutes(5);
@@ -57,9 +63,9 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public HealthVerificationResponse createHealthVerification(HealthVerificationRequest healthVerification) {
-        HealthVerificationClaim claim = generateHealthyVerificationClaim(healthVerification);
-        String issuerDid = generateIssuerDid();
+    public JwtResponse createHealthVerification(HealthVerificationRequest healthVerification) {
+        HealthVerificationClaim claim     = generateHealthyVerificationClaim(healthVerification);
+        String                  issuerDid = generateIssuerDid();
 
         final int insertedNumber;
         try {
@@ -74,9 +80,12 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             throw new InsertIntoDatabaseErrorException(healthVerification.getDid());
         }
 
-        healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
+        // 默认不需要上链
+        if (healthVerification.isOnChain()) {
+            healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
+        }
 
-        return HealthVerificationResponse.of(
+        HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.of(
                 claim.getContext(),
                 claim.getId(),
                 claim.getVer(),
@@ -86,6 +95,24 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 claim.getTyp(),
                 claim.getSub()
         );
+
+        String token = sign(healthVerification, healthVerificationResponse);
+        return JwtResponse.of(token);
+    }
+
+    private String sign(HealthVerificationRequest healthVerification, HealthVerificationResponse healthVerificationResponse) {
+        String token = "";
+        try {
+            Jwt jwt = Jwt.builder()
+                    .header(new Jwt.Header("ES256", "JWT"))
+                    .payLoad(healthVerificationResponse)
+                    .sign(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                    .build();
+            token = jwt.genJwtString();
+        } catch (Exception e) {
+            throw new SignJwtException(healthVerification.getDid());
+        }
+        return token;
     }
 
     @Override
@@ -94,7 +121,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(ownerId))
                 .orderBy(TBL_HEALTHY_VERIFICATION_CLAIM.IAT.desc())
-                .fetchOne()).orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
+                .fetchAny()).orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
 
@@ -110,12 +137,12 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getOwnerId()))
-                .fetchOne()).orElseThrow(() -> new HealthVerificationNotFoundException(changeHealthVerificationRequest.getOwnerId()));
+                .fetchAny()).orElseThrow(() -> new HealthVerificationNotFoundException(changeHealthVerificationRequest.getOwnerId()));
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
         claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
-        final Instant now = Instant.now();
-        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        final Instant now         = Instant.now();
+        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
         claim.setExp(expiredTime);
         healthVerificationDAO.updateHealthVerificationClaim(claim);
         return modelMapper.map(claim, HealthVerificationResponse.class);
@@ -123,19 +150,19 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(HealthVerificationRequest healthVerification) {
-        final String did = healthVerification.getDid();
-        final String phone = healthVerification.getPhone();
-        final float temperature = healthVerification.getTemperature();
-        final Result contact = Result.of(healthVerification.getContact());
-        final Result symptoms = Result.of(healthVerification.getSymptoms());
+        final String did         = healthVerification.getDid();
+        final String phone       = healthVerification.getPhone();
+        final float  temperature = healthVerification.getTemperature();
+        final Result contact     = Result.of(healthVerification.getContact());
+        final Result symptoms    = Result.of(healthVerification.getSymptoms());
 
         final String claimId = claimIdUtil.generateClaimId(did, version);
         log.info("Claim Id of did:{} is {}.", did, claimId);
         String issuerDid = generateIssuerDid();
 
-        final Instant now = Instant.now();
-        final long currentTime = now.getEpochSecond();
-        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        final Instant now         = Instant.now();
+        final long    currentTime = now.getEpochSecond();
+        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
 
         final HealthyStatusWrapper healthyStatus = generateHealthyStatus(phone, temperature, contact, symptoms);
 
@@ -166,7 +193,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         final boolean isHighTemperature = Float.compare(temperature, maxHealthyTemperature) >= 0;
 
-        final boolean hasContact = contact.equals(YES);
+        final boolean hasContact  = contact.equals(YES);
         final boolean hasSymptoms = symptoms.equals(YES);
 
         if (isHighTemperature || isSuspectedPatient || hasContact || hasSymptoms) {

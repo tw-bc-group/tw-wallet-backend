@@ -8,6 +8,7 @@ import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 
 import java.util.Arrays;
@@ -24,7 +25,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 568077612;
+    private static final long serialVersionUID = 331071086;
 
     /**
      * The reference instance of <code>public</code>
@@ -52,6 +53,11 @@ public class Public extends SchemaImpl {
     public final TblIdentities TBL_IDENTITIES = TblIdentities.TBL_IDENTITIES;
 
     /**
+     * The table <code>public.tbl_suspected_patients_phone_list</code>.
+     */
+    public final TblSuspectedPatientsPhoneList TBL_SUSPECTED_PATIENTS_PHONE_LIST = TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST;
+
+    /**
      * The table <code>public.tbl_transactions</code>.
      */
     public final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
@@ -76,6 +82,7 @@ public class Public extends SchemaImpl {
             TblBlocks.TBL_BLOCKS,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
             TblIdentities.TBL_IDENTITIES,
+            TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,
             TblTransactions.TBL_TRANSACTIONS);
     }
 }

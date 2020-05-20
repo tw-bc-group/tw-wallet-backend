@@ -68,8 +68,6 @@ public class SignatureHandler {
             case ECDSA:
             case SM2:
                 v = DSAPlaintoDER(sig);
-//                v = sig;
-
                 break;
             default:
                 v = sig;

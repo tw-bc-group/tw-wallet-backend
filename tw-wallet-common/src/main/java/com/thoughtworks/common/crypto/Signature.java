@@ -9,9 +9,9 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.Arrays;
 
 public class Signature {
-    private SignatureScheme scheme;
+    private SignatureScheme        scheme;
     private AlgorithmParameterSpec param;
-    private byte[] value;
+    private byte[]                 value;
 
     public Signature(SignatureScheme scheme, AlgorithmParameterSpec param, byte[] signature) {
         this.scheme = scheme;
@@ -29,41 +29,30 @@ public class Signature {
         }
 
         this.scheme = SignatureScheme.values()[data[0]];
-        if (scheme == SignatureScheme.SM3WITHSM2) {
-            int i = 0;
-            while (i < data.length && data[i] != 0){
-                i++;
-            }
-            if (i >= data.length) {
-                throw new CryptoException(CryptoError.InvalidSignatureData);
-            }
-            this.param = new SM2ParameterSpec(Arrays.copyOfRange(data, 1, i));
-            this.value = Arrays.copyOfRange(data, i + 1, data.length);
-        } else {
-            this.value = Arrays.copyOfRange(data, 1, data.length);
-        }
+        this.value = Arrays.copyOfRange(data, 1, data.length);
     }
 
     public byte[] toBytes() {
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         try {
-            bs.write((byte)scheme.ordinal());
+            bs.write((byte) scheme.ordinal());
             if (scheme == SignatureScheme.SM3WITHSM2) {
                 // adding the ID
-                bs.write(((SM2ParameterSpec)param).getID());
+                bs.write(((SM2ParameterSpec) param).getID());
                 // padding a 0 as the terminator
-                bs.write((byte)0);
+                bs.write((byte) 0);
             }
             bs.write(value);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return bs.toByteArray();
     }
 
-    public SignatureScheme getScheme() { return scheme; }
+    public SignatureScheme getScheme() {
+        return scheme;
+    }
 
     public byte[] getValue() {
         return this.value;

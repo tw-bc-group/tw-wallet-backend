@@ -30,16 +30,22 @@ public class HealthVerificationRequest {
     @Getter
     String symptoms;
 
+    @Getter
+    boolean onChain = false;
+
+
     @JsonCreator
     public HealthVerificationRequest(@JsonProperty("phone") String phone,
                                      @JsonProperty("did") String did,
                                      @JsonProperty("temperature") float temperature,
                                      @JsonProperty("contact") String contact,
-                                     @JsonProperty("symptoms") String symptoms) {
+                                     @JsonProperty("symptoms") String symptoms,
+                                     @JsonProperty("onchain") boolean onChain) {
         this.did = did;
         this.phone = phone;
         this.temperature = temperature;
         this.contact = contact;
         this.symptoms = symptoms;
+        this.onChain = onChain;
     }
 }

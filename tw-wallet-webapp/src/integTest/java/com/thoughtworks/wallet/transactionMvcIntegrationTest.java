@@ -41,6 +41,9 @@ public class transactionMvcIntegrationTest {
     @Autowired
     private ObjectMapper mapper;
 
+    /**
+     * TODO：先要准备数据库数据，然后才能跑过，以后重构
+     */
     @BeforeEach
     public void setup() {
         String url = String.format("http://localhost:%d/v1/transactions", port);
@@ -65,12 +68,15 @@ public class transactionMvcIntegrationTest {
             }));
     }
 
+    /**
+     * TODO：先要准备数据库数据，然后才能跑过，这里写法不对
+     */
     @Test
     public void whenGetTransactionByHash_thenReturnTransaction() {
-        String hash = "9eff6287e55ea56b2abcf8d84a1a151e8a00e0f482ea0ee0448fef9f5d3ebad4";
-        String url = this.base.toString() + "/" + hash;
-        final ResponseEntity<ResponseBean> response = testRestTemplate.getForEntity(url, ResponseBean.class);
-        final ResponseBean responseBean = response.getBody();
+        String                             hash         = "9eff6287e55ea56b2abcf8d84a1a151e8a00e0f482ea0ee0448fef9f5d3ebad4";
+        String                             url          = this.base.toString() + "/" + hash;
+        final ResponseEntity<ResponseBean> response     = testRestTemplate.getForEntity(url, ResponseBean.class);
+        final ResponseBean                 responseBean = response.getBody();
 
         final Transaction transaction = mapper.convertValue(responseBean.getResult(), Transaction.class);
         assertThat(transaction.getHash()).isEqualTo(hash);

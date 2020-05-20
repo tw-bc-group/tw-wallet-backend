@@ -20,7 +20,7 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = {"com.thoughtworks.common","com.thoughtworks.wallet"})
+@SpringBootApplication(scanBasePackages = {"com.thoughtworks.common", "com.thoughtworks.wallet"})
 public class TWWalletWebApp {
 
     @QuorumRPCUrl
@@ -38,7 +38,7 @@ public class TWWalletWebApp {
 
     @Bean
     Web3j quorum() {
-        String nodeEndpoint = rpcUrl;
+        String       nodeEndpoint = rpcUrl;
         Web3jService web3jService;
 
         if (nodeEndpoint == null || nodeEndpoint.equals("")) {
@@ -66,7 +66,7 @@ public class TWWalletWebApp {
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        return ERC20.load(DCEPContractAddress, web3j, Credentials.create(privateKey),
-                new DefaultGasProvider());
+        //TODO: 不转账没必要用私钥
+        return ERC20.load(DCEPContractAddress, web3j, Credentials.create(privateKey), new DefaultGasProvider());
     }
 }

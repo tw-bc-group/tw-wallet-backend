@@ -17,11 +17,11 @@ import java.util.List;
 public class HealthVerificationResponse {
     @JsonProperty(value = "@context")
     List<String> context;
-    String id;
-    String ver;
-    String iss;
-    long iat;
-    long exp;
-    List<String> typ;
+    String            id;
+    String            ver;
+    String            iss;
+    long              iat;
+    long              exp;
+    List<String>      typ;
     HealthyCredential sub;
 }

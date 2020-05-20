@@ -1,10 +1,7 @@
 
 package com.thoughtworks.common.crypto;
 
-import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.CryptoException;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
-import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jcajce.spec.SM2ParameterSpec;
 import org.bouncycastle.jce.ECNamedCurveTable;
@@ -17,6 +14,7 @@ import org.bouncycastle.util.Strings;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.*;
 import java.util.Arrays;
@@ -28,52 +26,93 @@ public class CryptoFacade {
     private PrivateKey      privateKey;
     private PublicKey       publicKey;
     private SignatureScheme signatureScheme;
+    private Curve           curve;
 
     /**
-     * 公钥验证走这边
+     * 用静态函数创建
+     */
+    private CryptoFacade(boolean fromPrivateKey, String key, SignatureScheme scheme, Curve curve) throws Exception {
+        if (scheme == SignatureScheme.SM3WITHSM2) {
+            this.keyType = KeyType.SM2;
+            this.curveParams = new Object[]{curve.toString()};
+        } else if (scheme == SignatureScheme.SHA256WITHECDSA) {
+            this.keyType = KeyType.ECDSA;
+            this.curveParams = new Object[]{curve.toString()};
+        }
+        this.signatureScheme = scheme;
+        this.curve = curve;
+
+        if (fromPrivateKey) {
+            byte[] privateKey = ByteHelper.hexToBytes(key);
+            Security.addProvider(new BouncyCastleProvider());
+
+            switch (scheme) {
+                case SHA256WITHECDSA:
+                case SM3WITHSM2:
+                    BigInteger d = new BigInteger(1, privateKey);
+
+                    ECNamedCurveParameterSpec spec = ECNamedCurveTable.getParameterSpec((String) this.curveParams[0]);
+                    ECParameterSpec paramSpec = new ECNamedCurveSpec(spec.getName(), spec.getCurve(), spec.getG(), spec.getN());
+                    ECPrivateKeySpec priSpec = new ECPrivateKeySpec(d, paramSpec);
+                    KeyFactory kf = KeyFactory.getInstance("EC", "BC");
+                    this.privateKey = kf.generatePrivate(priSpec);
+
+                    org.bouncycastle.math.ec.ECPoint Q = spec.getG().multiply(d).normalize();
+                    ECPublicKeySpec pubSpec = new ECPublicKeySpec(
+                            new ECPoint(Q.getAffineXCoord().toBigInteger(), Q.getAffineYCoord().toBigInteger()),
+                            paramSpec);
+                    this.publicKey = kf.generatePublic(pubSpec);
+                    break;
+                default:
+                    throw new CryptoException(CryptoError.UnsupportedKeyType);
+            }
+        } else {
+            byte[] publicKeyBytes = ByteHelper.hexToBytes(key);
+            Security.addProvider(new BouncyCastleProvider());
+            parsePublicKey(publicKeyBytes);
+        }
+    }
+
+    /**
+     * 公钥验证
      *
      * @param publicKey
      * @throws Exception
      */
-    public CryptoFacade(String publicKey) throws CryptoException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
-        byte[] publicKeyBytes = ByteHelper.hexToBytes(publicKey);
-
-        Security.addProvider(new BouncyCastleProvider());
-        parsePublicKey(publicKeyBytes);
+    static public CryptoFacade fromPublicKey(String publicKey, SignatureScheme scheme, Curve curve) throws Exception {
+        return new CryptoFacade(false, publicKey, scheme, curve);
     }
 
-    //    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
-//    ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
+    /**
+     * 私钥生成公私钥对，可以签名
+     *
+     * @param privateKeyString
+     * @param scheme
+     * @param curve
+     * @return
+     * @throws Exception
+     */
+    static public CryptoFacade fromPrivateKey(String privateKeyString, SignatureScheme scheme, Curve curve) throws Exception {
+        return new CryptoFacade(true, privateKeyString, scheme, curve);
+    }
+
     private void parsePublicKey(byte[] data) throws CryptoException, InvalidKeySpecException, NoSuchProviderException, NoSuchAlgorithmException {
         if (data == null) {
             throw new CryptoException(CryptoError.NullInput);
         } else if (data.length < 2) {
             throw new CryptoException(CryptoError.InvalidData);
         } else {
-            if (data.length == 33) {
-                this.keyType = KeyType.ECDSA;
-            } else if (data.length == 35) {
-                this.keyType = KeyType.fromLabel(data[0]);
-            }
 
             this.privateKey = null;
             this.publicKey = null;
             switch (this.keyType) {
                 case ECDSA:
-                    this.keyType = KeyType.ECDSA;
-                    this.curveParams = new Object[]{Curve.SECP256K1.toString()};
-                    ECNamedCurveParameterSpec spec0 = ECNamedCurveTable.getParameterSpec(Curve.SECP256K1.toString());
-                    ECParameterSpec param0 = new ECNamedCurveSpec(spec0.getName(), spec0.getCurve(), spec0.getG(), spec0.getN());
-                    ECPublicKeySpec pubSpec0 = new ECPublicKeySpec(ECPointUtil.decodePoint(param0.getCurve(), Arrays.copyOfRange(data, 0, data.length)), param0);
-                    KeyFactory kf0 = KeyFactory.getInstance("ECDSA", "BC");
-                    this.publicKey = kf0.generatePublic(pubSpec0);
-                    break;
                 case SM2:
-                    Curve c = Curve.fromLabel(data[1]);
-                    this.curveParams = new Object[]{c.toString()};
-                    ECNamedCurveParameterSpec spec = ECNamedCurveTable.getParameterSpec(c.toString());
+                    this.keyType = KeyType.ECDSA;
+                    this.curveParams = new Object[]{curve.toString()};
+                    ECNamedCurveParameterSpec spec = ECNamedCurveTable.getParameterSpec(curve.toString());
                     ECParameterSpec param = new ECNamedCurveSpec(spec.getName(), spec.getCurve(), spec.getG(), spec.getN());
-                    ECPublicKeySpec pubSpec = new ECPublicKeySpec(ECPointUtil.decodePoint(param.getCurve(), Arrays.copyOfRange(data, 2, data.length)), param);
+                    ECPublicKeySpec pubSpec = new ECPublicKeySpec(ECPointUtil.decodePoint(param.getCurve(), Arrays.copyOfRange(data, 0, data.length)), param);
                     KeyFactory kf = KeyFactory.getInstance("EC", "BC");
                     this.publicKey = kf.generatePublic(pubSpec);
                     break;
@@ -84,41 +123,6 @@ public class CryptoFacade {
         }
     }
 
-    public CryptoFacade(String privateKeyString, SignatureScheme scheme) throws CryptoException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] privateKey = ByteHelper.hexToBytes(privateKeyString);
-        Security.addProvider(new BouncyCastleProvider());
-        signatureScheme = scheme;
-
-        if (scheme == SignatureScheme.SM3WITHSM2) {
-            this.keyType = KeyType.SM2;
-            this.curveParams = new Object[]{Curve.SM2P256V1.toString()};
-        } else if (scheme == SignatureScheme.SHA256WITHECDSA) {
-            this.keyType = KeyType.ECDSA;
-            this.curveParams = new Object[]{Curve.SECP256K1.toString()};
-        }
-
-
-        switch (scheme) {
-            case SHA256WITHECDSA:
-            case SM3WITHSM2:
-                BigInteger d = new BigInteger(1, privateKey);
-
-                ECNamedCurveParameterSpec spec = ECNamedCurveTable.getParameterSpec((String) this.curveParams[0]);
-                ECParameterSpec paramSpec = new ECNamedCurveSpec(spec.getName(), spec.getCurve(), spec.getG(), spec.getN());
-                ECPrivateKeySpec priSpec = new ECPrivateKeySpec(d, paramSpec);
-                KeyFactory kf = KeyFactory.getInstance("EC", "BC");
-                this.privateKey = kf.generatePrivate(priSpec);
-
-                org.bouncycastle.math.ec.ECPoint Q = spec.getG().multiply(d).normalize();
-                ECPublicKeySpec pubSpec = new ECPublicKeySpec(
-                        new ECPoint(Q.getAffineXCoord().toBigInteger(), Q.getAffineYCoord().toBigInteger()),
-                        paramSpec);
-                this.publicKey = kf.generatePublic(pubSpec);
-                break;
-            default:
-                throw new CryptoException(CryptoError.UnsupportedKeyType);
-        }
-    }
 
     public PublicKey getPublicKey() {
         return publicKey;
@@ -129,11 +133,11 @@ public class CryptoFacade {
     }
 
 
-    public String generateSignature(byte[] msg) throws CryptoException, InvalidKeyException, NoSuchAlgorithmException, IOException, SignatureException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        return generateSignature(msg, null);
+    public String generateSignature(String msg) throws Exception {
+        return generateSignature(msg.getBytes(StandardCharsets.UTF_8), null);
     }
 
-    public String generateSignature(byte[] msg, Object sm2param) throws CryptoException, IOException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, NoSuchProviderException, NoSuchAlgorithmException {
+    public String generateSignature(byte[] msg, Object sm2param) throws Exception {
         if (msg == null || msg.length == 0) {
             throw new CryptoException(CryptoError.InvalidMessage);
         }
@@ -156,9 +160,9 @@ public class CryptoFacade {
         return ByteHelper.toHexString(signature);
     }
 
-    public boolean verifySignature(String msg, String signature) throws CryptoException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
+    public boolean verifySignature(String msg, String signature) throws Exception {
 
-        byte[] msgBytes       = ByteHelper.hexToBytes(msg);
+        byte[] msgBytes       = msg.getBytes(StandardCharsets.UTF_8);
         byte[] signatureBytes = ByteHelper.hexToBytes(signature);
 
         if (msgBytes == null || signatureBytes == null || msgBytes.length == 0 || signatureBytes.length == 0) {
@@ -177,11 +181,7 @@ public class CryptoFacade {
         BCECPublicKey         pub = (BCECPublicKey) publicKey;
         switch (this.keyType) {
             case ECDSA:
-                bs.write(pub.getQ().getEncoded(true));
-                break;
             case SM2:
-                bs.write(this.keyType.getLabel());
-                bs.write(Curve.valueOf(pub.getParameters().getCurve()).getLabel());
                 bs.write(pub.getQ().getEncoded(true));
                 break;
             default:
