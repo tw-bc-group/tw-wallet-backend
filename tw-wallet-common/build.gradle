@@ -17,6 +17,7 @@ dependencies {
     implementation Deps.jooq
     implementation Deps.guava
     implementation Deps.bouncycastle
+    implementation Deps.jwt
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

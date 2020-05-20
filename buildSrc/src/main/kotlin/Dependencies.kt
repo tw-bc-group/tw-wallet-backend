@@ -16,14 +16,14 @@ object Versions {
     const val lombok = "1.18.12"
     const val guava = "29.0-jre"
     const val okhttp = "4.6.0"
-    const val metrics = "4.1.7"
     const val failsafe = "2.3.5"       // retry and circuit breakers
     const val snakeyaml = "1.26"
     const val bouncycastle = "1.65"
-
+    const val jwt="3.10.3"
 }
 
 object Deps {
+    const val jwt ="com.auth0:java-jwt:${Versions.jwt}"
     const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:${Versions.bouncycastle}"
     const val springBootStarterAmqp = "org.springframework.boot:spring-boot-starter-amqp:${Versions.boot}"
     const val springBootStarterDataJdbc = "org.springframework.boot:spring-boot-starter-data-jdbc:${Versions.boot}"
