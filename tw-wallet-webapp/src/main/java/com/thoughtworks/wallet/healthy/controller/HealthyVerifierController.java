@@ -5,6 +5,7 @@ import com.thoughtworks.wallet.healthy.service.IHealthyClaimService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,14 @@ public class HealthyVerifierController {
 
     @PostMapping
     @ApiOperation(value = "添加健康认证")
+    @ResponseStatus(HttpStatus.CREATED)
     public JwtResponse createHealthVerification(@Valid @RequestBody HealthVerificationRequest healthVerification) {
         return healthyVerifierService.createHealthVerification(healthVerification);
     }
 
     @PostMapping(value = "/verify")
     @ApiOperation(value = "验证健康认证")
+    @ResponseStatus(HttpStatus.OK)
     public VerifyJwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
         return healthyVerifierService.VerifyHealthVerification(verifyJwtRequest);
     }

@@ -32,7 +32,6 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice {
             return body;
         }
         if(Objects.requireNonNull(request.getMethod()).matches(HttpMethod.POST.toString())){
-            response.setStatusCode(HttpStatus.CREATED);
             return ResponseBean.createdResponse(body);
         }
         return ResponseBean.okResponse(body);
