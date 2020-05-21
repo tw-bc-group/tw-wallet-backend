@@ -1,5 +1,8 @@
 package com.thoughtworks.wallet.healthy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
@@ -10,7 +13,9 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthVerificationClaim {
+    @JsonProperty(value = "@context")
     private List<String>      context;
     private String            id;
     private String            ver;
@@ -19,6 +24,7 @@ public class HealthVerificationClaim {
     private long              exp;
     private List<String>      typ;
     private HealthyCredential sub;
+    @JsonIgnore
     private String            token;
 
     /**

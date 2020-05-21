@@ -22,6 +22,7 @@ public interface IHealthyClaimService {
 
     /**
      * 改变健康声明状态，测试用途
+     * 另外也可以直接修改黑名单来改变状态
      *
      * @param changeHealthVerificationRequest
      * @return

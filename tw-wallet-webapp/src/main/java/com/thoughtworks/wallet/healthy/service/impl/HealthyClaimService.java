@@ -74,7 +74,7 @@ public class HealthyClaimService implements IHealthyClaimService {
                 .sub(claim.getSub())
                 .build();
 
-        String token = sign(healthVerification, healthVerificationResponse);
+        String token = sign(healthVerification.getDid(), claim);
 
         insertClaim2DB(healthVerification, claim, token);
 
@@ -102,22 +102,23 @@ public class HealthyClaimService implements IHealthyClaimService {
         }
     }
 
-    private String sign(HealthVerificationRequest healthVerification, HealthVerificationResponse healthVerificationResponse) {
+    private String sign(String did, HealthVerificationClaim claim) {
         String token = "";
         try {
             Jwt jwt = Jwt.builder()
                     .header(new Jwt.Header("ES256", "JWT"))
-                    .payLoad(healthVerificationResponse)
+                    .payLoad(claim)
                     .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
                     .build();
             token = jwt.genJwtString();
         } catch (Exception e) {
-            throw new SignJwtException(healthVerification.getDid());
+            throw new SignJwtException(did);
         }
         return token;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public HealthVerificationResponse getHealthVerification(String ownerId) {
         TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
@@ -127,29 +128,43 @@ public class HealthyClaimService implements IHealthyClaimService {
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
 
-        // TODO: 需要重新生成签名
         if (suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())) {
-            claim.getSub().setHealthyStatus(HealthyStatusWrapper.of(HealthyStatus.UNHEALTHY.getStatus()));
+            adjustExpireTime(claim);
+            adjustHealthyStatus(HealthyStatus.UNHEALTHY, claim);
+            String token = sign(ownerId, claim);
+            claim.setToken(token);
+            healthVerificationDAO.updateHealthVerificationClaim(claim);
         }
 
         return modelMapper.map(claim, HealthVerificationResponse.class);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public HealthVerificationResponse changeHealthVerification(ChangeHealthVerificationRequest changeHealthVerificationRequest) {
         TblHealthyVerificationClaimRecord tblHealthyVerificationClaimRecord = Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM)
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getOwnerId()))
                 .fetchAny()).orElseThrow(() -> new HealthVerificationNotFoundException(changeHealthVerificationRequest.getOwnerId()));
 
-        HealthVerificationClaim claim       = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
-        final Instant           now         = Instant.now();
-        final long              expiredTime = now.plus(expiredDuration).getEpochSecond();
-        claim.setExp(expiredTime);
-        claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
+        HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
+        adjustExpireTime(claim);
+        adjustHealthyStatus(changeHealthVerificationRequest.getHealthyStatus(), claim);
+        String token = sign(changeHealthVerificationRequest.getOwnerId(), claim);
+        claim.setToken(token);
         healthVerificationDAO.updateHealthVerificationClaim(claim);
         return modelMapper.map(claim, HealthVerificationResponse.class);
 
+    }
+
+    private void adjustHealthyStatus(HealthyStatus healthyStatus, HealthVerificationClaim claim) {
+        claim.getSub().getHealthyStatus().setVal(healthyStatus.getStatus());
+    }
+
+    private void adjustExpireTime(HealthVerificationClaim claim) {
+        final Instant now         = Instant.now();
+        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
+        claim.setExp(expiredTime);
     }
 
     @Override
