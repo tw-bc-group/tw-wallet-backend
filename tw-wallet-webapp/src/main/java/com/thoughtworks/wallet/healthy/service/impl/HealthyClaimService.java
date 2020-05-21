@@ -1,19 +1,15 @@
 package com.thoughtworks.wallet.healthy.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.thoughtworks.common.crypto.Base64;
 import com.thoughtworks.common.crypto.CryptoFacade;
 import com.thoughtworks.common.crypto.Curve;
 import com.thoughtworks.common.crypto.SignatureScheme;
+import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
-import com.thoughtworks.wallet.healthy.dto.ChangeHealthVerificationRequest;
-import com.thoughtworks.wallet.healthy.dto.HealthVerificationRequest;
-import com.thoughtworks.wallet.healthy.dto.HealthVerificationResponse;
+import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.common.util.Jwt;
-import com.thoughtworks.wallet.healthy.dto.JwtResponse;
-import com.thoughtworks.wallet.healthy.exception.HealthVerificationAlreadyExistException;
-import com.thoughtworks.wallet.healthy.exception.HealthVerificationNotFoundException;
-import com.thoughtworks.wallet.healthy.exception.InsertIntoDatabaseErrorException;
-import com.thoughtworks.wallet.healthy.exception.SignJwtException;
+import com.thoughtworks.wallet.healthy.exception.*;
 import com.thoughtworks.wallet.healthy.model.*;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthy.service.IHealthyClaimService;
@@ -112,7 +108,7 @@ public class HealthyClaimService implements IHealthyClaimService {
             Jwt jwt = Jwt.builder()
                     .header(new Jwt.Header("ES256", "JWT"))
                     .payLoad(healthVerificationResponse)
-                    .sign(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                    .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
                     .build();
             token = jwt.genJwtString();
         } catch (Exception e) {
@@ -146,14 +142,42 @@ public class HealthyClaimService implements IHealthyClaimService {
                 .where(TBL_HEALTHY_VERIFICATION_CLAIM.OWNER.equal(changeHealthVerificationRequest.getOwnerId()))
                 .fetchAny()).orElseThrow(() -> new HealthVerificationNotFoundException(changeHealthVerificationRequest.getOwnerId()));
 
-        HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
-        claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
-        final Instant now         = Instant.now();
-        final long    expiredTime = now.plus(expiredDuration).getEpochSecond();
+        HealthVerificationClaim claim       = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
+        final Instant           now         = Instant.now();
+        final long              expiredTime = now.plus(expiredDuration).getEpochSecond();
         claim.setExp(expiredTime);
+        claim.getSub().getHealthyStatus().setVal(changeHealthVerificationRequest.getHealthyStatus().getStatus());
         healthVerificationDAO.updateHealthVerificationClaim(claim);
         return modelMapper.map(claim, HealthVerificationResponse.class);
 
+    }
+
+    @Override
+    public VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
+
+        boolean verifySignature = false;
+        try {
+            String[]                   strings   = verifyJwtRequest.getToken().split("\\.");
+            Jwt.Header                 header    = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
+            HealthVerificationResponse payload   = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
+            String                     signature = Base64.decode(strings[2]);
+            Jwt jwt = Jwt.builder()
+                    .header(new Jwt.Header("ES256", "JWT"))
+                    .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                    .build();
+            String headerPayload = String.format("%s.%s", strings[0], strings[1]);
+            verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
+        } catch (Exception e) {
+            throw new VerifyJwtException(verifyJwtRequest.getToken());
+        }
+        return VerifyJwtResponse.builder()
+                .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                .onchain(VerifyResultEnum.NOT_SUPPORT)
+                .outdate(VerifyResultEnum.NOT_SUPPORT)
+                .revoked(VerifyResultEnum.NOT_SUPPORT)
+                .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
+                .verifyIssuer(VerifyResultEnum.NOT_SUPPORT)
+                .build();
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(HealthVerificationRequest healthVerification) {

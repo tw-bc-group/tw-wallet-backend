@@ -1,9 +1,6 @@
 package com.thoughtworks.wallet.healthy.controller;
 
-import com.thoughtworks.wallet.healthy.dto.ChangeHealthVerificationRequest;
-import com.thoughtworks.wallet.healthy.dto.HealthVerificationRequest;
-import com.thoughtworks.wallet.healthy.dto.HealthVerificationResponse;
-import com.thoughtworks.wallet.healthy.dto.JwtResponse;
+import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.service.IHealthyClaimService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +27,12 @@ public class HealthyVerifierController {
     @ApiOperation(value = "添加健康认证")
     public JwtResponse createHealthVerification(@Valid @RequestBody HealthVerificationRequest healthVerification) {
         return healthyVerifierService.createHealthVerification(healthVerification);
+    }
+
+    @PostMapping(value = "/verify")
+    @ApiOperation(value = "验证健康认证")
+    public VerifyJwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
+        return healthyVerifierService.VerifyHealthVerification(verifyJwtRequest);
     }
 
     @GetMapping("/{ownerId}")

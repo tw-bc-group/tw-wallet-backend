@@ -19,8 +19,11 @@ public class Jwt {
         String typ;
     }
 
-    CryptoFacade sign;
-    CryptoFacade verify;
+    /**
+     * 私钥CryptoFacade可以生成签名和验证签名
+     * 公钥CryptoFacade只可以验证签名
+     */
+    CryptoFacade cryptoFacade;
 
     Header header;
 
@@ -34,7 +37,7 @@ public class Jwt {
         String header  = Base64.encode(JacksonUtil.beanToJSonStr(this.getHeader()));
         String payload = Base64.encode(JacksonUtil.beanToJSonStr(this.getPayLoad()));
         String headerPayload = String.format("%s.%s", header, payload);
-        String generateSignature = sign.generateSignature(headerPayload);
+        String generateSignature = cryptoFacade.generateSignature(headerPayload);
         this.signature         = Base64.encode(generateSignature);
         this.token = String.format("%s.%s", headerPayload, signature);
         return token;

@@ -27,7 +27,7 @@ public class SignClaimTest {
     // generate by ethers.js
     String publicKey     = "038773a46bc5a2bb1c5687de4788a7d58df3f27483687c8df81d07350753161e05";
     String privateKey    = "4762e04d10832808a0aebdaa79c12de54afbe006bfffd228b3abcc494fe986f9";
-    Jwt    jwt;
+    Jwt    jwtSign;
     String headerPayload = ""; // 签名的对象
     String alg           = "ES256";
     String type          = "JWT";
@@ -56,15 +56,13 @@ public class SignClaimTest {
                             HealthyStatusWrapper.of(HealthyStatus.HEALTHY.getStatus())))
                     .build();
 
-            jwt = Jwt.builder()
+            jwtSign = Jwt.builder()
                     .header(new Jwt.Header("ES256", "JWT"))
                     .payLoad(healthVerificationResponse)
-                    .sign(CryptoFacade.fromPrivateKey(privateKey, SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
-                    .verify(CryptoFacade.fromPublicKey(publicKey, SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                    .cryptoFacade(CryptoFacade.fromPrivateKey(privateKey, SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
                     .build();
-
-            String header  = Base64.encode(JacksonUtil.beanToJSonStr(jwt.getHeader()));
-            String payload = Base64.encode(JacksonUtil.beanToJSonStr(jwt.getPayLoad()));
+            String header  = Base64.encode(JacksonUtil.beanToJSonStr(jwtSign.getHeader()));
+            String payload = Base64.encode(JacksonUtil.beanToJSonStr(jwtSign.getPayLoad()));
             headerPayload = String.format("%s.%s", header, payload);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +76,7 @@ public class SignClaimTest {
 
         // 生成签名
         {
-            token = jwt.genJwtString();
+            token = jwtSign.genJwtString();
             System.out.println(token);
         }
 
@@ -87,7 +85,7 @@ public class SignClaimTest {
         Jwt.Header                 header          = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
         HealthVerificationResponse payload         = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
         String                     signature       = Base64.decode(strings[2]);
-        boolean                    verifySignature = jwt.getVerify().verifySignature(headerPayload, signature);
+        boolean                    verifySignature = jwtSign.getCryptoFacade().verifySignature(headerPayload, signature);
         assertThat(verifySignature).isTrue();
         assertThat(header.getAlg()).isEqualTo(alg);
         assertThat(header.getTyp()).isEqualTo(type);

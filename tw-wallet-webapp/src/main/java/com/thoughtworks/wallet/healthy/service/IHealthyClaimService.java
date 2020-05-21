@@ -28,5 +28,10 @@ public interface IHealthyClaimService {
      */
     HealthVerificationResponse changeHealthVerification(ChangeHealthVerificationRequest changeHealthVerificationRequest);
 
-//    VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest);
+    /**
+     * 验证token
+     * @param verifyJwtRequest
+     * @return
+     */
+    VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest);
 }
