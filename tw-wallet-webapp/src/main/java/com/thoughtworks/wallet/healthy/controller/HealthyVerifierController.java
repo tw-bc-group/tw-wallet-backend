@@ -4,7 +4,7 @@ import com.thoughtworks.wallet.healthy.dto.ChangeHealthVerificationRequest;
 import com.thoughtworks.wallet.healthy.dto.HealthVerificationRequest;
 import com.thoughtworks.wallet.healthy.dto.HealthVerificationResponse;
 import com.thoughtworks.wallet.healthy.dto.JwtResponse;
-import com.thoughtworks.wallet.healthy.service.IHealthyVerifierService;
+import com.thoughtworks.wallet.healthy.service.IHealthyClaimService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +20,9 @@ import javax.validation.Valid;
 @Api(tags = "健康认证服务")
 public class HealthyVerifierController {
 
-    private final IHealthyVerifierService healthyVerifierService;
+    private final IHealthyClaimService healthyVerifierService;
 
-    public HealthyVerifierController(IHealthyVerifierService healthyVerifierService) {
+    public HealthyVerifierController(IHealthyClaimService healthyVerifierService) {
         this.healthyVerifierService = healthyVerifierService;
     }
 

@@ -16,7 +16,7 @@ import com.thoughtworks.wallet.healthy.exception.InsertIntoDatabaseErrorExceptio
 import com.thoughtworks.wallet.healthy.exception.SignJwtException;
 import com.thoughtworks.wallet.healthy.model.*;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
-import com.thoughtworks.wallet.healthy.service.IHealthyVerifierService;
+import com.thoughtworks.wallet.healthy.service.IHealthyClaimService;
 import com.thoughtworks.wallet.healthy.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ import static com.thoughtworks.wallet.healthy.model.Result.YES;
 
 @Slf4j
 @Service
-public class HealthyVerifierService implements IHealthyVerifierService {
+public class HealthyClaimService implements IHealthyClaimService {
     private final       DSLContext                      dslContext;
     private final       ClaimIdUtil                     claimIdUtil;
     private final       HealthyClaimContractService     healthyClaimContractService;
@@ -52,7 +52,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
     // TODO 目前假设 claim 5 mins 过期
     Duration expiredDuration = Duration.ofMinutes(5);
 
-    public HealthyVerifierService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO) {
+    public HealthyClaimService(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO) {
         this.dslContext = dslContext;
         this.claimIdUtil = claimIdUtil;
         this.healthyClaimContractService = healthyClaimContractService;

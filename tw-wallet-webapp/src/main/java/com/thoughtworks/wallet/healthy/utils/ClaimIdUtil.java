@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.web3j.crypto.Hash;
 
 import java.util.Arrays;
-import static com.thoughtworks.wallet.healthy.service.impl.HealthyVerifierService.didSchema;
+import static com.thoughtworks.wallet.healthy.service.impl.HealthyClaimService.didSchema;
 
 
 @Slf4j

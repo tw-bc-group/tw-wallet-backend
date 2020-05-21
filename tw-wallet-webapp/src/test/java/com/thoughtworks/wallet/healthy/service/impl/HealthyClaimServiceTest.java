@@ -15,10 +15,10 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest()
 @ActiveProfiles("test")
-class HealthyVerifierServiceTest {
+class HealthyClaimServiceTest {
 
     @InjectMocks
-    private HealthyVerifierService healthyVerifierService;
+    private HealthyClaimService healthyVerifierService;
 
     @Mock
     private SuspectedPatientService suspectedPatientService;

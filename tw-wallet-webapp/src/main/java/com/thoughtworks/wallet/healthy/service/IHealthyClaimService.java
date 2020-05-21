@@ -2,7 +2,7 @@ package com.thoughtworks.wallet.healthy.service;
 
 import com.thoughtworks.wallet.healthy.dto.*;
 
-public interface IHealthyVerifierService {
+public interface IHealthyClaimService {
 
     /**
      * 创建健康声明
