@@ -6,12 +6,12 @@ import com.thoughtworks.common.crypto.CryptoFacade;
 import com.thoughtworks.common.crypto.Curve;
 import com.thoughtworks.common.crypto.SignatureScheme;
 import com.thoughtworks.common.util.JacksonUtil;
-import com.thoughtworks.wallet.healthyVerifier.dto.HealthVerificationResponse;
+import com.thoughtworks.wallet.healthy.dto.HealthVerificationResponse;
 import com.thoughtworks.common.util.Jwt;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatus;
-import com.thoughtworks.wallet.healthyVerifier.model.HealthyStatusWrapper;
-import com.thoughtworks.wallet.healthyVerifier.model.Result;
+import com.thoughtworks.wallet.healthy.model.HealthyCredential;
+import com.thoughtworks.wallet.healthy.model.HealthyStatus;
+import com.thoughtworks.wallet.healthy.model.HealthyStatusWrapper;
+import com.thoughtworks.wallet.healthy.model.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
