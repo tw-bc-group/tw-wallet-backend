@@ -24,7 +24,7 @@ pipeline {
   stages {
     stage('Migration') {
       steps {
-        sh './gradlew flywayMigrate'
+        sh './gradlew --no-daemon -Penv=dev flywayMigrate'
       }
     }
 
