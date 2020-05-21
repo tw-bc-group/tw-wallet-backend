@@ -56,7 +56,7 @@ pipeline {
         echo 'Time to send slack message.'
         slackSend channel: '#wallet',
             color: COLOR_MAP[currentBuild.currentResult],
-            message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}"
+            message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} on (<${env.BUILD_URL}|Open>)"
     }
   }
 }
