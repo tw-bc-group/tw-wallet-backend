@@ -155,29 +155,32 @@ public class HealthyClaimService implements IHealthyClaimService {
     @Override
     public VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
 
-        boolean verifySignature = false;
         try {
-            String[]                   strings   = verifyJwtRequest.getToken().split("\\.");
-            Jwt.Header                 header    = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
-            HealthVerificationResponse payload   = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
-            String                     signature = Base64.decode(strings[2]);
-            Jwt jwt = Jwt.builder()
-                    .header(new Jwt.Header("ES256", "JWT"))
+            String[]                   strings       = verifyJwtRequest.getToken().split("\\.");
+            Jwt.Header                 header        = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
+            HealthVerificationResponse payload       = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
+            String                     signature     = Base64.decode(strings[2]);
+            String                     headerPayload = String.format("%s.%s", strings[0], strings[1]);
+
+            Jwt jwt = Jwt.builder().header(new Jwt.Header(header.getAlg(), header.getTyp()))
                     .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
                     .build();
-            String headerPayload = String.format("%s.%s", strings[0], strings[1]);
-            verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
+
+            boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
+            boolean outdate         = payload.getExp() > Instant.now().getEpochSecond();
+
+            return VerifyJwtResponse.builder()
+                    .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                    .onchain(VerifyResultEnum.NOT_SUPPORT)
+                    .outdate(outdate ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                    .revoked(VerifyResultEnum.NOT_SUPPORT)
+                    .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
+                    .verifyIssuer(VerifyResultEnum.NOT_SUPPORT)
+                    .build();
         } catch (Exception e) {
             throw new VerifyJwtException(verifyJwtRequest.getToken());
         }
-        return VerifyJwtResponse.builder()
-                .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
-                .onchain(VerifyResultEnum.NOT_SUPPORT)
-                .outdate(VerifyResultEnum.NOT_SUPPORT)
-                .revoked(VerifyResultEnum.NOT_SUPPORT)
-                .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
-                .verifyIssuer(VerifyResultEnum.NOT_SUPPORT)
-                .build();
+
     }
 
     private HealthVerificationClaim generateHealthyVerificationClaim(HealthVerificationRequest healthVerification) {
