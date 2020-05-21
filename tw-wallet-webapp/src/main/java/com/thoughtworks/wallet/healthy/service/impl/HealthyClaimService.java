@@ -184,8 +184,8 @@ public class HealthyClaimService implements IHealthyClaimService {
         final String did         = healthVerification.getDid();
         final String phone       = healthVerification.getPhone();
         final float  temperature = healthVerification.getTemperature();
-        final Result contact     = Result.of(healthVerification.getContact());
-        final Result symptoms    = Result.of(healthVerification.getSymptoms());
+        final Result contact     = healthVerification.getContact();
+        final Result symptoms    = healthVerification.getSymptoms();
 
         final String claimId = claimIdUtil.generateClaimId(did, version);
         log.info("Claim Id of did:{} is {}.", did, claimId);
@@ -224,8 +224,8 @@ public class HealthyClaimService implements IHealthyClaimService {
 
         final boolean isHighTemperature = Float.compare(temperature, maxHealthyTemperature) >= 0;
 
-        final boolean hasContact  = contact.equals(YES);
-        final boolean hasSymptoms = symptoms.equals(YES);
+        final boolean hasContact  = YES.equals(contact);
+        final boolean hasSymptoms = YES.equals(symptoms);
 
         if (isHighTemperature || isSuspectedPatient || hasContact || hasSymptoms) {
             return HealthyStatusWrapper.of(HealthyStatus.UNHEALTHY.getStatus());
