@@ -19,7 +19,7 @@ public class HealthVerificationClaim {
     private long              exp;
     private List<String>      typ;
     private HealthyCredential sub;
-    private String            signature;
+    private String            token;
 
     /**
      * deserialize the JSON string from database of table tbl_healthy_verification_claim
@@ -34,6 +34,6 @@ public class HealthVerificationClaim {
         this.exp = tblHealthyVerificationClaimRecord.getExp();
         this.typ = ImmutableList.of(tblHealthyVerificationClaimRecord.getTyp());
         this.sub = JacksonUtil.fromJsonNode(tblHealthyVerificationClaimRecord.getSub(), HealthyCredential.class);
-        this.signature = tblHealthyVerificationClaimRecord.getSignature();
+        this.token = tblHealthyVerificationClaimRecord.getToken();
     }
 }

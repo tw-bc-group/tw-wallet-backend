@@ -40,21 +40,22 @@ public class SignClaimTest {
             final Instant now         = Instant.now();
             final long    currentTime = now.getEpochSecond();
             final long    expiredTime = now.plus(Duration.ofMinutes(5)).getEpochSecond();
-            HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.of(
-                    ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/"),
-                    claimId,
-                    "v0.0.1",
-                    "DID:TW:iss",
-                    currentTime,
-                    expiredTime,
-                    ImmutableList.of("HealthyCredential"),
-                    HealthyCredential.of("DID:TW:sub",
+            HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.builder()
+                    .context(ImmutableList.of("https://blockchain.thoughtworks.cn/credentials/v1/"))
+                    .id(claimId)
+                    .ver("v0.0.1")
+                    .iss("DID:TW:iss")
+                    .iat(currentTime)
+                    .exp(expiredTime)
+                    .typ(ImmutableList.of("HealthyCredential"))
+                    .sub(HealthyCredential.of("DID:TW:sub",
                             "phone",
                             36,
                             Result.NO,
                             Result.NO,
-                            HealthyStatusWrapper.of(HealthyStatus.HEALTHY.getStatus()))
-            );
+                            HealthyStatusWrapper.of(HealthyStatus.HEALTHY.getStatus())))
+                    .build();
+
             jwt = Jwt.builder()
                     .header(new Jwt.Header("ES256", "JWT"))
                     .payLoad(healthVerificationResponse)

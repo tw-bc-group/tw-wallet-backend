@@ -67,8 +67,33 @@ public class HealthyVerifierService implements IHealthyVerifierService {
         HealthVerificationClaim claim     = generateHealthyVerificationClaim(healthVerification);
         String                  issuerDid = generateIssuerDid();
 
+        HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.builder()
+                .context(claim.getContext())
+                .id(claim.getId())
+                .ver(claim.getVer())
+                .iss(claim.getIss())
+                .iat(claim.getIat())
+                .exp(claim.getExp())
+                .typ(claim.getTyp())
+                .sub(claim.getSub())
+                .build();
+
+        String token = sign(healthVerification, healthVerificationResponse);
+
+        insertClaim2DB(healthVerification, claim, token);
+
+        // 默认不需要上链
+        if (healthVerification.isOnChain()) {
+            healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
+        }
+
+        return JwtResponse.of(token);
+    }
+
+    private void insertClaim2DB(HealthVerificationRequest healthVerification, HealthVerificationClaim claim, String token) {
         final int insertedNumber;
         try {
+            claim.setToken(token);
             insertedNumber = healthVerificationDAO.insertHealthVerificationClaim(claim);
         } catch (DataIntegrityViolationException e) {
             log.error("Healthy verification of owner:{} is already existed.", healthVerification.getDid());
@@ -79,25 +104,6 @@ public class HealthyVerifierService implements IHealthyVerifierService {
             log.error("Insert into database error: can not insert healthy verification of owner: {}.", healthVerification.getDid());
             throw new InsertIntoDatabaseErrorException(healthVerification.getDid());
         }
-
-        // 默认不需要上链
-        if (healthVerification.isOnChain()) {
-            healthyClaimContractService.createHealthVerification(healthVerificationClaimContract.getIssuerAddress(), claim.getId(), healthVerification.getDid(), issuerDid);
-        }
-
-        HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.of(
-                claim.getContext(),
-                claim.getId(),
-                claim.getVer(),
-                claim.getIss(),
-                claim.getIat(),
-                claim.getExp(),
-                claim.getTyp(),
-                claim.getSub()
-        );
-
-        String token = sign(healthVerification, healthVerificationResponse);
-        return JwtResponse.of(token);
     }
 
     private String sign(HealthVerificationRequest healthVerification, HealthVerificationResponse healthVerificationResponse) {
@@ -125,6 +131,7 @@ public class HealthyVerifierService implements IHealthyVerifierService {
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
 
+        // TODO: 需要重新生成签名
         if (suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())) {
             claim.getSub().setHealthyStatus(HealthyStatusWrapper.of(HealthyStatus.UNHEALTHY.getStatus()));
         }

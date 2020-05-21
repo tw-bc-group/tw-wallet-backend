@@ -5,14 +5,16 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.thoughtworks.wallet.healthyVerifier.model.HealthyCredential;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HealthVerificationResponse {
     @JsonProperty(value = "@context")
@@ -24,4 +26,9 @@ public class HealthVerificationResponse {
     long              exp;
     List<String>      typ;
     HealthyCredential sub;
+
+    /**
+     * jwt token
+     */
+    String token;
 }

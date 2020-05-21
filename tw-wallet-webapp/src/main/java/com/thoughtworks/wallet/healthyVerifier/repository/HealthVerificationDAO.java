@@ -28,6 +28,7 @@ public class HealthVerificationDAO {
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.EXP, claim.getExp())
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.TYP, claim.getTyp().get(0))
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM.SUB, JacksonUtil.toJsonNode(claim.getSub()))
+                .set(TBL_HEALTHY_VERIFICATION_CLAIM.TOKEN, claim.getToken())
                 .execute();
     }
 
