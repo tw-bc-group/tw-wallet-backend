@@ -20,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHealthyVerificationClaimRecord> implements Record10<String, String, String, String, Long, Long, String, JsonNode, String, String> {
 
-    private static final long serialVersionUID = -1100190467;
+    private static final long serialVersionUID = -1834194399;
 
     /**
      * Setter for <code>public.tbl_healthy_verification_claim.id</code>.
@@ -158,17 +158,17 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
     }
 
     /**
-     * Setter for <code>public.tbl_healthy_verification_claim.signature</code>.
+     * Setter for <code>public.tbl_healthy_verification_claim.token</code>.
      */
-    public TblHealthyVerificationClaimRecord setSignature(String value) {
+    public TblHealthyVerificationClaimRecord setToken(String value) {
         set(9, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.tbl_healthy_verification_claim.signature</code>.
+     * Getter for <code>public.tbl_healthy_verification_claim.token</code>.
      */
-    public String getSignature() {
+    public String getToken() {
         return (String) get(9);
     }
 
@@ -242,7 +242,7 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
 
     @Override
     public Field<String> field10() {
-        return TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM.SIGNATURE;
+        return TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM.TOKEN;
     }
 
     @Override
@@ -292,7 +292,7 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
 
     @Override
     public String component10() {
-        return getSignature();
+        return getToken();
     }
 
     @Override
@@ -342,7 +342,7 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
 
     @Override
     public String value10() {
-        return getSignature();
+        return getToken();
     }
 
     @Override
@@ -401,7 +401,7 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
 
     @Override
     public TblHealthyVerificationClaimRecord value10(String value) {
-        setSignature(value);
+        setToken(value);
         return this;
     }
 
@@ -434,7 +434,7 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
     /**
      * Create a detached, initialised TblHealthyVerificationClaimRecord
      */
-    public TblHealthyVerificationClaimRecord(String id, String ver, String context, String iss, Long iat, Long exp, String typ, JsonNode sub, String owner, String signature) {
+    public TblHealthyVerificationClaimRecord(String id, String ver, String context, String iss, Long iat, Long exp, String typ, JsonNode sub, String owner, String token) {
         super(TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM);
 
         set(0, id);
@@ -446,6 +446,6 @@ public class TblHealthyVerificationClaimRecord extends UpdatableRecordImpl<TblHe
         set(6, typ);
         set(7, sub);
         set(8, owner);
-        set(9, signature);
+        set(9, token);
     }
 }

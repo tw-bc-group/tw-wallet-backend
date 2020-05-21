@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblHealthyVerificationClaim extends TableImpl<TblHealthyVerificationClaimRecord> {
 
-    private static final long serialVersionUID = 735038825;
+    private static final long serialVersionUID = 1980191787;
 
     /**
      * The reference instance of <code>public.tbl_healthy_verification_claim</code>
@@ -94,9 +94,9 @@ public class TblHealthyVerificationClaim extends TableImpl<TblHealthyVerificatio
     public final TableField<TblHealthyVerificationClaimRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(64), this, "");
 
     /**
-     * The column <code>public.tbl_healthy_verification_claim.signature</code>.
+     * The column <code>public.tbl_healthy_verification_claim.token</code>.
      */
-    public final TableField<TblHealthyVerificationClaimRecord, String> SIGNATURE = createField(DSL.name("signature"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<TblHealthyVerificationClaimRecord, String> TOKEN = createField(DSL.name("token"), org.jooq.impl.SQLDataType.VARCHAR(3000), this, "");
 
     /**
      * Create a <code>public.tbl_healthy_verification_claim</code> table reference
