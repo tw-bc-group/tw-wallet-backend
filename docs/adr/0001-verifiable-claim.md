@@ -12,7 +12,7 @@ Date: 2020-05-20
 
 ## Decision
 
-1. ave to blockchain is optional
+1. Save to blockchain is optional
 
 ## Consequences
 
@@ -28,4 +28,4 @@ HealthVerificationRequest{
     onchain	boolean
 }
 ```
-add `onchain` field, default is false.
+add `onchain` field, if set it as false, do not send it to Smart Contract.

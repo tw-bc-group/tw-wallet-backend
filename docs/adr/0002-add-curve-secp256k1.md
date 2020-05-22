@@ -8,14 +8,14 @@ Date: 2020-05-20
 
 ## Context
 
-- We Use Eth lib to generate private key and public key
+- Use Eth lib to generate private key and public key
 - Claim use JWT format
 - JWT lib do not support SECP256k1
-- we want to support more ECDSA algo
+- we want to support ECDSA with SECP256k1
 
 ## Decision
 
-- wrapper bouncycastle to support more algo
+- wrapper bouncycastle to support more algos
 - generate JWT signature algo: `signature := Base64(sign(Base64(header).Base64(payload)))`
 
 
@@ -23,3 +23,7 @@ Date: 2020-05-20
 
 - define sequence and algorithm in specification
 - write crypto lib
+- support ECDSA with Curve：
+    - SECP256k1 
+    - P-256 etc...
+    - SM2
