@@ -10,6 +10,8 @@ Date: 2020-05-22
 
 tw-wallet backend should have a convenient mechanism to protect API.
 
+## Decision
+
 0. DID API should be protected by 
     - phone verification 
     - kyc process
@@ -28,9 +30,6 @@ tw-wallet backend should have a convenient mechanism to protect API.
 4. Client use JWT Token to request APIs.
 5. Client should refresh JWT token if it expired
 
-## Decision
-
-Decision here...
 
 ## Consequences
 

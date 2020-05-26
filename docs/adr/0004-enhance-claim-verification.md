@@ -21,14 +21,15 @@ https://dev.tw-wallet.in2e.com/v1/health-certifications/verify just support expi
     "outdate": "TRUE",
     "revoked": "NOT_SUPPORT",
     "onchain": "NOT_SUPPORT",
-    "verify_issuer": "NOT_SUPPORT",
     "verify_signature": "TRUE",
     "verify_holder": "NOT_SUPPORT"
   }
 }
 ```
 
-Yin suggest support "revoked","onchain","verify_issuer" and "verify_holder" verification
+## Decision
+
+Suggest support "revoked","onchain","verify_issuer" and "verify_holder" verification
 
 ### revoked
 
@@ -66,10 +67,6 @@ avoid use others' claim.
 > so server do not need to query DID smart contract
 > this is a temporary mock
 
-
-## Decision
-
-Decision here...
 
 ## Consequences
 

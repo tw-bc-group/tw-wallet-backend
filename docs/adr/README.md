@@ -5,3 +5,4 @@
 * [3. login-token](0003-login-token.md)
 * [4. enhance-claim-verification](0004-enhance-claim-verification.md)
 * [5. refine-blacklist-mechanism](0005-refine-blacklist-mechanism.md)
+* [6. small-qrcode](0006-small-qrcode.md)

@@ -8,7 +8,8 @@ Date: 2020-05-20
 
 ## Context
 
-1. healthy claim do not save to blockchain
+1. issuer should have a choice to save claim proof to blockchain
+2. if save claim proof to blockchain, issuer can revoke claim in the future
 
 ## Decision
 
