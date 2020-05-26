@@ -1,9 +1,7 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
-import com.thoughtworks.common.exception.ErrorSendTransactionException;
-import com.thoughtworks.common.exception.InvalidAddressErrorException;
-import com.thoughtworks.common.exception.QuorumConnectionErrorException;
-import com.thoughtworks.common.exception.ReadFileErrorException;
+import com.thoughtworks.common.annotation.QuorumRPCUrl;
+import com.thoughtworks.common.exception.*;
 import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.asset.annotation.IdentityRegistryContractAddress;
@@ -18,15 +16,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.toList;
@@ -35,11 +36,13 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class QuorumServiceImpl implements IBlockchainService {
 
-    private final Web3j web3j;
-    private final ERC20 decp;
-    private final ModelMapper modelMapper = new ModelMapper();
-    private final JacksonUtil jacksonUtil;
+    private final        Web3j       web3j;
+    private final        ERC20       decp;
+    private final        ModelMapper modelMapper       = new ModelMapper();
+    private final        JacksonUtil jacksonUtil;
+    private final static int         autoTransferValue = 100;
 
+    @QuorumRPCUrl
     private String rpcUrl;
 
     @IdentityRegistryContractAddress
@@ -54,15 +57,15 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     @Override
     public DECPBalanceResponse getDCEPBalanceBy(String address)
-        throws InvalidAddressErrorException, QuorumConnectionErrorException {
+            throws InvalidAddressErrorException, QuorumConnectionErrorException {
         log.info("The address of this request is " + address);
 
         if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);
         }
 
-        final String decpSymbol;
-        final String decpName;
+        final String     decpSymbol;
+        final String     decpName;
         final BigInteger decpDecimal;
         final BigInteger decpBalance;
         try {
@@ -76,13 +79,13 @@ public class QuorumServiceImpl implements IBlockchainService {
         }
 
         return DECPBalanceResponse
-            .of(address, DECP.create(decpName, decpSymbol, decpDecimal), new BigDecimal(decpBalance));
+                .of(address, DECP.create(decpName, decpSymbol, decpDecimal), new BigDecimal(decpBalance));
     }
 
     @Override
     public DECPInfoResponse getDCEPInfo() {
-        final String decpSymbol;
-        final String decpName;
+        final String     decpSymbol;
+        final String     decpName;
         final BigInteger decpDecimal;
         try {
             decpSymbol = decp.symbol().sendAsync().get();
@@ -95,7 +98,7 @@ public class QuorumServiceImpl implements IBlockchainService {
 
         final String decpContractPath = "/contracts/DC_EP_ERC20.json";
         final String jsonString;
-        String abi;
+        String       abi;
         try {
             jsonString = jacksonUtil.readJsonFile(decpContractPath);
             abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
@@ -126,10 +129,24 @@ public class QuorumServiceImpl implements IBlockchainService {
         return IdentityRegistryInfoResponse.of(name, identityRegistryContractAddress, abi);
     }
 
+    @Override
+    public void assignInitPoint(String address) {
+        log.info("assignInitPoint - address: {}", address);
+        try {
+            BigInteger decpDecimal = decp.decimals().sendAsync().get();
+            BigInteger money       = BigInteger.valueOf(autoTransferValue).multiply(BigInteger.TEN.pow(decpDecimal.intValue()));
+            this.decp.transfer(address, money).sendAsync();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new TransferException(rpcUrl);
+        }
+    }
+
+    @Override
     public List<TransactionResponse> getTransactionsBy(String address, int limit) {
         log.info("getTransactionsBy:" + address);
-        int blockLimit = 1000;
-        List<TransactionResponse> responses = new ArrayList<>();
+        int                       blockLimit = 1000;
+        List<TransactionResponse> responses  = new ArrayList<>();
 
         if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);
@@ -141,7 +158,7 @@ public class QuorumServiceImpl implements IBlockchainService {
                 log.debug("fetching block number: {}", ethBlockNumber);
                 if (countBlockTransactions(ethBlockNumber).compareTo(BigInteger.ZERO) > 0) {
                     final List<Transaction> transactions = fetchBlockTransactions(address,
-                        ethBlockNumber);
+                            ethBlockNumber);
 
                     for (int j = 0; j < Math.max(limit, transactions.size()); j++) {
                         responses.add(modelMapper.map(transactions.get(j), TransactionResponse.class));
@@ -183,23 +200,23 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)
-        throws ExecutionException, InterruptedException {
+            throws ExecutionException, InterruptedException {
         return web3j
-            .ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(ethBlockNumber))
-            .sendAsync().get().getTransactionCount();
+                .ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(ethBlockNumber))
+                .sendAsync().get().getTransactionCount();
     }
 
     private List<Transaction> fetchBlockTransactions(String address, BigInteger ethBlockNumber)
-        throws InterruptedException, ExecutionException {
+            throws InterruptedException, ExecutionException {
         return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(ethBlockNumber), true)
-            .sendAsync()
-            .get()
-            .getBlock()
-            .getTransactions()
-            .stream()
-            .map(transactionResult -> (Transaction) transactionResult.get())
-            .filter(tx -> relatedTo(tx, address))
-            .collect(toList());
+                .sendAsync()
+                .get()
+                .getBlock()
+                .getTransactions()
+                .stream()
+                .map(transactionResult -> (Transaction) transactionResult.get())
+                .filter(tx -> relatedTo(tx, address))
+                .collect(toList());
     }
 
     private boolean relatedTo(Transaction tx, String address) {

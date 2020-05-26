@@ -33,5 +33,6 @@ public class IdentityController {
     public void identityRegistry(@Valid @RequestBody IdentityRegistryRequest request) {
         log.info("Create Identity: " + request.toString());
         quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getAddress());
+        quorumService.assignInitPoint(request.getAddress());
     }
 }

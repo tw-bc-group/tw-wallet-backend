@@ -16,7 +16,9 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -66,7 +68,6 @@ public class TWWalletWebApp {
             throw new QuorumConnectionErrorException(rpcUrl);
         }
 
-        //TODO: 不转账没必要用私钥
-        return ERC20.load(DCEPContractAddress, web3j, Credentials.create(privateKey), new DefaultGasProvider());
+        return ERC20.load(DCEPContractAddress, web3j, Credentials.create(privateKey), new StaticGasProvider(BigInteger.ZERO, BigInteger.valueOf(4_300_000)));
     }
 }

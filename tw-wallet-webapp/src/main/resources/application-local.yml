@@ -29,22 +29,19 @@ spring:
 
 quorum:
   rpc:
-    url: 'http://127.0.0.1:7545'
-  #    url: 'http://quorum.tw-wallet.in2e.com:22002'
+    url: 'http://quorum.tw-wallet.in2e.com:22001'
   dc-ep:
-    contract-address: '0x0BcD39Aa6353a4F9dEfDF289C74A4B6f0250f100'
-    #    url: 'http://quorum.tw-wallet.in2e.com:22002'
-    url: 'http://127.0.0.1:7545'
-  tw-point:
-    contract-address: '0x0BcD39Aa6353a4F9dEfDF289C74A4B6f0250f100'
+    contract-address: '0x624d400315312c6280F6dB7683ACf2128EbB9d46'
+    url: 'http://quorum.tw-wallet.in2e.com:22001'
   identity-registry:
     contract-address: '0xfb87495Ab114664d5bEb3Ce9Efb8fBc08fc18C36'
   health-verification-claim:
     contract-address: '0xc4F5D965d797e807F5014AC944E48D5ecCa29Eb9'
-    #    TODO: use issuer-did
     issuer-did: '0xcA843569e3427144cEad5e4d5999a3D0cCF92B8e'
     issuer-address: '0x47187406E7dA648AcF3E6761eFC00660fcd7A0C6'
     issuer-private-key: '1cf09fe5283831f39add043b66ad202948ebb9bf994e2d09cf00dd2279b1d6b2'
   node1:
-    private-key: '0x4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377'
+    private-key: '0x4762E04D10832808A0AEBDAA79C12DE54AFBE006BFFFD228B3ABCC494FE986F9'
+#    address: '0x86e961c7b74f760fe5DF0623f1bBD048c643F653'
+#    public-key: '0x036c45647d628602b863b7571a39d3f771cef5e8f9c5e8f954c6b5342e7394d908'
 
