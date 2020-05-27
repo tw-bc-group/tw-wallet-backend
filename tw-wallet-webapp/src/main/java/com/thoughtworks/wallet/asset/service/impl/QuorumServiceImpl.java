@@ -40,7 +40,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     private final        ERC20       decp;
     private final        ModelMapper modelMapper       = new ModelMapper();
     private final        JacksonUtil jacksonUtil;
-    private final static int         autoTransferValue = 100;
+    private final static int         autoTransferValue = 10;
 
     @QuorumRPCUrl
     private String rpcUrl;
