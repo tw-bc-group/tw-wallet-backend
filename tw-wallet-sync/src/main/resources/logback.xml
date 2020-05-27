@@ -20,7 +20,7 @@
                 <maxFileSize>64 MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!-- keep 30 days' worth of history -->
-            <maxHistory>3</maxHistory>
+            <maxHistory>2</maxHistory>
         </rollingPolicy>
 
         <!-- Safely log to the same file from multiple JVMs. Degrades performance! -->
@@ -45,18 +45,6 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
-
-    <!-- SQL execution logging is logged to the LoggerListener logger at DEBUG level -->
-    <Logger name="org.jooq.tools.LoggerListener" level="INFO" additivity="false">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
-    </Logger>
-
-     Other jOOQ related debug log output
-    <Logger name="org.jooq" level="INFO" additivity="false">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
-    </Logger>
 
     <!-- For loggers in the these namespaces, log at DEBUG levels above. -->
     <logger name="com.thoughtworks.wallet" level="INFO" additivity="false">
