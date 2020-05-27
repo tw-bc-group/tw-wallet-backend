@@ -117,6 +117,11 @@ public class HealthyClaimService implements IHealthyClaimService {
         return token;
     }
 
+    /**
+     * TODO: client should create claim, delete this method in the future
+     * @param ownerId
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public HealthVerificationResponse getHealthVerification(String ownerId) {
@@ -128,9 +133,24 @@ public class HealthyClaimService implements IHealthyClaimService {
 
         HealthVerificationClaim claim = new HealthVerificationClaim(tblHealthyVerificationClaimRecord);
 
-        if (suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())) {
+        if (suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())
+                && claim.getSub().getHealthyStatus().getVal().equals(HealthyStatus.HEALTHY.getStatus())) {
             adjustExpireTime(claim);
             adjustHealthyStatus(HealthyStatus.UNHEALTHY, claim);
+            String token = sign(ownerId, claim);
+            claim.setToken(token);
+            healthVerificationDAO.updateHealthVerificationClaim(claim);
+        }
+
+        // bug: 当把一个手机号码预置在黑名单内时，进入健康流程，填入所有都是健康的信息，提交，健康码是红色的。
+        // 此时，调用从黑名单中删除该手机号的接口后刷新此身份的健康码，健康码还是红色的。
+        if (!suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())
+                && claim.getSub().getHealthyStatus().getVal().equals(HealthyStatus.UNHEALTHY.getStatus())
+                && claim.getSub().getContact().equals(Result.NO)
+                && claim.getSub().getSymptoms().equals(Result.NO)
+        ) {
+            adjustExpireTime(claim);
+            adjustHealthyStatus(HealthyStatus.HEALTHY, claim);
             String token = sign(ownerId, claim);
             claim.setToken(token);
             healthVerificationDAO.updateHealthVerificationClaim(claim);
