@@ -6,3 +6,4 @@
 * [4. enhance-claim-verification](0004-enhance-claim-verification.md)
 * [5. refine-blacklist-mechanism](0005-refine-blacklist-mechanism.md)
 * [6. small-qrcode](0006-small-qrcode.md)
+* [7. checkin-generate-code](0007-checkin-generate-code.md)
