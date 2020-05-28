@@ -144,10 +144,12 @@ public class HealthyClaimService implements IHealthyClaimService {
 
         // bug: 当把一个手机号码预置在黑名单内时，进入健康流程，填入所有都是健康的信息，提交，健康码是红色的。
         // 此时，调用从黑名单中删除该手机号的接口后刷新此身份的健康码，健康码还是红色的。
+        final boolean isHighTemperature = Float.compare(claim.getSub().getTemperature(), maxHealthyTemperature) >= 0;
         if (!suspectedPatientService.isSuspectedPatient(claim.getSub().getPhone())
                 && claim.getSub().getHealthyStatus().getVal().equals(HealthyStatus.UNHEALTHY.getStatus())
                 && claim.getSub().getContact().equals(Result.NO)
                 && claim.getSub().getSymptoms().equals(Result.NO)
+                && !isHighTemperature
         ) {
             adjustExpireTime(claim);
             adjustHealthyStatus(HealthyStatus.HEALTHY, claim);
