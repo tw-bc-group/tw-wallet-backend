@@ -41,7 +41,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'wallet-docker-account', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
                     sh '''
-                    echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
+                    echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin $DOCKER_REG
                     '''
                 }
                 sh 'make image TAG=$TW_WALLET_IMAGE'
