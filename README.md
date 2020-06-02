@@ -4,7 +4,6 @@
 #### RunTime
 * Java 1.8
 * PostgreSQL/H2
-* RabbitMQ
 * Gradle 5.2.1
 
 #### QuickStart
@@ -36,13 +35,6 @@ docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tw-wallet-2020 -e P
 ./gradlew flywayMigrate
 ```
 
-* Install `RabbitMQ` at your `local` environment
-```
-docker pull rabbitmq:management
-docker run -d --name rabbitmq --publish 5671:5671  --publish 5672:5672 --publish 4369:4369 --publish 25672:25672 --publish 15671:15671 --publish 15672:15672 rabbitmq:management
-```
-> 可在 `http://localhost:15672/` 页面,通过 `guest` 和 `guest`(用户名/密码) 登陆 rabbitMQ 的终端页面.
-> RabbitMQ 的配置文件位于: `java/com/thoughtworks/wallet/config/SenderConf.java` 
 
 * If you want to deploy the whole service, you have to export the below environment variable before you do `docker-compose up` in `./docker` folder.
     * DB_USERNAME

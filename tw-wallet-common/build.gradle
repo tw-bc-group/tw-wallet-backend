@@ -21,7 +21,6 @@ dependencies {
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor
-    testImplementation Deps.springRabbitTest
 }
 
 test {

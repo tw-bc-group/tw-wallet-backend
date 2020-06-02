@@ -29,11 +29,6 @@ def binding = [
         HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS  : System.getenv('HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS') ?: "",
         HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: System.getenv('HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY') ?: "",
         NODE1_PRIVATE_KEY: System.getenv('NODE1_PRIVATE_KEY') ?: "",
-
-        RABBIT_MQ_URL: System.getenv('RABBIT_MQ_URL') ?: "",
-        RABBIT_MQ_PORT: System.getenv('RABBIT_MQ_PORT') ?: "",
-        RABBIT_MQ_USERNAME: System.getenv('RABBIT_MQ_USERNAME') ?: "",
-        RABBIT_MQ_PASSWORD: System.getenv('RABBIT_MQ_PASSWORD') ?: ""
 ]
 def config = new File("$projectDir/src/main/resources/application-${environment}.yml")
 def template = engine.createTemplate(config).make(binding).toString()

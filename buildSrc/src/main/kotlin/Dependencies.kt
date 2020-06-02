@@ -30,7 +30,6 @@ object Deps {
     const val springBootStarterWeb = "org.springframework.boot:spring-boot-starter-web:${Versions.boot}"
     const val springBootConfigurationProcessor = "org.springframework.boot:spring-boot-configuration-processor:${Versions.boot}"
     const val springBootStarterTest = "org.springframework.boot:spring-boot-starter-test:${Versions.boot}"
-    const val springRabbitTest = "org.springframework.amqp:spring-rabbit-test:${Versions.boot}"
     const val springfoxSwagger2 = "io.springfox:springfox-swagger2:${Versions.swagger2}"
     const val springfoxSwaggerUI = "io.springfox:springfox-swagger-ui:${Versions.swagger2}"
     const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"
