@@ -16,10 +16,10 @@ pipeline {
         HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS = "${HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS}"
         HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY = "${HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY}"
         RPC_URL = "${RPC_URL}"
-        DOCKER_REG = "thoughtwallet"
+        DOCKER_REG = "${BC_DOCKER_REG}"
         LOG_DIR = "${LOG_DIR}"
         HOST_IP = "${HOST_IP}"
-        TW_WALLET_IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
+        TW_WALLET_IMAGE = "${BC_DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
     }
     stages {
         stage('Migration') {
@@ -39,11 +39,6 @@ pipeline {
 
         stage('Dockerize') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'wallet-docker-account', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
-                    '''
-                }
                 sh 'make image TAG=$TW_WALLET_IMAGE'
                 sh 'docker push $TW_WALLET_IMAGE'
                 sh 'docker rmi $TW_WALLET_IMAGE'
