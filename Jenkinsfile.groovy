@@ -16,10 +16,10 @@ pipeline {
         HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS = "${HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS}"
         HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY = "${HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY}"
         RPC_URL = "${RPC_URL}"
-        DOCKER_REG = "thoughtwallet"
+        DOCKER_REG = "${BC_DOCKER_REG}"
         LOG_DIR = "${LOG_DIR}"
         HOST_IP = "${HOST_IP}"
-        TW_WALLET_IMAGE = "${DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
+        TW_WALLET_IMAGE = "${BC_DOCKER_REG}/tw-wallet:build-${BUILD_NUMBER}"
     }
     stages {
         stage('Migration') {
