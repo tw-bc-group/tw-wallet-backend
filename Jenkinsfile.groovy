@@ -42,18 +42,15 @@ pipeline {
         sh 'aws ecr get-login-password | docker login  -u AWS --password-stdin $DOCKER_REG'
         sh 'make image TAG=$TW_WALLET_IMAGE'
         sh 'docker push $TW_WALLET_IMAGE'
-        sh '''docker rmi `docker images -a | grep tw-wallet | awk '{ print $3 }'` '''
-        sh '/usr/local/bin/kompose convert -c -f docker/docker-compose.yml'
-        sh 'cd docker; /usr/local/bin/docker-compose up -d'
+        sh 'docker rmi $TW_WALLET_IMAGE'
       }
     }
 
     stage('Deploy') {
       steps {
-        sh '/usr/local/bin/kompose convert -c -f docker/docker-compose.yml'
-        // TODO: Remove this will real helm install
-        sh 'env > docker/.env'
-        sh 'cd docker; /usr/local/bin/docker-compose up -d'
+        sh 'env > .env'
+
+        sh 'make deploy.sync_ci BUILD_NUMBER=$BUILD_NUMBER'
       }
     }
   }
