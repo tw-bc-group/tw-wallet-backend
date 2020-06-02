@@ -21,17 +21,6 @@ spring:
   flyway:
     enabled: false
 
-  rabbitmq:
-    host: ${RABBIT_MQ_URL}
-    port: ${RABBIT_MQ_PORT}
-    username: ${RABBIT_MQ_USERNAME}
-    password: ${RABBIT_MQ_PASSWORD}
-    listener:
-      simple:
-        concurrency: 10
-        max-concurrency: 20
-        prefetch: 5
-
 quorum:
   rpc:
     url: ${RPC_URL}

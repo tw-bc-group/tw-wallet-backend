@@ -1,18 +1,6 @@
 ---
 version: '2'
 services:
-  rabbitMQ:
-    image: rabbitmq:management
-    ports:
-      - "5671:5671"
-      - "5672:5672"
-      - "4369:4369"
-      - "25672:25672"
-      - "15671:15671"
-      - "15672:15672"
-    networks:
-      - backend
-
   backend:
     image: ${TW_WALLET_IMAGE}
     user: root
@@ -35,16 +23,8 @@ services:
       LOG_DIR: ${LOG_DIR}
       swagger.enable: 'true'
       server.port: 8080
-      RABBIT_MQ_URL: rabbitMQ
-      RABBIT_MQ_PORT: 5672
-      RABBIT_MQ_USERNAME: guest
-      RABBIT_MQ_PASSWORD: guest
-    depends_on:
-      - rabbitMQ
     ports:
       - "80:8080"
-    links:
-      - rabbitMQ
     networks:
       - backend
 
@@ -68,15 +48,8 @@ services:
       LOG_DIR: ${LOG_DIR}
       swagger.enable: 'true'
       server.port: 8080
-      RABBIT_MQ_URL: rabbitMQ
-      RABBIT_MQ_PORT: 5672
-      RABBIT_MQ_USERNAME: guest
-      RABBIT_MQ_PASSWORD: guest
     depends_on:
       - backend
-      - rabbitMQ
-    links:
-      - rabbitMQ
     networks:
       - backend
 

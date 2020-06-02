@@ -45,7 +45,6 @@ dependencies {
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor
-    testImplementation Deps.springRabbitTest
     testImplementation Deps.h2
 
     jooqRuntime Deps.postgresql

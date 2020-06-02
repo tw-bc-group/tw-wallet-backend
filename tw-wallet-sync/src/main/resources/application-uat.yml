@@ -12,17 +12,6 @@ spring:
       name: org.jooq.meta.postgres.PostgresDatabase
       inputSchema: public
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    listener:
-      simple:
-        concurrency: 10
-        max-concurrency: 20
-        prefetch: 5
-
 quorum:
   rpc:
     url: 'http://localhost:22001'
