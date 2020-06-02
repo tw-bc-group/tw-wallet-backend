@@ -54,3 +54,8 @@ deploy.sync:
 	cat docker/k8s/tw-wallet-sync-deployment.yaml \
 		| sed 's#tw-wallet:latest#${TAG}#' \
 		| kubectl apply -n tw-wallet -f -
+
+deploy.webapp:
+	cat docker/k8s/tw-wallet-webapp-deployment.yaml \
+		| sed 's#tw-wallet:latest#${TAG}#' \
+		| kubectl apply -n tw-wallet -f -

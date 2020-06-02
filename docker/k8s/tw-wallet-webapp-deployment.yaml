@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tw-wallet-webapp
+  name: tw-wallet-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tw-wallet-webapp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tw-wallet-webapp
+    spec:
+      restartPolicy: Always
+      containers:
+        - image: tw-wallet:latest
+          name: tw-wallet-webapp
+          volumeMounts:
+            - mountPath: /app/logs
+              name: log-volume
+          args:
+            - java
+            - -jar
+            - tw-wallet-webapp.jar
+          envFrom:
+            - configMapRef:
+                name: tw-wallet-env
+          imagePullPolicy: ""
+      volumes:
+        - name: log-volume
+          emptyDir: {}
+
