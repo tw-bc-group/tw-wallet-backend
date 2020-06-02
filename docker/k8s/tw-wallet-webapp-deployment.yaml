@@ -21,6 +21,8 @@ spec:
       containers:
         - image: tw-wallet:latest
           name: tw-wallet-webapp
+          ports:
+            - containerPort: 8080
           volumeMounts:
             - mountPath: /app/logs
               name: log-volume

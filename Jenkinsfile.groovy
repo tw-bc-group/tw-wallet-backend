@@ -51,6 +51,7 @@ pipeline {
         sh 'env > .env'
         sh 'make deploy.sync TAG=$TW_WALLET_IMAGE'
         sh 'make deploy.webapp TAG=$TW_WALLET_IMAGE'
+        sh 'make deploy.webapp.service'
       }
     }
   }
