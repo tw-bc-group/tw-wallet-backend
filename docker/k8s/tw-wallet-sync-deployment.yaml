@@ -19,7 +19,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - image: 219905775130.dkr.ecr.us-east-2.amazonaws.com/tw-wallet:latest
+        - image: tw-wallet:latest
           name: tw-wallet-sync
           volumeMounts:
             - mountPath: /app/logs

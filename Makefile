@@ -51,7 +51,6 @@ k8s.show:
 	kubectl -n tw-wallet get all
 
 deploy.sync:
-	kubectl apply -n tw-wallet -f docker/k8s/tw-wallet-sync-deployment.yaml
-
-deploy.sync_ci:
-	cat docker/k8s/tw-wallet-sync-deployment.yaml | sed 's/tw-wallet:latest/tw-wallet:$(BUILD_NUMBER)/'
+	cat docker/k8s/tw-wallet-sync-deployment.yaml \
+		| sed 's#tw-wallet:latest#${TAG}#' \
+		| kubectl apply -n tw-wallet -f -

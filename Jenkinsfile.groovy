@@ -50,7 +50,7 @@ pipeline {
       steps {
         sh 'env > .env'
 
-        sh 'make deploy.sync_ci BUILD_NUMBER=$BUILD_NUMBER'
+        sh 'make deploy.sync TAG=$TW_WALLET_IMAGE'
       }
     }
   }
