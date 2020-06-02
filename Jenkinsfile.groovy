@@ -42,7 +42,6 @@ pipeline {
         sh 'aws ecr get-login-password | docker login  -u AWS --password-stdin $DOCKER_REG'
         sh 'make image TAG=$TW_WALLET_IMAGE'
         sh 'docker push $TW_WALLET_IMAGE'
-        sh '''docker rmi `docker images -a | grep tw-wallet | awk '{ print $3 }'` '''
         sh '/usr/local/bin/kompose convert -c -f docker/docker-compose.yml'
         sh 'cd docker; /usr/local/bin/docker-compose up -d'
       }
