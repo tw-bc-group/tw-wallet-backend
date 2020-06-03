@@ -37,6 +37,7 @@ pipeline {
             }
         }
 
+<<<<<<< HEAD
         stage('Dockerize') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'wallet-docker-account', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
@@ -49,6 +50,17 @@ pipeline {
                 sh 'docker rmi $TW_WALLET_IMAGE'
             }
         }
+=======
+    stage('Dockerize') {
+      steps {
+        sh 'aws ecr get-login-password | docker login  -u AWS --password-stdin $DOCKER_REG'
+        sh 'make image TAG=$TW_WALLET_IMAGE'
+        sh 'docker push $TW_WALLET_IMAGE'
+        sh '/usr/local/bin/kompose convert -c -f docker/docker-compose.yml'
+        sh 'cd docker; /usr/local/bin/docker-compose up -d'
+      }
+    }
+>>>>>>> 4b0c5923ba05ef07fe26f9dcef0783ce3c7a3579
 
         stage('Deploy') {
             steps {
