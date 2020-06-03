@@ -18,17 +18,21 @@ println "Current Environment: " + environment
 def engine = new SimpleTemplateEngine()
 
 def binding = [
-        DB_USERNAME: System.getenv('DB_USERNAME') ?: "",
-        DB_URL     : System.getenv('DB_URL') ?: "",
-        DB_PASSWORD: System.getenv('DB_PASSWORD') ?: "",
-
-        RPC_URL: System.getenv('RPC_URL') ?: "",
-        TWPOINT_CONTRACT_ADDRESS: System.getenv('TWPOINT_CONTRACT_ADDRESS') ?: "",
-        IDENTITY_REGISTRY_CONTRACT_ADDRESS: System.getenv('IDENTITY_REGISTRY_CONTRACT_ADDRESS') ?: "",
-        HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: System.getenv('HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS') ?: "",
-        HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS  : System.getenv('HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS') ?: "",
+        DB_NAME                                     : System.getenv('DB_NAME') ?: "",
+        DB_USERNAME                                 : System.getenv('DB_USERNAME') ?: "",
+        DB_URL                                      : System.getenv('DB_URL') ?: "",
+        DB_PASSWORD                                 : System.getenv('DB_PASSWORD') ?: "",
+        RPC_URL                                     : System.getenv('RPC_URL') ?: "",
+        TWPOINT_CONTRACT_ADDRESS                    : System.getenv('TWPOINT_CONTRACT_ADDRESS') ?: "",
+        IDENTITY_REGISTRY_CONTRACT_ADDRESS          : System.getenv('IDENTITY_REGISTRY_CONTRACT_ADDRESS') ?: "",
+        HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS  : System.getenv('HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS') ?: "",
+        HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS    : System.getenv('HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS') ?: "",
         HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: System.getenv('HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY') ?: "",
+<<<<<<< HEAD
+        NODE1_PRIVATE_KEY                           : System.getenv('NODE1_PRIVATE_KEY') ?: "",
+=======
         NODE1_PRIVATE_KEY: System.getenv('NODE1_PRIVATE_KEY') ?: "",
+>>>>>>> 4b0c5923ba05ef07fe26f9dcef0783ce3c7a3579
 ]
 def config = new File("$projectDir/src/main/resources/application-${environment}.yml")
 def template = engine.createTemplate(config).make(binding).toString()
