@@ -25,11 +25,14 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     @Value("${swagger.enable}")
-    private boolean isEnable;
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String DEFAULT_INCLUDE_PATTERN = "/v1.*";
-    private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
+    private             boolean isEnable;
+    public static final String  AUTHORIZATION_HEADER    = "Authorization";
+    public static final String  DEFAULT_INCLUDE_PATTERN = "/v1.*";
+    private final       Logger  log                     = LoggerFactory.getLogger(SwaggerConfig.class);
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
@@ -50,8 +53,13 @@ public class SwaggerConfig {
                 "https://baidu.com",
                 vext);
 
+        String host = "";
+        if ("dev".equals(activeProfile)) {
+            host = "127.0.0.1:10443";
+        }
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
+                .host(host)
                 .pathMapping("/")
                 .apiInfo(ApiInfo.DEFAULT)
                 .enable(isEnable)
