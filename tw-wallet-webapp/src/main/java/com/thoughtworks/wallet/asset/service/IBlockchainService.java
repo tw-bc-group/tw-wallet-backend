@@ -2,10 +2,7 @@ package com.thoughtworks.wallet.asset.service;
 
 import com.thoughtworks.common.exception.InvalidAddressErrorException;
 import com.thoughtworks.common.exception.QuorumConnectionErrorException;
-import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
-import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
-import com.thoughtworks.wallet.asset.response.DECPInfoResponse;
-import com.thoughtworks.wallet.asset.response.TransactionResponse;
+import com.thoughtworks.wallet.asset.response.*;
 
 import java.util.List;
 
@@ -54,4 +51,6 @@ public interface IBlockchainService {
      * @param address
      */
     void assignInitPoint(String address);
+
+    IdentitiesContractInfoRepresentation getIdentityInfo();
 }

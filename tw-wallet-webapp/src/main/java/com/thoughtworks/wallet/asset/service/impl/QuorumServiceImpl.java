@@ -4,30 +4,24 @@ import com.thoughtworks.common.annotation.QuorumRPCUrl;
 import com.thoughtworks.common.exception.*;
 import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.common.util.JacksonUtil;
-import com.thoughtworks.wallet.asset.annotation.IdentityRegistryContractAddress;
+import com.thoughtworks.wallet.asset.annotation.IdentitiesContractAddress;
 import com.thoughtworks.wallet.asset.model.DECP;
-import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
-import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
-import com.thoughtworks.wallet.asset.response.DECPInfoResponse;
-import com.thoughtworks.wallet.asset.response.TransactionResponse;
+import com.thoughtworks.wallet.asset.response.*;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.contracts.eip20.generated.ERC20;
-import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.toList;
@@ -36,16 +30,16 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class QuorumServiceImpl implements IBlockchainService {
 
-    private final        Web3j       web3j;
-    private final        ERC20       decp;
-    private final        ModelMapper modelMapper       = new ModelMapper();
-    private final        JacksonUtil jacksonUtil;
-    private final static int         autoTransferValue = 10;
-
+    private static final String IDENTITIES_CONTRACT_PATH = "/contracts/Identities.json";
+    private final static int autoTransferValue = 10;
+    private final Web3j web3j;
+    private final ERC20 decp;
+    private final ModelMapper modelMapper = new ModelMapper();
+    private final JacksonUtil jacksonUtil;
     @QuorumRPCUrl
     private String rpcUrl;
 
-    @IdentityRegistryContractAddress
+    @IdentitiesContractAddress
     private String identityRegistryContractAddress;
 
     @Autowired
@@ -64,8 +58,8 @@ public class QuorumServiceImpl implements IBlockchainService {
             throw new InvalidAddressErrorException(address);
         }
 
-        final String     decpSymbol;
-        final String     decpName;
+        final String decpSymbol;
+        final String decpName;
         final BigInteger decpDecimal;
         final BigInteger decpBalance;
         try {
@@ -84,8 +78,8 @@ public class QuorumServiceImpl implements IBlockchainService {
 
     @Override
     public DECPInfoResponse getDCEPInfo() {
-        final String     decpSymbol;
-        final String     decpName;
+        final String decpSymbol;
+        final String decpName;
         final BigInteger decpDecimal;
         try {
             decpSymbol = decp.symbol().sendAsync().get();
@@ -98,7 +92,7 @@ public class QuorumServiceImpl implements IBlockchainService {
 
         final String decpContractPath = "/contracts/DC_EP_ERC20.json";
         final String jsonString;
-        String       abi;
+        String abi;
         try {
             jsonString = jacksonUtil.readJsonFile(decpContractPath);
             abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
@@ -134,7 +128,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         log.info("assignInitPoint - address: {}", address);
         try {
             BigInteger decpDecimal = decp.decimals().sendAsync().get();
-            BigInteger money       = BigInteger.valueOf(autoTransferValue).multiply(BigInteger.TEN.pow(decpDecimal.intValue()));
+            BigInteger money = BigInteger.valueOf(autoTransferValue).multiply(BigInteger.TEN.pow(decpDecimal.intValue()));
             this.decp.transfer(address, money).sendAsync();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -143,10 +137,23 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
+    public IdentitiesContractInfoRepresentation getIdentityInfo() {
+        try {
+            String jsonString = jacksonUtil.readJsonFile(IDENTITIES_CONTRACT_PATH);
+            String name = jacksonUtil.parsePropertyFromJson(jsonString, "contractName");
+            String abi = jacksonUtil.parsePropertyFromJson(jsonString, "abi");
+            return IdentitiesContractInfoRepresentation.of(name, identityRegistryContractAddress, abi);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new ReadFileErrorException(IDENTITIES_CONTRACT_PATH);
+        }
+    }
+
+    @Override
     public List<TransactionResponse> getTransactionsBy(String address, int limit) {
         log.info("getTransactionsBy:" + address);
-        int                       blockLimit = 1000;
-        List<TransactionResponse> responses  = new ArrayList<>();
+        int blockLimit = 1000;
+        List<TransactionResponse> responses = new ArrayList<>();
 
         if (!Identity.isValidAddress(address)) {
             throw new InvalidAddressErrorException(address);

@@ -23,6 +23,8 @@ quorum:
     contract-address: '0x9d13C6D3aFE1721BEef56B55D303B09E021E27ab'
   identity-registry:
     contract-address: '0x11aC39ac7D780a6b9DdfC8687831e25B655884c7'
+  identities:
+    contract-address: '0x85718166E6526703aC4E7012B7aAF50A4A04f159'
   health-verification-claim:
     contract-address: '0x81845481fD51Efd88fd44e8983a60CEcF3886552'
     issuer-address: '0xcA843569e3427144cEad5e4d5999a3D0cCF92B8e'

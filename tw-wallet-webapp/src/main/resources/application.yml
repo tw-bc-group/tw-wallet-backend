@@ -28,6 +28,8 @@ quorum:
     contract-address: ${TWPOINT_CONTRACT_ADDRESS}
   identity-registry:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
+  identities:
+    contract-address: ${IDENTITIES_CONTRACT_ADDRESS}
   health-verification-claim:
     contract-address: ${HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS}
     issuer-address: ${HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS}

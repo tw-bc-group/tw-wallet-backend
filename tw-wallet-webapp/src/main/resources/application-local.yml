@@ -24,6 +24,8 @@ quorum:
     url: 'http://quorum.tw-wallet.in2e.com:22001'
   identity-registry:
     contract-address: '0xfb87495Ab114664d5bEb3Ce9Efb8fBc08fc18C36'
+  identities:
+    contract-address: '0x85718166E6526703aC4E7012B7aAF50A4A04f159'
   health-verification-claim:
     contract-address: '0xc4F5D965d797e807F5014AC944E48D5ecCa29Eb9'
     issuer-did: '0xcA843569e3427144cEad5e4d5999a3D0cCF92B8e'
