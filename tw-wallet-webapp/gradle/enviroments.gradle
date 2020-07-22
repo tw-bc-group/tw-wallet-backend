@@ -18,12 +18,12 @@ println "Current Environment: " + environment
 def engine = new SimpleTemplateEngine()
 def binding = [:]
 if (environment == 'local') {
-    file("../.env.${environment}").readLines().each() {
+    file("../.env.local").readLines().each() {
         def (key, value) = it.tokenize('=')
         binding.put(key, value)
     }
 }else{
-    file("../.env.${environment}").readLines().each() {
+    file("../.env.local").readLines().each() {
         def (key, value) = it.tokenize('=')
         binding.put(key, System.getenv(key) ?: "")
     }
