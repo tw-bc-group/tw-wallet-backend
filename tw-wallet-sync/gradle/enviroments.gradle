@@ -17,16 +17,19 @@ println "Current Environment: " + environment
 
 def engine = new SimpleTemplateEngine()
 
-def binding = [
-        DB_NAME                           : System.getenv('DB_NAME') ?: "",
-        DB_USERNAME                       : System.getenv('DB_USERNAME') ?: "",
-        DB_URL                            : System.getenv('DB_URL') ?: "",
-        DB_PASSWORD                       : System.getenv('DB_PASSWORD') ?: "",
-        RPC_URL                           : System.getenv('RPC_URL') ?: "",
-        TWPOINT_CONTRACT_ADDRESS          : System.getenv('TWPOINT_CONTRACT_ADDRESS') ?: "",
-        IDENTITY_REGISTRY_CONTRACT_ADDRESS: System.getenv('IDENTITY_REGISTRY_CONTRACT_ADDRESS') ?: "",
-        NODE1_PRIVATE_KEY                 : System.getenv('NODE1_PRIVATE_KEY') ?: "",
-]
+def binding = [:]
+if (environment == 'local') {
+    file("../.env.${environment}").readLines().each() {
+        def (key, value) = it.tokenize('=')
+        binding.put(key, value)
+    }
+} else {
+    file("../.env.${environment}").readLines().each() {
+        def (key, value) = it.tokenize('=')
+        binding.put(key, System.getenv(key) ?: "")
+    }
+}
+println(binding)
 def config = new File("$projectDir/src/main/resources/application-${environment}.yml")
 def template = engine.createTemplate(config).make(binding).toString()
 project.ext.environment = new Yaml().load(template)

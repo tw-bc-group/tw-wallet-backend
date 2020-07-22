@@ -7,6 +7,24 @@
 * Gradle 5.2.1
 
 #### QuickStart
+
+
+##### 1. start by gradlew
+```sh
+set environment in .env.local 
+source ./loadenv.sh
+./gradlew :tw-wallet-webapp:bootRun
+```
+
+##### 2. debug by idea
+
+install plugin "env file"
+
+![](docs/images/idea-env-plugin.jpg)
+
+
+##### 3. other useful cmd
+
 * `./gradlew clean` : clean `build` folder
 * `./gradlew build -x integTest` : build application
 * `./gradlew test` : run unit test

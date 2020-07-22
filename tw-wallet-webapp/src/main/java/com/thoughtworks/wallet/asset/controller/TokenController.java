@@ -34,6 +34,7 @@ public class TokenController {
     @GetMapping("/{address}")
     @ApiOperation(value = "根据用户的 quorum 地址获取 DC/EP 余额")
     public DECPBalanceResponse getBalanceByAddress(@PathVariable("address") String address) {
+        log.info("DC/EP getBalanceByAddress: " + address);
         return quorumService.getDCEPBalanceBy(address);
     }
 
