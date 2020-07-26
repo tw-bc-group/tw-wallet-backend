@@ -7,3 +7,6 @@
 * [5. refine-blacklist-mechanism](0005-refine-blacklist-mechanism.md)
 * [6. small-qrcode](0006-small-qrcode.md)
 * [7. checkin-generate-code](0007-checkin-generate-code.md)
+* [8. 同步服务](0008-同步服务.md)
+* [9. 原始规划框架](0009-原始规划框架.md)
+* [10. 通信加密](0010-通信加密.md)
