@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.scheduler.eth;
+package com.thoughtworks.wallet.scheduler.eth.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

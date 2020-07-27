@@ -5,6 +5,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * 自动运行Engine
+ */
 @Slf4j
 @Component
 @DependsOn("Engine")

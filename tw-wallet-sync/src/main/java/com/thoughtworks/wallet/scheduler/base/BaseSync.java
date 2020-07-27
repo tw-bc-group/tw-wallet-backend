@@ -10,6 +10,9 @@ import java.util.concurrent.*;
 
 import static java.util.stream.LongStream.range;
 
+/**
+ * BaseSync 实现了模板模式，每个同步区块链数据的工作都可以按照此模板执行
+ */
 @Slf4j
 public abstract class BaseSync implements ISyncJob {
 
@@ -21,10 +24,13 @@ public abstract class BaseSync implements ISyncJob {
     @Autowired
     private ApplicationContext applicationContext;
 
+
+    /**
+     * 顺序解析块
+     */
     @SneakyThrows
     @Override
     public void execute() {
-//        this.test();
 
         int oneBlockTryTime = 1;
 
@@ -58,7 +64,9 @@ public abstract class BaseSync implements ISyncJob {
         }
     }
 
-
+    /**
+     * 方便调试parseTx的函数
+     */
     private void test() {
 
         long blockNumber = 15566;

@@ -1,26 +1,22 @@
 package com.thoughtworks.wallet;
 
-import com.thoughtworks.common.annotation.Node1PrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
-import com.thoughtworks.common.annotation.DCEPContractAddress;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.web3j.contracts.eip20.generated.ERC20;
-import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
-import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = {"com.thoughtworks.common","com.thoughtworks.wallet"})
+@SpringBootApplication(scanBasePackages = {"com.thoughtworks.common", "com.thoughtworks.wallet"})
 public class TWWalletSync {
 
     @QuorumRPCUrl
@@ -30,15 +26,39 @@ public class TWWalletSync {
         SpringApplication.run(TWWalletSync.class, args);
     }
 
+    private OkHttpClient createOkHttpClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        configureLogging(builder);
+        configureTimeouts(builder);
+        return builder.build();
+    }
+
+    private void configureTimeouts(OkHttpClient.Builder builder) {
+        Long tos = 60L;
+        if (tos != null) {
+            builder.connectTimeout(tos, TimeUnit.SECONDS);
+            builder.readTimeout(tos, TimeUnit.SECONDS);  // Sets the socket timeout too
+            builder.writeTimeout(tos, TimeUnit.SECONDS);
+        }
+    }
+
+    private static void configureLogging(OkHttpClient.Builder builder) {
+        if (log.isDebugEnabled()) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(logging);
+        }
+    }
+
     @Bean
     Web3j quorum() {
         String nodeEndpoint = rpcUrl;
         Web3jService web3jService;
 
         if (nodeEndpoint == null || nodeEndpoint.equals("")) {
-            web3jService = new HttpService();
+            web3jService = new HttpService(createOkHttpClient());
         } else if (nodeEndpoint.startsWith("http")) {
-            web3jService = new HttpService(nodeEndpoint);
+            web3jService = new HttpService(nodeEndpoint, createOkHttpClient(), false);
         } else if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
             web3jService = new WindowsIpcService(nodeEndpoint);
         } else {

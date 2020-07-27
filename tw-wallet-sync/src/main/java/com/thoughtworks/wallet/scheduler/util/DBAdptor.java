@@ -1,8 +1,8 @@
 package com.thoughtworks.wallet.scheduler.util;
 
 
-import com.thoughtworks.wallet.scheduler.eth.Identity;
-import com.thoughtworks.wallet.scheduler.eth.TWPoint;
+import com.thoughtworks.wallet.scheduler.eth.pojo.Identity;
+import com.thoughtworks.wallet.scheduler.eth.pojo.TWPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.Record1;

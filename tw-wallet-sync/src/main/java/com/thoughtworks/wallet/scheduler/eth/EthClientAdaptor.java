@@ -42,6 +42,7 @@ public class EthClientAdaptor {
 
     }
 
+    //TODO: add switch logic
     public void switchNode() {
         log.info("switchNode , create web3j with another url");
     }

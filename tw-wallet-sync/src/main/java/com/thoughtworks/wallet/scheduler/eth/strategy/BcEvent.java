@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.scheduler.base;
+package com.thoughtworks.wallet.scheduler.eth.strategy;
 
 import org.springframework.stereotype.Component;
 
@@ -7,9 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 
 
 /**
- * engine will load SyncJobs and execute them
+ * 标识区块链事件
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Component
-public @interface SyncJob {
+public @interface BcEvent {
 }
