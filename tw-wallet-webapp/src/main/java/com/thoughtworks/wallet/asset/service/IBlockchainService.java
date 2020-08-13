@@ -49,8 +49,9 @@ public interface IBlockchainService {
     /**
      * assign point to address which just create DID
      * @param address
+     * @param amount
      */
-    void assignInitPoint(String address);
+    void assignInitPoint(String address, int amount);
 
     IdentitiesContractInfoRepresentation getIdentityInfo();
 }

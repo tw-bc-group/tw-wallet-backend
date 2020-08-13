@@ -20,6 +20,7 @@ import javax.validation.Valid;
 @Api(tags = "身份相关操作")
 public class IdentityController {
 
+    private static final int INITIAL_AMOUNT = 10;
     private final IBlockchainService quorumService;
 
     @Autowired
@@ -33,6 +34,6 @@ public class IdentityController {
     public void identityRegistry(@Valid @RequestBody IdentityRegistryRequest request) {
         log.info("Create Identity: " + request.toString());
         quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getAddress());
-        quorumService.assignInitPoint(request.getAddress());
+        quorumService.assignInitPoint(request.getAddress(), INITIAL_AMOUNT);
     }
 }

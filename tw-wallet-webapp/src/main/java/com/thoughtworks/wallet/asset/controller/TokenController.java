@@ -50,6 +50,6 @@ public class TokenController {
     @ApiOperation(value = "DC/EP 奖励")
     public void transfer(@Valid @RequestBody TWPRewardRequest request) {
         log.info("DC/EP reward: " + request.toString());
-        quorumService.assignInitPoint(request.getAddress());
+        quorumService.assignInitPoint(request.getAddress(), request.getAmount());
     }
 }

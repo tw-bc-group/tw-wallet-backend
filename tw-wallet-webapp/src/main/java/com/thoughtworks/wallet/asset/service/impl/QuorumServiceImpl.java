@@ -124,11 +124,12 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
-    public void assignInitPoint(String address) {
+    public void assignInitPoint(String address, int amount) {
         log.info("assignInitPoint - address: {}", address);
         try {
             BigInteger decpDecimal = decp.decimals().sendAsync().get();
-            BigInteger money = BigInteger.valueOf(autoTransferValue).multiply(BigInteger.TEN.pow(decpDecimal.intValue()));
+            BigInteger money =
+                    BigInteger.valueOf(autoTransferValue).multiply(BigInteger.valueOf(amount).pow(decpDecimal.intValue()));
             this.decp.transfer(address, money).sendAsync();
         } catch (Exception e) {
             log.error(e.getMessage());
