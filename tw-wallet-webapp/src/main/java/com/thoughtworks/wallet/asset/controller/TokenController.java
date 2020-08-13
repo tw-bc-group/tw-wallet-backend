@@ -1,5 +1,6 @@
 package com.thoughtworks.wallet.asset.controller;
 
+import com.thoughtworks.wallet.asset.request.TWPRewardRequest;
 import com.thoughtworks.wallet.asset.request.TWPTransferRequest;
 import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
@@ -43,5 +44,12 @@ public class TokenController {
     public void transfer(@Valid @RequestBody TWPTransferRequest request) {
         log.info("DC/EP transfer: " + request.toString());
         quorumService.sendRawTransaction(request.getSignedTransactionRawData(), request.getFromAddress());
+    }
+
+    @PostMapping(value = "/reward")
+    @ApiOperation(value = "DC/EP 奖励")
+    public void transfer(@Valid @RequestBody TWPRewardRequest request) {
+        log.info("DC/EP reward: " + request.toString());
+        quorumService.assignInitPoint(request.getAddress());
     }
 }
