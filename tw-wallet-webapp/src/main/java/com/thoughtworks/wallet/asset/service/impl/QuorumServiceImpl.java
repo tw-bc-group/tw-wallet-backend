@@ -31,7 +31,6 @@ import static java.util.stream.Collectors.toList;
 public class QuorumServiceImpl implements IBlockchainService {
 
     private static final String IDENTITIES_CONTRACT_PATH = "/contracts/Identities.json";
-    private final static int autoTransferValue = 10;
     private final Web3j web3j;
     private final ERC20 decp;
     private final ModelMapper modelMapper = new ModelMapper();
@@ -128,8 +127,7 @@ public class QuorumServiceImpl implements IBlockchainService {
         log.info("assignInitPoint - address: {}", address);
         try {
             BigInteger decpDecimal = decp.decimals().sendAsync().get();
-            BigInteger money =
-                    BigInteger.valueOf(autoTransferValue).multiply(BigInteger.valueOf(amount).pow(decpDecimal.intValue()));
+            BigInteger money = BigInteger.valueOf(amount).multiply(BigInteger.TEN.pow(decpDecimal.intValue()));;
             this.decp.transfer(address, money).sendAsync();
         } catch (Exception e) {
             log.error(e.getMessage());
