@@ -20,7 +20,12 @@ spring:
 
 quorum:
   rpc:
-    url: ${RPC_URL}
+    urls:
+      - ${RPC_URL1}
+      - ${RPC_URL2}
+      - ${RPC_URL3}
+      - ${RPC_URL4}
+
   dc-ep:
     contract-address: ${TWPOINT_CONTRACT_ADDRESS}
   identity-registry:
@@ -32,9 +37,5 @@ quorum:
 sync:
   interval: 3000
   block-stop-increase: 10
-  url0: ${RPC_URL}
-  url1: ${RPC_URL}
-  url2: ${RPC_URL}
-  url3: ${RPC_URL}
 
 

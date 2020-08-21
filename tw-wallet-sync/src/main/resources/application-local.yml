@@ -15,7 +15,11 @@ spring:
 
 quorum:
   rpc:
-    url: 'http://quorum.tw-wallet.in2e.com:22001'
+    urls:
+      - ${RPC_URL1}
+      - ${RPC_URL2}
+      - ${RPC_URL3}
+      - ${RPC_URL4}
   dc-ep:
     contract-address: '0x624d400315312c6280F6dB7683ACf2128EbB9d46'
   identity-registry:

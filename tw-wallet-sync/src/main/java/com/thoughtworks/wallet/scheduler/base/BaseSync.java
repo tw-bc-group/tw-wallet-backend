@@ -28,39 +28,42 @@ public abstract class BaseSync implements ISyncJob {
     /**
      * 顺序解析块
      */
-    @SneakyThrows
     @Override
     public void execute() {
 
         int oneBlockTryTime = 1;
 
         while (true) {
-            long remoteBlockNum = geRemoteBlockNum();
-            long localBlockNum = getLocalBlockNum();
+            try {
+                long remoteBlockNum = geRemoteBlockNum();
+                long localBlockNum = getLocalBlockNum();
 
-            log.info("Sync Job Start- {}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
+                log.info("Sync Job Start- {}::execute localBlockNum:{}, remoteBlockNum:{}", this.getClass().getName(), localBlockNum, remoteBlockNum);
 
-            //wait for generating block
-            if (localBlockNum >= remoteBlockNum) {
-                log.info("{} wait for block", this.getClass().getName());
-                Thread.sleep(configSync.SYNC_BLOCK_INTERVAL);
-                oneBlockTryTime++;
-                if (oneBlockTryTime >= configSync.SYNC_BLOCK_STOP_INCREASE) {
-                    switchNode();
-                    oneBlockTryTime = 1;
+                //wait for generating block
+                if (localBlockNum >= remoteBlockNum) {
+                    log.info("{} wait for block", this.getClass().getName());
+                    Thread.sleep(configSync.SYNC_BLOCK_INTERVAL);
+                    oneBlockTryTime++;
+                    if (oneBlockTryTime >= configSync.SYNC_BLOCK_STOP_INCREASE) {
+                        switchNode();
+                        oneBlockTryTime = 1;
+                    }
+                    continue;
                 }
-                continue;
+
+                range(localBlockNum, remoteBlockNum)
+                        .forEach((blockNumber) -> {
+                            try {
+                                this.parseBlock(blockNumber);
+                            } catch (Exception e) {
+                                log.error("{}::parseBlock - exception: ", this.getClass().getName(), e);
+                            }
+                        });
+            } catch (Exception e) {
+                log.error("{}::execute loop - exception: ", this.getClass().getName(), e);
+                switchNode();
             }
-
-
-            range(localBlockNum, remoteBlockNum)
-                    .forEach((blockNumber) -> {
-                        try {
-                            this.parseBlock(blockNumber);
-                        } catch (Exception e) {
-                            log.error("{}::parseBlock - exception: ", this.getClass().getName(), e);
-                        }
-                    });
         }
     }
 
