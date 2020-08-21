@@ -34,9 +34,13 @@ public class EthSync extends BaseSync {
         return ethClientAdaptor.getRemoteBlockNum();
     }
 
+    /**
+     * 区块链里面是从1开始，数据库是从0开始
+     * @return
+     */
     @Override
     protected long getLocalBlockNum() {
-        return dbAdptor.getLocalBlockHeight();
+        return dbAdptor.getLocalBlockHeight() + 1;
     }
 
     @Override
