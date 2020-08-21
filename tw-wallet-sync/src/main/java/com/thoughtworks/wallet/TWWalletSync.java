@@ -34,7 +34,7 @@ public class TWWalletSync {
     }
 
     private void configureTimeouts(OkHttpClient.Builder builder) {
-        Long tos = 60L;
+        Long tos = 60L * 5;
         if (tos != null) {
             builder.connectTimeout(tos, TimeUnit.SECONDS);
             builder.readTimeout(tos, TimeUnit.SECONDS);  // Sets the socket timeout too
