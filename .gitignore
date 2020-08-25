@@ -45,3 +45,4 @@ gradle/wrapper/
 **/bin/**
 
 .env
+.DS_Store
