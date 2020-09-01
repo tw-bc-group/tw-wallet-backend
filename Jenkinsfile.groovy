@@ -33,7 +33,7 @@ pipeline {
                 // sh 'make cache'
                 // sh 'make build'
                 // TODO: Remove this workaround
-                sh './gradlew --no-daemon -Penv=dev clean build -x integTest'
+                sh './gradlew --no-daemon -Penv=dev clean build -x test'
             }
         }
 
