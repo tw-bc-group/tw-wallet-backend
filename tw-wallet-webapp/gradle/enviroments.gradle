@@ -23,7 +23,7 @@ if (environment == 'local') {
         binding.put(key, value)
     }
 }else{
-    file("../.env.local").readLines().each() {
+    file("../.env.keys").readLines().each() {
         def (key, value) = it.tokenize('=')
         binding.put(key, System.getenv(key) ?: "")
     }

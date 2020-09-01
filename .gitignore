@@ -46,3 +46,4 @@ gradle/wrapper/
 
 .env
 .DS_Store
+.env.local
