@@ -6,6 +6,7 @@ package com.thoughtworks.wallet.gen;
 
 import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
+import com.thoughtworks.wallet.gen.tables.TblDcep;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
@@ -27,6 +28,11 @@ public class Tables {
      * The table <code>public.tbl_blocks</code>.
      */
     public static final TblBlocks TBL_BLOCKS = TblBlocks.TBL_BLOCKS;
+
+    /**
+     * The table <code>public.tbl_dcep</code>.
+     */
+    public static final TblDcep TBL_DCEP = TblDcep.TBL_DCEP;
 
     /**
      * The table <code>public.tbl_healthy_verification_claim</code>.

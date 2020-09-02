@@ -6,6 +6,7 @@ package com.thoughtworks.wallet.gen;
 
 import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
+import com.thoughtworks.wallet.gen.tables.TblDcep;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
@@ -25,7 +26,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 331071086;
+    private static final long serialVersionUID = 599978312;
 
     /**
      * The reference instance of <code>public</code>
@@ -41,6 +42,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.tbl_blocks</code>.
      */
     public final TblBlocks TBL_BLOCKS = TblBlocks.TBL_BLOCKS;
+
+    /**
+     * The table <code>public.tbl_dcep</code>.
+     */
+    public final TblDcep TBL_DCEP = TblDcep.TBL_DCEP;
 
     /**
      * The table <code>public.tbl_healthy_verification_claim</code>.
@@ -80,6 +86,7 @@ public class Public extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             TblBlocks.TBL_BLOCKS,
+            TblDcep.TBL_DCEP,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
             TblIdentities.TBL_IDENTITIES,
             TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,

@@ -1,7 +1,10 @@
 package com.thoughtworks.wallet.asset.controller;
 
+import com.thoughtworks.common.exception.InvalidAddressErrorException;
+import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.wallet.asset.request.DCEPMintRequest;
 import com.thoughtworks.wallet.asset.response.DCEPInfoV2Response;
+import com.thoughtworks.wallet.asset.response.DCEPNFTInfoV2Response;
 import com.thoughtworks.wallet.asset.service.IDCEPService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,11 +30,15 @@ public class TokenV2Controller {
     }
 
 
+    // TODO: swagger 增加枚举的解析 https://juejin.im/post/6844903845697421319
     @PostMapping(value = "/mint")
-    @ApiOperation(value = "DC/EP 奖励")
-    public void transfer(@Valid @RequestBody DCEPMintRequest request) {
+    @ApiOperation(value = "发行 DC/EP")
+    public DCEPNFTInfoV2Response mint(@Valid @RequestBody DCEPMintRequest request) {
         log.info("DC/EP mint: " + request.toString());
-        decpService.mint(request);
+        if (!Identity.isValidAddress(request.getAddress())) {
+            throw new InvalidAddressErrorException(request.getAddress());
+        }
+        return decpService.mint(request);
     }
 
     @GetMapping(value = "/info")

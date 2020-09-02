@@ -21,12 +21,12 @@ import java.util.Arrays;
 
 
 public class CryptoFacade {
-    private KeyType         keyType;
-    private Object[]        curveParams;
-    private PrivateKey      privateKey;
-    private PublicKey       publicKey;
+    private KeyType keyType;
+    private Object[] curveParams;
+    private PrivateKey privateKey;
+    private PublicKey publicKey;
     private SignatureScheme signatureScheme;
-    private Curve           curve;
+    private Curve curve;
 
     /**
      * 用静态函数创建
@@ -145,7 +145,7 @@ public class CryptoFacade {
             throw new CryptoException(CryptoError.WithoutPrivate);
         }
 
-        SignatureHandler       ctx       = new SignatureHandler(keyType, signatureScheme);
+        SignatureHandler ctx = new SignatureHandler(keyType, signatureScheme);
         AlgorithmParameterSpec paramSpec = null;
         if (signatureScheme == SignatureScheme.SM3WITHSM2) {
             if (sm2param instanceof String) {
@@ -160,25 +160,28 @@ public class CryptoFacade {
         return ByteHelper.toHexString(signature);
     }
 
-    public boolean verifySignature(String msg, String signature) throws Exception {
-
-        byte[] msgBytes       = msg.getBytes(StandardCharsets.UTF_8);
+    public boolean verifySignature(byte[] msgBytes, String signature) throws Exception {
         byte[] signatureBytes = ByteHelper.hexToBytes(signature);
-
         if (msgBytes == null || signatureBytes == null || msgBytes.length == 0 || signatureBytes.length == 0) {
             throw new CryptoException(CryptoError.InvalidParams);
         }
         if (this.publicKey == null) {
             throw new CryptoException(CryptoError.WithoutPublicKey);
         }
-        Signature        sig = new Signature(signatureBytes);
+        Signature sig = new Signature(signatureBytes);
         SignatureHandler ctx = new SignatureHandler(keyType, sig.getScheme());
         return ctx.verifySignature(publicKey, msgBytes, sig.getValue());
     }
 
+    public boolean verifySignature(String msg, String signature) throws Exception {
+
+        byte[] msgBytes = msg.getBytes(StandardCharsets.UTF_8);
+        return verifySignature(msgBytes,signature);
+    }
+
     public byte[] serializePublicKey() throws CryptoException, IOException {
-        ByteArrayOutputStream bs  = new ByteArrayOutputStream();
-        BCECPublicKey         pub = (BCECPublicKey) publicKey;
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        BCECPublicKey pub = (BCECPublicKey) publicKey;
         switch (this.keyType) {
             case ECDSA:
             case SM2:

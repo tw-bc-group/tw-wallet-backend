@@ -18,6 +18,7 @@ dependencies {
     implementation Deps.guava
     implementation Deps.bouncycastle
     implementation Deps.jwt
+    implementation Deps.commonsLang3
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor
