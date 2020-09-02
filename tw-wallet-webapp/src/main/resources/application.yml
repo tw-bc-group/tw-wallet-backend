@@ -26,6 +26,8 @@ quorum:
     url: ${RPC_URL}
   dc-ep:
     contract-address: ${TWPOINT_CONTRACT_ADDRESS}
+    contract-address-new: ${DCEP_CONTRACT_ADDRESS}
+
   identity-registry:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
   identities:

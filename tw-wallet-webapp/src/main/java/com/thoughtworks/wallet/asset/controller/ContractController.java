@@ -1,9 +1,11 @@
 package com.thoughtworks.wallet.asset.controller;
 
+import com.thoughtworks.wallet.asset.response.DCEPInfoV2Response;
 import com.thoughtworks.wallet.asset.response.DECPInfoResponse;
 import com.thoughtworks.wallet.asset.response.IdentitiesContractInfoRepresentation;
 import com.thoughtworks.wallet.asset.response.IdentityRegistryInfoResponse;
 import com.thoughtworks.wallet.asset.service.IBlockchainService;
+import com.thoughtworks.wallet.asset.service.IDCEPService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "合约相关接口")
 public class ContractController {
     private final IBlockchainService quorumService;
+    private final IDCEPService decpService;
 
     @Autowired
-    public ContractController(IBlockchainService quorumService) {
+    public ContractController(IBlockchainService quorumService, IDCEPService decpService) {
         this.quorumService = quorumService;
+        this.decpService = decpService;
     }
 
     @GetMapping(value = "/identity-registry")
@@ -38,6 +42,13 @@ public class ContractController {
     @ApiOperation(value = "获取 DC/EP 合约的相关信息")
     public DECPInfoResponse getDCEPContractInfo() {
         return quorumService.getDCEPInfo();
+    }
+
+
+    @GetMapping(value = "/nft-decp")
+    @ApiOperation(value = "获取 NFT DC/EP 合约的相关信息")
+    public DCEPInfoV2Response getDCEPContractInfoNew() {
+        return decpService.getDCEPInfo();
     }
 
     @GetMapping(value = "/identities")

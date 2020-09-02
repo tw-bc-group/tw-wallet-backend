@@ -31,7 +31,8 @@ public class SwaggerConfig {
     @Value("${swagger.enable}")
     private             boolean isEnable;
     public static final String  AUTHORIZATION_HEADER    = "Authorization";
-    public static final String  DEFAULT_INCLUDE_PATTERN = "/v1.*";
+    public static final String  DEFAULT_INCLUDE_PATTERN = "/v[12].*";
+
     private final       Logger  log                     = LoggerFactory.getLogger(SwaggerConfig.class);
 
     @Bean

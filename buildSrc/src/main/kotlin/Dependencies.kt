@@ -9,7 +9,7 @@ object Versions {
     const val modelmapper = "2.3.7"
     const val modelmapperJooq = "2.3.0"
     const val jackson = "2.11.0.rc1"
-    const val w3j = "4.2.0"
+    const val w3j = "4.5.16"
     const val flyway = "6.4.1"
     const val commonsLang3 = "3.10"
     const val commonsCollections4 = "4.4"
