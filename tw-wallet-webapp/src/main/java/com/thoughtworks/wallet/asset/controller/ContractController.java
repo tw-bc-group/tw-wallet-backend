@@ -45,7 +45,7 @@ public class ContractController {
     }
 
 
-    @GetMapping(value = "/nft-decp")
+    @GetMapping(value = "/nft-dcep")
     @ApiOperation(value = "获取 NFT DC/EP 合约的相关信息")
     public DCEPInfoV2Response getDCEPContractInfoNew() {
         return decpService.getDCEPInfo();

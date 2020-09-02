@@ -15,6 +15,7 @@ import lombok.Data;
 public class DECPBalanceResponse {
     private String address;
 
+    // TODO: DCEP
     private DECP DECP;
 
     @JsonSerialize(using = CoinSerializer.class)
