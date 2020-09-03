@@ -10,11 +10,13 @@ import com.thoughtworks.wallet.asset.service.IDCEPService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -55,6 +57,16 @@ public class TokenV2Controller {
     public DCEPNFTInfoV2Response getDCEPBySerialNumber(@PathVariable("serial_number") String serialNumber) {
         log.info("DC/EP getDCEPBySerialNumber: " + serialNumber);
         return decpService.getDCEPBySerialNumber(serialNumber);
+    }
+
+    @GetMapping
+    @ApiOperation(value = "查询某个 address 持有的 DC/EP")
+    public List<DCEPNFTInfoV2Response> getDCEPByAddress(
+            @RequestParam(value = "address") String address,
+            @RequestParam(name = "limit", defaultValue = "10") int limit,
+            @RequestParam(name = "offset", defaultValue = "0") int offset
+    ) {
+        return decpService.getDCEPByAddress(address, limit, offset);
     }
 }
 

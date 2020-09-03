@@ -3,7 +3,6 @@ package com.thoughtworks.wallet.asset.service.impl;
 import com.thoughtworks.common.annotation.Node1PrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
 import com.thoughtworks.common.exception.*;
-import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
@@ -21,6 +20,7 @@ import org.web3j.protocol.Web3j;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -52,6 +52,11 @@ public class DCEPServiceImpl implements IDCEPService {
     @Override
     public DCEPNFTInfoV2Response getDCEPBySerialNumber(String serialNumber) {
         return decpRepository.getDCEPBySerialNumber(serialNumber);
+    }
+
+    @Override
+    public List<DCEPNFTInfoV2Response> getDCEPByAddress(String address, int limit, int offset) {
+        return decpRepository.getDCEPByAddress(address, limit, offset);
     }
 
 

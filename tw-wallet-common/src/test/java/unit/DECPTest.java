@@ -18,7 +18,9 @@ public class DECPTest {
 
     // 人命币的格式
     String rmb100 = "CB_100_00_1000000000000000000001";
-    private static final String privateKey = "4762e04d10832808a0aebdaa79c12de54afbe006bfffd228b3abcc494fe986f9";
+    private static final String privateKey = "e6181caaffff94a09d7e332fc8da9884d99902c7874eb74354bdcadf411929f1";
+    private static final String publicKey = "02d404fd50a69fc33003943b438cd63440bc65f7f10ea1a7f2cf0dd2bd620b80d6";
+
 
     @Test
     void should_generate_serial_number_success() throws Exception {
@@ -29,7 +31,7 @@ public class DECPTest {
     @Test
     void should_get_bank_signature_success() throws Exception {
         String serialNumberSign = DCEPUtil.getBankSign(rmb100, privateKey);
-        CryptoFacade sign = CryptoFacade.fromPrivateKey(privateKey, SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1);
+        CryptoFacade sign = CryptoFacade.fromPublicKey(publicKey, SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1);
         byte[] bytes = Digest.hash256(rmb100.getBytes(StandardCharsets.UTF_8));
         boolean verifySignature = sign.verifySignature(bytes, serialNumberSign);
         assertThat(verifySignature).isTrue();

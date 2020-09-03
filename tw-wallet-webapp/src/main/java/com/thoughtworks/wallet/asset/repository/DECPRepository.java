@@ -8,6 +8,7 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.thoughtworks.wallet.gen.tables.TblDcep.TBL_DCEP;
@@ -41,7 +42,16 @@ public class DECPRepository {
     public DCEPNFTInfoV2Response getDCEPBySerialNumber(String serialNumber) {
         return Optional.ofNullable(dslContext
                 .selectFrom(TBL_DCEP)
-                    .where(TBL_DCEP.SERIAL_NUMBER.eq(serialNumber))
+                .where(TBL_DCEP.SERIAL_NUMBER.eq(serialNumber))
                 .fetchOneInto(DCEPNFTInfoV2Response.class)).orElseThrow(() -> new DCEPNotFoundException(serialNumber));
+    }
+
+    public List<DCEPNFTInfoV2Response> getDCEPByAddress(String address, int limit, int offset) {
+        return Optional.ofNullable(dslContext
+                .selectFrom(TBL_DCEP)
+                .where(TBL_DCEP.OWNER.eq(address))
+                .limit(limit)
+                .offset(offset)
+                .fetchInto(DCEPNFTInfoV2Response.class)).orElseThrow(() -> new DCEPNotFoundException(address));
     }
 }
