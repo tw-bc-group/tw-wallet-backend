@@ -8,7 +8,6 @@ import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.MoneyType;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
 import org.junit.jupiter.api.Test;
-import org.web3j.abi.datatypes.generated.Bytes32;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -23,8 +22,8 @@ public class DECPTest {
 
     @Test
     void should_generate_serial_number_success() throws Exception {
-        BigInteger serialNumber = DCEPUtil.serialNumber(1, MoneyType.RMB100);
-        assertThat(StringBytesConvert.hexToAscii(serialNumber.toString(16))).isEqualTo(rmb100);
+        BigInteger serialNumber = DCEPUtil.serialNumber(MoneyType.RMB100);
+        assertThat(StringBytesConvert.hexToAscii(serialNumber.toString(16)).startsWith("CB_100_00_"));
     }
 
     @Test
