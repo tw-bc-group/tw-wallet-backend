@@ -23,7 +23,8 @@ public enum ErrorCode {
     INVALID_ADDRESS(BAD_REQUEST, 400_01, "用户地址格式有误"),
     HEALTH_VERIFICATION_NOT_FOUND(BAD_REQUEST, 400_02, "该用户暂无健康认证信息"),
     HEALTH_VERIFICATION_ALREADY_EXIST(BAD_REQUEST, 400_03, "该用户已创建健康认证信息"),
-    INSERT_INTO_DATABASE_ERROR(BAD_REQUEST, 400_04, "健康认证信息入库错误");
+    INSERT_INTO_DATABASE_ERROR(BAD_REQUEST, 400_04, "健康认证信息入库错误"),
+    DCEP_NOT_FOUND(BAD_REQUEST, 400_05, "没有找到DCEP");
 
     @NonNull
     private HttpStatus status;

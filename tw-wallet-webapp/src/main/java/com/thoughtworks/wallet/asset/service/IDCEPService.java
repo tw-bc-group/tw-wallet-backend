@@ -7,14 +7,6 @@ public interface IDCEPService {
 
 
     /**
-     * get DC/EP Infos
-     *
-     * @return
-     */
-    DCEPNFTInfoV2Response getDCEPInfo(String id);
-
-
-    /**
      * mint DC/EP to address
      */
     DCEPNFTInfoV2Response mint(DCEPMintRequest DCEPMintRequest);
@@ -25,4 +17,9 @@ public interface IDCEPService {
      */
     DCEPInfoV2Response getDCEPInfo();
 
+    /**
+     * 根据冠字号获取 DC/EP 信息
+     * @return
+     */
+    DCEPNFTInfoV2Response getDCEPBySerialNumber(String serialNumber);
 }

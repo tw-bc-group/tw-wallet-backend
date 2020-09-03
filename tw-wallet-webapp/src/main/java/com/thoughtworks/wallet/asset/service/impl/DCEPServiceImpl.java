@@ -20,6 +20,7 @@ import org.web3j.protocol.Web3j;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -49,8 +50,8 @@ public class DCEPServiceImpl implements IDCEPService {
 
 
     @Override
-    public DCEPNFTInfoV2Response getDCEPInfo(String id) {
-        return null;
+    public DCEPNFTInfoV2Response getDCEPBySerialNumber(String serialNumber) {
+        return decpRepository.getDCEPBySerialNumber(serialNumber);
     }
 
 
@@ -61,6 +62,8 @@ public class DCEPServiceImpl implements IDCEPService {
         log.info("mint - DCEPMintRequest: {}", mintRequest.toString());
         String serialNumberStr = "error";
         String bankSign = "error";
+        LocalDateTime createTime = LocalDateTime.now();
+
         try {
 
             // 根据请求的money生成冠字号
@@ -71,7 +74,7 @@ public class DCEPServiceImpl implements IDCEPService {
             bankSign = DCEPUtil.getBankSign(serialNumberStr, privateKey);
 
             // 把信息保存到数据库
-            decpRepository.insert(serialNumberStr, mintRequest.getMoneyType(), mintRequest.getAddress(), bankSign);
+            decpRepository.insert(serialNumberStr, mintRequest.getMoneyType(), mintRequest.getAddress(), bankSign, createTime);
 
             // 批量生产 NFT
             this.decp.mint(mintRequest.getAddress(), serialNumber).send();
@@ -83,7 +86,7 @@ public class DCEPServiceImpl implements IDCEPService {
             throw new MintException(rpcUrl);
         }
         // 返回给客户端
-        return DCEPNFTInfoV2Response.of(serialNumberStr, mintRequest.getMoneyType(), bankSign);
+        return new DCEPNFTInfoV2Response(serialNumberStr, mintRequest.getAddress(), bankSign, mintRequest.getMoneyType().getMoneyTypeString(), createTime);
     }
 
     @Override

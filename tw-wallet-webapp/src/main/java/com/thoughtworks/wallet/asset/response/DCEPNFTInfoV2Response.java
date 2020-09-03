@@ -8,11 +8,15 @@ import lombok.Data;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 
+import java.time.LocalDateTime;
+
 @Data
-@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class DCEPNFTInfoV2Response {
     private String serialNumber;
-    private MoneyType moneyType;
-    private String bankSign;
+    private String owner;
+    private String signature;
+    private String moneyType;
+    private LocalDateTime createTime;
 }

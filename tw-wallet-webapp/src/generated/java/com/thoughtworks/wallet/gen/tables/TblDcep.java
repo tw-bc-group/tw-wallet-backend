@@ -9,7 +9,7 @@ import com.thoughtworks.wallet.gen.Keys;
 import com.thoughtworks.wallet.gen.Public;
 import com.thoughtworks.wallet.gen.tables.records.TblDcepRecord;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblDcep extends TableImpl<TblDcepRecord> {
 
-    private static final long serialVersionUID = -464200572;
+    private static final long serialVersionUID = 1006961668;
 
     /**
      * The reference instance of <code>public.tbl_dcep</code>
@@ -72,7 +72,7 @@ public class TblDcep extends TableImpl<TblDcepRecord> {
     /**
      * The column <code>public.tbl_dcep.create_time</code>.
      */
-    public final TableField<TblDcepRecord, OffsetDateTime> CREATE_TIME = createField(DSL.name("create_time"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+    public final TableField<TblDcepRecord, LocalDateTime> CREATE_TIME = createField(DSL.name("create_time"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false).defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * Create a <code>public.tbl_dcep</code> table reference
@@ -158,7 +158,7 @@ public class TblDcep extends TableImpl<TblDcepRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, String, OffsetDateTime> fieldsRow() {
+    public Row5<String, String, String, String, LocalDateTime> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

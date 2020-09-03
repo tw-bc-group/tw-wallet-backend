@@ -5,6 +5,7 @@ import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.wallet.asset.request.DCEPMintRequest;
 import com.thoughtworks.wallet.asset.response.DCEPInfoV2Response;
 import com.thoughtworks.wallet.asset.response.DCEPNFTInfoV2Response;
+import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
 import com.thoughtworks.wallet.asset.service.IDCEPService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +45,16 @@ public class TokenV2Controller {
     @GetMapping(value = "/info")
     @ApiOperation(value = "获取 NFT DC/EP 合约的相关信息")
     public DCEPInfoV2Response getDCEPContractInfo() {
+        log.info("DC/EP getDCEPContractInfo");
         return decpService.getDCEPInfo();
+    }
+
+
+    @GetMapping("/{serial_number}")
+    @ApiOperation(value = "根据冠字号地址获取 DC/EP 信息")
+    public DCEPNFTInfoV2Response getDCEPBySerialNumber(@PathVariable("serial_number") String serialNumber) {
+        log.info("DC/EP getDCEPBySerialNumber: " + serialNumber);
+        return decpService.getDCEPBySerialNumber(serialNumber);
     }
 }
 
