@@ -56,7 +56,8 @@ public class TokenV2Controller {
     @ApiOperation(value = "根据冠字号地址获取 DC/EP 信息")
     public DCEPNFTInfoV2Response getDCEPBySerialNumber(@PathVariable("serial_number") String serialNumber) {
         log.info("DC/EP getDCEPBySerialNumber: " + serialNumber);
-        return decpService.getDCEPBySerialNumber(serialNumber);
+        DCEPNFTInfoV2Response dcepBySerialNumber = decpService.getDCEPBySerialNumber(serialNumber);
+        return dcepBySerialNumber;
     }
 
     @GetMapping

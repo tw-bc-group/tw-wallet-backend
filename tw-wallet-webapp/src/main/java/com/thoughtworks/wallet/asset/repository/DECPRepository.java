@@ -29,26 +29,41 @@ public class DECPRepository {
                 , TBL_DCEP.SERIAL_NUMBER
                 , TBL_DCEP.SIGNATURE
                 , TBL_DCEP.CREATE_TIME
+                , TBL_DCEP.OPERATOR
+                , TBL_DCEP.FROM_ADDRESS
+
         ).values(
-                moneyType.getMoneyTypeString()
+                moneyType
                 , address
                 , number
                 , signature
                 , createTime
+                , ""
+                , ""
         )
                 .execute();
     }
 
     public DCEPNFTInfoV2Response getDCEPBySerialNumber(String serialNumber) {
         return Optional.ofNullable(dslContext
-                .selectFrom(TBL_DCEP)
+                .select(TBL_DCEP.SERIAL_NUMBER
+                        , TBL_DCEP.OWNER
+                        , TBL_DCEP.SIGNATURE
+                        , TBL_DCEP.MONEY_TYPE
+                        , TBL_DCEP.CREATE_TIME)
+                .from(TBL_DCEP)
                 .where(TBL_DCEP.SERIAL_NUMBER.eq(serialNumber))
                 .fetchOneInto(DCEPNFTInfoV2Response.class)).orElseThrow(() -> new DCEPNotFoundException(serialNumber));
     }
 
     public List<DCEPNFTInfoV2Response> getDCEPByAddress(String address, int limit, int offset) {
         return Optional.ofNullable(dslContext
-                .selectFrom(TBL_DCEP)
+                .select(TBL_DCEP.SERIAL_NUMBER
+                        , TBL_DCEP.OWNER
+                        , TBL_DCEP.SIGNATURE
+                        , TBL_DCEP.MONEY_TYPE
+                        , TBL_DCEP.CREATE_TIME)
+                .from(TBL_DCEP)
                 .where(TBL_DCEP.OWNER.eq(address))
                 .limit(limit)
                 .offset(offset)

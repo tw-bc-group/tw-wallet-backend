@@ -24,7 +24,7 @@ public class DECPTest {
 
     @Test
     void should_generate_serial_number_success() throws Exception {
-        BigInteger serialNumber = DCEPUtil.serialNumber(MoneyType.RMB100);
+        BigInteger serialNumber = DCEPUtil.serialNumber(MoneyType.RMB000_10);
         assertThat(StringBytesConvert.hexToAscii(serialNumber.toString(16)).startsWith("CB_100_00_"));
     }
 

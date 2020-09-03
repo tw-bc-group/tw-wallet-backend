@@ -1,12 +1,12 @@
 swagger:
   enable: true
 
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tw_wallet
-    name: pg-sync
-    username: postgres
-    password: tw-wallet-2020
+    url: jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jooq:
     database:
@@ -21,8 +21,16 @@ quorum:
       - ${RPC_URL3}
       - ${RPC_URL4}
   dc-ep:
-    contract-address: '0x624d400315312c6280F6dB7683ACf2128EbB9d46'
+    contract-address: ${TWPOINT_CONTRACT_ADDRESS}
   identity-registry:
-    contract-address: '0x11aC39ac7D780a6b9DdfC8687831e25B655884c7'
+    contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
+  identities:
+    contract-address: ${IDENTITIES_CONTRACT_ADDRESS}
+  health-verification-claim:
+    contract-address: ${HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS}
+    issuer-address: ${HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS}
+    issuer-private-key: ${HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY}
   node1:
-    private-key: '0x4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377'
+    private-key: ${NODE1_PRIVATE_KEY}
+
+

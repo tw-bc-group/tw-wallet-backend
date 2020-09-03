@@ -31,6 +31,4 @@ quorum:
     issuer-private-key: ${HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY}
   node1:
     private-key: ${NODE1_PRIVATE_KEY}
-#    address: '0x86e961c7b74f760fe5DF0623f1bBD048c643F653'
-#    public-key: '0x036c45647d628602b863b7571a39d3f771cef5e8f9c5e8f954c6b5342e7394d908'
 

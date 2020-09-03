@@ -17,6 +17,6 @@ public class DCEPNFTInfoV2Response {
     private String serialNumber;
     private String owner;
     private String signature;
-    private String moneyType;
+    private MoneyType moneyType;
     private LocalDateTime createTime;
 }

@@ -4,6 +4,7 @@
 package com.thoughtworks.wallet.gen.tables;
 
 
+import com.thoughtworks.common.util.dcep.MoneyType;
 import com.thoughtworks.wallet.gen.Indexes;
 import com.thoughtworks.wallet.gen.Keys;
 import com.thoughtworks.wallet.gen.Public;
@@ -18,7 +19,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblDcep extends TableImpl<TblDcepRecord> {
 
-    private static final long serialVersionUID = 1006961668;
+    private static final long serialVersionUID = -808513301;
 
     /**
      * The reference instance of <code>public.tbl_dcep</code>
@@ -60,6 +61,16 @@ public class TblDcep extends TableImpl<TblDcepRecord> {
     public final TableField<TblDcepRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
+     * The column <code>public.tbl_dcep.operator</code>.
+     */
+    public final TableField<TblDcepRecord, String> OPERATOR = createField(DSL.name("operator"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
+     * The column <code>public.tbl_dcep.from_address</code>.
+     */
+    public final TableField<TblDcepRecord, String> FROM_ADDRESS = createField(DSL.name("from_address"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
      * The column <code>public.tbl_dcep.signature</code>.
      */
     public final TableField<TblDcepRecord, String> SIGNATURE = createField(DSL.name("signature"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
@@ -67,7 +78,7 @@ public class TblDcep extends TableImpl<TblDcepRecord> {
     /**
      * The column <code>public.tbl_dcep.money_type</code>.
      */
-    public final TableField<TblDcepRecord, String> MONEY_TYPE = createField(DSL.name("money_type"), org.jooq.impl.SQLDataType.VARCHAR(20).nullable(false), this, "");
+    public final TableField<TblDcepRecord, MoneyType> MONEY_TYPE = createField(DSL.name("money_type"), org.jooq.impl.SQLDataType.VARCHAR(20).nullable(false), this, "", new org.jooq.impl.EnumConverter<java.lang.String, com.thoughtworks.common.util.dcep.MoneyType>(java.lang.String.class, com.thoughtworks.common.util.dcep.MoneyType.class));
 
     /**
      * The column <code>public.tbl_dcep.create_time</code>.
@@ -154,11 +165,11 @@ public class TblDcep extends TableImpl<TblDcepRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row7<String, String, String, String, String, MoneyType, LocalDateTime> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

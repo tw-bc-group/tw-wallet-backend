@@ -3,6 +3,8 @@ create table tbl_dcep
 (
     serial_number varchar(255)                                          not null PRIMARY KEY,
     owner         varchar(255)                                          not null,
+    operator      varchar(255)                                          not null,
+    from_address  varchar(255)                                          not null,
     signature     varchar(255)                                          not null,
     money_type    varchar(20)                                           not null,
     create_time   timestamp WITHOUT TIME ZONE default CURRENT_TIMESTAMP not null

@@ -36,11 +36,12 @@ public class EthSync extends BaseSync {
 
     /**
      * 区块链里面是从1开始，数据库是从0开始
+     *
      * @return
      */
     @Override
     protected long getLocalBlockNum() {
-        return dbAdptor.getLocalBlockHeight() + 1;
+        return dbAdptor.getLocalBlockHeight();
     }
 
     @Override
@@ -66,14 +67,13 @@ public class EthSync extends BaseSync {
         }
     }
 
-    @SneakyThrows
     @Override
-    public void parseTx(String txHash) {
+    public void parseTx(String txHash) throws Exception {
         TransactionReceipt receipt = ethClientAdaptor.getTransactionReceipt(txHash);
-        eventStrategyMap.entrySet().forEach(syncJobEntry -> {
+        for (Map.Entry<String, BaseEventStrategy> syncJobEntry : eventStrategyMap.entrySet()) {
             BaseEventStrategy baseEventStrategy = syncJobEntry.getValue();
             baseEventStrategy.execute(receipt);
-        });
+        }
     }
 
 
@@ -90,7 +90,13 @@ public class EthSync extends BaseSync {
 
         if (hasTx) {
             SYNC_EXECUTOR.submit(
-                    () -> transactionObjects.stream().parallel().forEach(tx -> this.parseTx(tx.getHash()))
+                    () -> transactionObjects.stream().parallel().forEach(tx -> {
+                        try {
+                            this.parseTx(tx.getHash());
+                        } catch (Exception e) {
+                            log.error("parseTx - tx.getHash()s: {}", height, tx.getHash());
+                        }
+                    })
             );
         }
         // save block

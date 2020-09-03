@@ -52,7 +52,7 @@ public abstract class BaseSync implements ISyncJob {
                     continue;
                 }
 
-                range(localBlockNum, remoteBlockNum)
+                range(localBlockNum, remoteBlockNum + 1)
                         .forEach((blockNumber) -> {
                             try {
                                 this.parseBlock(blockNumber);
@@ -85,7 +85,7 @@ public abstract class BaseSync implements ISyncJob {
 
     public abstract void switchNode();
 
-    public abstract void parseTx(String hash);
+    public abstract void parseTx(String hash) throws Exception;
 
     public abstract void parseBlock(Long height);
 

@@ -1,6 +1,8 @@
 package com.thoughtworks.wallet.scheduler.util;
 
 
+import com.thoughtworks.common.util.dcep.MoneyType;
+import com.thoughtworks.wallet.gen.Tables;
 import com.thoughtworks.wallet.scheduler.eth.pojo.Identity;
 import com.thoughtworks.wallet.scheduler.eth.pojo.TWPoint;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +11,12 @@ import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.thoughtworks.wallet.gen.Tables.*;
+import static com.thoughtworks.wallet.gen.tables.TblDcep.TBL_DCEP;
+import static org.jooq.impl.DSL.exists;
 
 
 @Slf4j
@@ -94,5 +99,30 @@ public class DBAdptor {
                 .onDuplicateKeyIgnore()
                 .execute();
 
+    }
+
+    public void insertOrUpdateDCEP(String number, String operator, String fromAddress, String to, MoneyType moneyType, String signature) {
+        dslContext.insertInto(
+                Tables.TBL_DCEP
+                , TBL_DCEP.MONEY_TYPE
+                , TBL_DCEP.OWNER
+                , TBL_DCEP.SERIAL_NUMBER
+                , TBL_DCEP.SIGNATURE
+                , TBL_DCEP.OPERATOR
+                , TBL_DCEP.FROM_ADDRESS
+        ).values(
+                moneyType
+                , to
+                , number
+                , signature
+                , operator
+                , fromAddress
+        ).onDuplicateKeyUpdate()
+                .set(TBL_DCEP.MONEY_TYPE, moneyType)
+                .set(TBL_DCEP.OWNER, to)
+                .set(TBL_DCEP.SIGNATURE, signature)
+                .set(TBL_DCEP.OPERATOR, operator)
+                .set(TBL_DCEP.FROM_ADDRESS, fromAddress)
+                .execute();
     }
 }

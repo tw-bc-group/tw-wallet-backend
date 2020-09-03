@@ -46,6 +46,22 @@
         <appender-ref ref="FILE"/>
     </root>
 
+    <!-- SQL execution logging is logged to the LoggerListener logger at DEBUG level -->
+    <Logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </Logger>
+
+    <Logger name="org.jooq.tools.LoggerListener" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </Logger>
+
+    <Logger name="org.jooq" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </Logger>
+
     <!-- For loggers in the these namespaces, log at DEBUG levels above. -->
     <logger name="com.thoughtworks.wallet" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>

@@ -2,7 +2,7 @@ package com.thoughtworks.wallet;
 
 import com.thoughtworks.common.annotation.Node1PrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
-import com.thoughtworks.wallet.wrapper.DCEPContract;
+import com.thoughtworks.common.wrapper.DCEPContract;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -86,10 +86,16 @@ jooq {
                 inputSchema = "${environment.spring.jooq.database.inputSchema}"
                 forcedTypes {
                     forcedType {
-                        userType='com.fasterxml.jackson.databind.JsonNode'
-                        binding='com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
+                        userType = 'com.fasterxml.jackson.databind.JsonNode'
+                        binding = 'com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
                         includeExpression = '.*\\.sub.*'
-                        includeTypes='.*'
+                        includeTypes = '.*'
+                    }
+                    forcedType {
+                        userType = 'com.thoughtworks.common.util.dcep.MoneyType'
+                        enumConverter = true
+                        includeExpression = '.*\\.money_type'
+                        includeTypes = '.*'
                     }
                 }
             }

@@ -6,11 +6,11 @@ import com.thoughtworks.common.exception.*;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
+import com.thoughtworks.common.wrapper.DCEPContract;
 import com.thoughtworks.wallet.asset.repository.DECPRepository;
 import com.thoughtworks.wallet.asset.request.DCEPMintRequest;
 import com.thoughtworks.wallet.asset.response.*;
 import com.thoughtworks.wallet.asset.service.IDCEPService;
-import com.thoughtworks.wallet.wrapper.DCEPContract;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +82,7 @@ public class DCEPServiceImpl implements IDCEPService {
             decpRepository.insert(serialNumberStr, mintRequest.getMoneyType(), mintRequest.getAddress(), bankSign, createTime);
 
             // 批量生产 NFT
-            this.decp.mint(mintRequest.getAddress(), serialNumber).send();
+            this.decp.mint(mintRequest.getAddress(), serialNumber).sendAsync();
 
         } catch (Exception e) {
             log.error("getMessage:{}, serialNumberStr:{}, getMoneyType:{}, getAddress:{}, bankSign:{}"
@@ -91,7 +91,7 @@ public class DCEPServiceImpl implements IDCEPService {
             throw new MintException(rpcUrl);
         }
         // 返回给客户端
-        return new DCEPNFTInfoV2Response(serialNumberStr, mintRequest.getAddress(), bankSign, mintRequest.getMoneyType().getMoneyTypeString(), createTime);
+        return new DCEPNFTInfoV2Response(serialNumberStr, mintRequest.getAddress(), bankSign, mintRequest.getMoneyType(), createTime);
     }
 
     @Override

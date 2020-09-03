@@ -37,14 +37,14 @@ abstract public class BaseEventStrategy {
      *
      * @param receipt
      */
-    abstract protected void readBcLogs(TransactionReceipt receipt);
+    abstract protected void readBcLogs(TransactionReceipt receipt) throws Exception;
 
     /**
      * 执行策略
      *
      * @param receipt
      */
-    public void execute(TransactionReceipt receipt) {
+    public void execute(TransactionReceipt receipt) throws Exception {
 
         List<Log> logs = receipt.getLogs();
         Log logTx = logs.get(0);

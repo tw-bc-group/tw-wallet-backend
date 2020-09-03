@@ -35,7 +35,7 @@ public class Indexes {
 
     private static class Indexes0 {
         public static Index FLYWAY_SCHEMA_HISTORY_S_IDX = Internal.createIndex("flyway_schema_history_s_idx", FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, new OrderField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.SUCCESS }, false);
-        public static Index TBL_BLOCKS_OWNER_INDEX = Internal.createIndex("tbl_blocks_owner_index", TblDcep.TBL_DCEP, new OrderField[] { TblDcep.TBL_DCEP.OWNER }, true);
+        public static Index TBL_BLOCKS_OWNER_INDEX = Internal.createIndex("tbl_blocks_owner_index", TblDcep.TBL_DCEP, new OrderField[] { TblDcep.TBL_DCEP.OWNER }, false);
         public static Index TBL_IDENTITIES_HASH_INDEX = Internal.createIndex("tbl_identities_hash_index", TblIdentities.TBL_IDENTITIES, new OrderField[] { TblIdentities.TBL_IDENTITIES.HASH }, false);
         public static Index TBL_TRANSACTIONS_HASH_INDEX = Internal.createIndex("tbl_transactions_hash_index", TblTransactions.TBL_TRANSACTIONS, new OrderField[] { TblTransactions.TBL_TRANSACTIONS.HASH }, false);
     }
