@@ -76,7 +76,7 @@ public class DCEPServiceImpl implements IDCEPService {
             serialNumberStr = StringBytesConvert.hexToAscii(serialNumber);
 
             // 创建银行签名
-            bankSign = DCEPUtil.getBankSign(serialNumberStr, privateKey);
+            bankSign = DCEPUtil.sign(serialNumberStr, privateKey);
 
             // 把信息保存到数据库
             decpRepository.insert(serialNumberStr, mintRequest.getMoneyType(), mintRequest.getAddress(), bankSign, createTime);

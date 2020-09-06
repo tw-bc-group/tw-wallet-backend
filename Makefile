@@ -48,7 +48,7 @@ k8s.showconfig:
 	kubectl -n tw-wallet get configmap tw-wallet-env -o yaml
 
 k8s.logs:
-	kubectl -n tw-wallet logs $(pod)
+	kubectl -n tw-wallet logs $(pod) -f
 
 k8s.show:
 	kubectl -n tw-wallet get all

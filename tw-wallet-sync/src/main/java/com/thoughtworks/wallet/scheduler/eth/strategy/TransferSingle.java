@@ -56,7 +56,7 @@ public class TransferSingle extends BaseEventStrategy {
         MoneyType moneyType = MoneyType.valueOf(moneyTypeStr);
 
         // 创建银行签名
-        String bankSign = DCEPUtil.getBankSign(serialNumberStr, privateKey);
+        String bankSign = DCEPUtil.sign(serialNumberStr, privateKey);
         log.info("readBcLogs - operator:{}, fromAddr:{}, toAddr:{}, serialNumber:{}, value:{}", operator.getValue(), fromAddr.getValue(), toAddr.getValue(), serialNumber, value);
         //transfer,更新owner, operator, fromAddr
         dbAdptor.insertOrUpdateDCEP(serialNumberStr, operator.getValue(), fromAddr.getValue(), toAddr.getValue(), moneyType, bankSign);
