@@ -3,6 +3,7 @@ package com.thoughtworks.wallet.asset.controller;
 import com.thoughtworks.common.exception.InvalidAddressErrorException;
 import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.wallet.asset.request.DCEPMintRequest;
+import com.thoughtworks.wallet.asset.request.TWPTransferRequest;
 import com.thoughtworks.wallet.asset.response.DCEPInfoV2Response;
 import com.thoughtworks.wallet.asset.response.DCEPNFTInfoV2Response;
 import com.thoughtworks.wallet.asset.response.DECPBalanceResponse;
@@ -68,6 +69,13 @@ public class TokenV2Controller {
             @RequestParam(name = "offset", defaultValue = "0") int offset
     ) {
         return decpService.getDCEPByAddress(address, limit, offset);
+    }
+
+    @PostMapping(value = "/transfer")
+    @ApiOperation(value = "DC/EP 转账")
+    public void transfer(@Valid @RequestBody TWPTransferRequest request) {
+        log.info("DC/EP transfer: " + request.toString());
+        decpService.sendRawTransaction(request.getSignedTransactionRawData(), request.getFromAddress());
     }
 }
 

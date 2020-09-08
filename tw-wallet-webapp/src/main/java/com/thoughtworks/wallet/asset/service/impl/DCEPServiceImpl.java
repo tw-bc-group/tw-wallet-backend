@@ -2,8 +2,10 @@ package com.thoughtworks.wallet.asset.service.impl;
 
 import com.thoughtworks.common.annotation.CenterBankPrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
+import com.thoughtworks.common.exception.ErrorSendTransactionException;
 import com.thoughtworks.common.exception.MintException;
 import com.thoughtworks.common.exception.ReadFileErrorException;
+import com.thoughtworks.common.util.Identity;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
@@ -115,5 +117,27 @@ public class DCEPServiceImpl implements IDCEPService {
         }
 
         return DCEPInfoV2Response.of(decp.getContractAddress(), decpName, decpSymbol, decpDecimal, abi);
+    }
+
+
+    @Override
+    public void sendRawTransaction(String signedTransactionData, String address) {
+
+        if (!Identity.verifySignature(signedTransactionData, address)) {
+            throw new ErrorSendTransactionException("Can not verify your signed transaction.");
+        }
+
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse;
+        try {
+            transactionResponse = web3j.ethSendRawTransaction(signedTransactionData).send();
+            if (transactionResponse.hasError()) {
+                throw new ErrorSendTransactionException(transactionResponse.getError().getMessage());
+            }
+        } catch (IOException e) {
+            log.error("Cannot send transaction", e);
+            throw new ErrorSendTransactionException(e.getMessage());
+        }
+
+        log.info("Transaction hash: {}", transactionResponse.getTransactionHash());
     }
 }

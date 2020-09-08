@@ -33,4 +33,6 @@ public interface IDCEPService {
      * @return
      */
     List<DCEPNFTInfoV2Response> getDCEPByAddress(String address, int limit, int offset);
+
+    void sendRawTransaction(String signedTransactionRawData, String fromAddress);
 }
