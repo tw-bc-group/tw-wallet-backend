@@ -1,26 +1,22 @@
 package com.thoughtworks.common.util.dcep;
 
-import com.thoughtworks.common.crypto.CryptoFacade;
-import com.thoughtworks.common.crypto.Curve;
-import com.thoughtworks.common.crypto.Digest;
-import com.thoughtworks.common.crypto.SignatureScheme;
-import org.web3j.abi.datatypes.generated.Bytes32;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.thoughtworks.common.crypto.*;
 import org.apache.commons.lang3.RandomUtils;
-import org.web3j.crypto.*;
+import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Sign;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DCEPUtil {
     private static final BigInteger range = (new BigInteger("10")).pow(21);
@@ -79,6 +75,7 @@ public class DCEPUtil {
 
     /**
      * 和web3js兼容的签名算法
+     *
      * @param message
      * @param privateKey
      * @return
@@ -95,13 +92,25 @@ public class DCEPUtil {
                 .toString();
     }
 
-    public static byte[] encode(String serialNumber, Sign.SignatureData signatureData) {
+    /**
+     * Create base64 encoded signature using SHA256/RSA.
+     *
+     * @param message
+     * @param privateKey private key with base64 encoded
+     * @return
+     * @throws Exception
+     */
+    public static String signWithSHA256RSA(String message, String privateKey) throws Exception {
+        return RSA.signSHA256RSA(message, privateKey);
+    }
+
+    private static byte[] encode(String serialNumber, Sign.SignatureData signatureData) {
         List<RlpType> values = asRlpValues(serialNumber, signatureData, false);
         RlpList rlpList = new RlpList(values);
         return RlpEncoder.encode(rlpList);
     }
 
-    public static List<RlpType> asRlpValues(
+    private static List<RlpType> asRlpValues(
             String serialNumber, Sign.SignatureData signatureData, boolean withMessage) {
         List<RlpType> result = new ArrayList<>();
 

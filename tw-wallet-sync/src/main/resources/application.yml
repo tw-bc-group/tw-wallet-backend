@@ -28,6 +28,7 @@ quorum:
   dc-ep:
     contract-address: ${TWPOINT_CONTRACT_ADDRESS}
     contract-address-new: ${DCEP_CONTRACT_ADDRESS}
+    center_bank_rsa_pk: ${CENTER_BANK_RSA_PK}
   identity-registry:
     contract-address: ${IDENTITY_REGISTRY_CONTRACT_ADDRESS}
   identities:

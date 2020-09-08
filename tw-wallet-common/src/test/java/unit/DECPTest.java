@@ -1,9 +1,6 @@
 package unit;
 
-import com.thoughtworks.common.crypto.CryptoFacade;
-import com.thoughtworks.common.crypto.Curve;
-import com.thoughtworks.common.crypto.Digest;
-import com.thoughtworks.common.crypto.SignatureScheme;
+import com.thoughtworks.common.crypto.*;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.MoneyType;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
@@ -65,5 +62,16 @@ public class DECPTest {
         String sign = DCEPUtil.sign(hello, privateKey);
         // signature is generate by `tw-eth-cli sign -m "hello world" -k e5e2a5f8e8f786b61a08af8770afe9a3f5bc3fa7cce000ec932372b6732fe018`
         assertThat(sign).isEqualTo("0x03325eb8d7617e10a6fa106a65284c438bf6529016c64e84af158a62aac285295e810f0823a094ec65cd4ada8bb85e605c59de327ba408bf8f33fce5b3faf9bd1b");
+    }
+
+    @Test
+    void should_get_bank_signature_with_rsa() throws Exception {
+
+        String b64PrivatekeyRSA = "MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEAjlJenDVJKwzcU3jclUqfiBv6gZd+MvusIOW6rJ0DIdny9XvJKqLygzUKgdEL1TZJPsiV3J2xD7hyML3F/N7HFwIDAQABAkBpj3yu/fLcJHjSzMVHUgcLrDzcm+G1rOeZqusPlpG5K9PdSP2epVpcQOlL+rUpSq9ZIHq80kj9sEuWzjAaoXWJAiEAzS4GV9yuY7HXnXoncn0M3IucKiNoUyyFk6HwmPR1/5UCIQCxkqmnwx6dwXgbwfXMqUsUXEGA3Ja602h/L5xC0Oxw+wIgKMmRcT3pXOApoKB73wKE4ALQ1H+daYtcMnDqxz0xh9ECIHUPDP5F13IBry8FPwdK9u6WHqxXPposcW+esDEvzx5vAiAjhMh+ld+hVzQNfc64etsCBX9PZPUoBUSis7xq9kMnVA==";
+        //public key with base64 encoded
+        String b64pubkey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI5SXpw1SSsM3FN43JVKn4gb+oGXfjL7rCDluqydAyHZ8vV7ySqi8oM1CoHRC9U2ST7IldydsQ+4cjC9xfzexxcCAwEAAQ==";
+        String ethereumMessageHash = DCEPUtil.signWithSHA256RSA(hello, b64PrivatekeyRSA);
+        boolean verify = RSA.verify(hello, ethereumMessageHash, b64pubkey);
+        assertThat(verify).isTrue();
     }
 }

@@ -1,6 +1,6 @@
 package com.thoughtworks.wallet.scheduler.eth.strategy;
 
-import com.thoughtworks.common.annotation.Node1PrivateKey;
+import com.thoughtworks.common.annotation.CenterBankPrivateKey;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.MoneyType;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
@@ -26,7 +26,7 @@ public class TransferSingle extends BaseEventStrategy {
     @Autowired
     private DBAdptor dbAdptor;
 
-    @Node1PrivateKey
+    @CenterBankPrivateKey
     private String privateKey;
 
     @Override
@@ -56,7 +56,7 @@ public class TransferSingle extends BaseEventStrategy {
         MoneyType moneyType = MoneyType.valueOf(moneyTypeStr);
 
         // 创建银行签名
-        String bankSign = DCEPUtil.sign(serialNumberStr, privateKey);
+        String bankSign = DCEPUtil.signWithSHA256RSA(serialNumberStr, privateKey);
         log.info("readBcLogs - operator:{}, fromAddr:{}, toAddr:{}, serialNumber:{}, value:{}", operator.getValue(), fromAddr.getValue(), toAddr.getValue(), serialNumber, value);
         //transfer,更新owner, operator, fromAddr
         dbAdptor.insertOrUpdateDCEP(serialNumberStr, operator.getValue(), fromAddr.getValue(), toAddr.getValue(), moneyType, bankSign);

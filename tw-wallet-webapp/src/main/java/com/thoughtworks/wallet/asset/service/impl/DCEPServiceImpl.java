@@ -1,15 +1,17 @@
 package com.thoughtworks.wallet.asset.service.impl;
 
-import com.thoughtworks.common.annotation.Node1PrivateKey;
+import com.thoughtworks.common.annotation.CenterBankPrivateKey;
 import com.thoughtworks.common.annotation.QuorumRPCUrl;
-import com.thoughtworks.common.exception.*;
+import com.thoughtworks.common.exception.MintException;
+import com.thoughtworks.common.exception.ReadFileErrorException;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.common.util.dcep.DCEPUtil;
 import com.thoughtworks.common.util.dcep.StringBytesConvert;
 import com.thoughtworks.common.wrapper.DCEPContract;
 import com.thoughtworks.wallet.asset.repository.DECPRepository;
 import com.thoughtworks.wallet.asset.request.DCEPMintRequest;
-import com.thoughtworks.wallet.asset.response.*;
+import com.thoughtworks.wallet.asset.response.DCEPInfoV2Response;
+import com.thoughtworks.wallet.asset.response.DCEPNFTInfoV2Response;
 import com.thoughtworks.wallet.asset.service.IDCEPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class DCEPServiceImpl implements IDCEPService {
     private final DCEPContract decp;
     private final JacksonUtil jacksonUtil;
 
-    @Node1PrivateKey
+    @CenterBankPrivateKey
     private String privateKey;
 
     // TODO：做成可以自动切换节点，有重试机制的请求模块。这里只是为了打印错误好调试
@@ -76,7 +78,7 @@ public class DCEPServiceImpl implements IDCEPService {
             serialNumberStr = StringBytesConvert.hexToAscii(serialNumber);
 
             // 创建银行签名
-            bankSign = DCEPUtil.sign(serialNumberStr, privateKey);
+            bankSign = DCEPUtil.signWithSHA256RSA(serialNumberStr, privateKey);
 
             // 把信息保存到数据库
             decpRepository.insert(serialNumberStr, mintRequest.getMoneyType(), mintRequest.getAddress(), bankSign, createTime);
