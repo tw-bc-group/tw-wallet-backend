@@ -46,9 +46,12 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}'
-                sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
-                sh 'docker rmi ${IMAGE_NAME}:${IMAGE_TAG}'
+                sh '''
+                export AWS_PROFILE=tw-bc-cn
+                aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+                docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                docker rmi ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
             }
         }
 
