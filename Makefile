@@ -31,10 +31,6 @@ build:
 	$(gradle) clean build -x integTest
 	@echo build done
 
-image:
-	@echo build $(TAG)
-	docker build -t $(TAG) .
-
 k8s.namespace:
 	kubectl apply -f docker/k8s/tw-wallet-namespace.yaml
 
@@ -52,17 +48,3 @@ k8s.logs:
 
 k8s.show:
 	kubectl -n tw-wallet get all
-
-deploy.sync:
-	cat docker/k8s/tw-wallet-sync-deployment.yaml \
-		| sed 's#tw-wallet:latest#${TAG}#' \
-		| kubectl apply -n tw-wallet -f -
-
-deploy.webapp:
-	cat docker/k8s/tw-wallet-webapp-deployment.yaml \
-		| sed 's#tw-wallet:latest#${TAG}#' \
-		| kubectl apply -n tw-wallet -f -
-
-deploy.webapp.service:
-	cat docker/k8s/tw-wallet-webapp-service.yaml \
-		| kubectl apply -n tw-wallet -f -

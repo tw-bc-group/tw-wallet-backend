@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    creationTimestamp: null
+    labels:
+        app: tw-wallet-sync
+    name: tw-wallet-sync
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: tw-wallet-sync
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                app: tw-wallet-sync
+        spec:
+            {{- with .Values.imagePullSecrets }}
+            imagePullSecrets:
+                {{- toYaml . | nindent 8 }}
+            {{- end }}
+            serviceAccountName: {{ include "tw-wallet.serviceAccountName" . }}
+            restartPolicy: Always
+            containers:
+                - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+                  imagePullPolicy: {{ .Values.image.pullPolicy }}
+                  name: tw-wallet-sync
+                  volumeMounts:
+                      - mountPath: /app/logs
+                        name: log-volume
+                  args:
+                      - java
+                      - -jar
+                      - tw-wallet-sync.jar
+                  envFrom:
+                      - configMapRef:
+                            name: tw-wallet-env
+            volumes:
+                - name: log-volume
+                  emptyDir: {}
+

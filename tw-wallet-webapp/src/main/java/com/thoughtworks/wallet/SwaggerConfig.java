@@ -48,15 +48,15 @@ public class SwaggerConfig {
                 "Backend API",
                 "This is TW Wallet API",
                 "1.0.0",
-                "https://baidu.com",
+                "https://thoughtworks.com",
                 contact,
                 "MIT",
-                "https://baidu.com",
+                "https://Thoughtworks.com",
                 vext);
 
         String host = "";
         if ("dev".equals(activeProfile)) {
-            host = "wallet.blockchain.thoughtworks.cn:10443";
+            host = "wallet.cn.blockchain.thoughtworks.cn:10443";
         }
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)

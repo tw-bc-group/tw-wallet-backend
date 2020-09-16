@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "tw-wallet.fullname" . }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/client-max-body-size: "1024m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1024m"
+    #cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  labels:
+    {{- include "tw-wallet.labels" . | nindent 4 }}
+spec:
+  tls:
+    - hosts:
+      - wallet.blockchain.thoughtworks.cn
+      secretName: {{ include "tw-wallet.fullname" . }}-tls
+  rules:
+    - host: wallet.cn.blockchain.thoughtworks.cn
+      http:
+        paths:
+          - backend:
+              serviceName: tw-wallet-webapp-service
+              servicePort: 8080
