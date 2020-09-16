@@ -13,7 +13,7 @@ metadata:
 spec:
   tls:
     - hosts:
-      - wallet.blockchain.thoughtworks.cn
+      - wallet.cn.blockchain.thoughtworks.cn
       secretName: {{ include "tw-wallet.fullname" . }}-tls
   rules:
     - host: wallet.cn.blockchain.thoughtworks.cn
