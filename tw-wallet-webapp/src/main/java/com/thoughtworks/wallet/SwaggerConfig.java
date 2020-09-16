@@ -56,7 +56,7 @@ public class SwaggerConfig {
 
         String host = "";
         if ("dev".equals(activeProfile)) {
-            host = "wallet.cn.blockchain.thoughtworks.cn:10443";
+            host = "wallet.cn.blockchain.thoughtworks.cn";
         }
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
