@@ -185,7 +185,7 @@ public class QuorumServiceImpl implements IBlockchainService {
     }
 
     @Override
-    public void sendRawTransaction(String signedTransactionData, String address) {
+    public String sendRawTransaction(String signedTransactionData, String address) {
 
         if (!Identity.verifySignature(signedTransactionData, address)) {
             throw new ErrorSendTransactionException("Can not verify your signed transaction.");
@@ -201,8 +201,11 @@ public class QuorumServiceImpl implements IBlockchainService {
             log.error("Cannot send transaction", e);
             throw new ErrorSendTransactionException(e.getMessage());
         }
+        String transactionHash = transactionResponse.getTransactionHash();
 
-        log.info("Transaction hash: {}", transactionResponse.getTransactionHash());
+        log.info("Transaction hash: {}", transactionHash);
+
+        return transactionHash;
     }
 
     private BigInteger countBlockTransactions(BigInteger ethBlockNumber)

@@ -32,7 +32,7 @@ public interface IBlockchainService {
      * @param signedTransactionData
      * @param address
      */
-    void sendRawTransaction(String signedTransactionData, String address);
+    String sendRawTransaction(String signedTransactionData, String address);
 
     /**
      * get DC/EP Infos

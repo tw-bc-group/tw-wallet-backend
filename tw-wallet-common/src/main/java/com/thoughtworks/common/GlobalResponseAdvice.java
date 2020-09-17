@@ -26,12 +26,12 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType,
-        MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request,
-        ServerHttpResponse response) {
+                                  MediaType selectedContentType, Class selectedConverterType,
+                                  ServerHttpRequest request, ServerHttpResponse response) {
         if (body instanceof ResponseBean) {
             return body;
         }
-        if(Objects.requireNonNull(request.getMethod()).matches(HttpMethod.POST.toString())){
+        if (Objects.requireNonNull(request.getMethod()).matches(HttpMethod.POST.toString())) {
             return ResponseBean.createdResponse(body);
         }
         return ResponseBean.okResponse(body);
@@ -40,9 +40,9 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice {
     @ExceptionHandler(AppException.class)
     @ResponseBody
     public ResponseBean applicationException(AppException appException,
-        HttpServletResponse resp) {
+                                             HttpServletResponse resp) {
         resp.setStatus(appException.getCode().getStatus().value());
         return new ResponseBean(appException.getCode().getErrCode(), appException.getMessage(),
-            appException.getData());
+                appException.getData());
     }
 }
