@@ -79,5 +79,4 @@ tolerations: []
 
 affinity: {}
 
-cac:
-  host: cac-management.cn.blockchain.thoughtworks.cn
+host: wallet.cn.blockchain.thoughtworks.cn
