@@ -59,7 +59,7 @@ apply from: "gradle/enviroments.gradle"
 jooq {
     version = '3.13.1'
     edition = 'OSS'
-    generateSchemaSourceOnCompilation = true
+    generateSchemaSourceOnCompilation = false
     wallet(sourceSets.main) {
         jdbc {
             driver = "${environment.spring.datasource.'driver-class-name'}"

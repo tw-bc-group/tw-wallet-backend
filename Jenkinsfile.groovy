@@ -58,8 +58,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'env > .env'
-                sh 'kubectl get namespaces tw-wallet-backend-ns-dev || kubectl create namespace tw-wallet-backend-ns-dev'
-                sh 'helm -n tw-wallet-backend-ns-dev upgrade --install tw-wallet-backend ./helm --set image.tag=${IMAGE_TAG} --set image.repository=${IMAGE_NAME}'
+                sh 'kubectl get namespaces tw-wallet-backend-ns || kubectl create namespace tw-wallet-backend-ns'
+                sh 'helm -n tw-wallet-backend-ns upgrade --install tw-wallet-backend ./helm --set image.tag=${IMAGE_TAG} --set image.repository=${IMAGE_NAME}'
             }
         }
     }
