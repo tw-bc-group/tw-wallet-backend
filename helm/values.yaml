@@ -79,4 +79,4 @@ tolerations: []
 
 affinity: {}
 
-host: wallet.cn.blockchain.thoughtworks.cn
+host: wallet.dev.cn.blockchain.thoughtworks.cn
