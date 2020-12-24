@@ -1,14 +1,12 @@
 package com.thoughtworks.wallet.healthy.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class VcType {
