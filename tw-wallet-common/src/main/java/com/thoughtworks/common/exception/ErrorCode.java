@@ -24,7 +24,10 @@ public enum ErrorCode {
     HEALTH_VERIFICATION_NOT_FOUND(BAD_REQUEST, 400_02, "该用户暂无健康认证信息"),
     HEALTH_VERIFICATION_ALREADY_EXIST(BAD_REQUEST, 400_03, "该用户已创建健康认证信息"),
     INSERT_INTO_DATABASE_ERROR(BAD_REQUEST, 400_04, "健康认证信息入库错误"),
-    DCEP_NOT_FOUND(BAD_REQUEST, 400_05, "没有找到DCEP");
+    DCEP_NOT_FOUND(BAD_REQUEST, 400_05, "没有找到DCEP"),
+
+    ISSUER_NOT_FOUND(BAD_REQUEST, 600_01, "没有找到Issuer"),
+    VC_TYPE_NOT_FOUND(BAD_REQUEST, 600_02, "没有找到VcType");
 
     @NonNull
     private HttpStatus status;

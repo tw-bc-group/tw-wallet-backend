@@ -4,13 +4,7 @@
 package com.thoughtworks.wallet.gen;
 
 
-import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
-import com.thoughtworks.wallet.gen.tables.TblBlocks;
-import com.thoughtworks.wallet.gen.tables.TblDcep;
-import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
-import com.thoughtworks.wallet.gen.tables.TblIdentities;
-import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
-import com.thoughtworks.wallet.gen.tables.TblTransactions;
+import com.thoughtworks.wallet.gen.tables.*;
 
 
 /**
@@ -45,6 +39,11 @@ public class Tables {
     public static final TblIdentities TBL_IDENTITIES = TblIdentities.TBL_IDENTITIES;
 
     /**
+     * The table <code>public.tbl_issuers</code>.
+     */
+    public static final TblIssuers TBL_ISSUERS = TblIssuers.TBL_ISSUERS;
+
+    /**
      * The table <code>public.tbl_suspected_patients_phone_list</code>.
      */
     public static final TblSuspectedPatientsPhoneList TBL_SUSPECTED_PATIENTS_PHONE_LIST = TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST;
@@ -53,4 +52,9 @@ public class Tables {
      * The table <code>public.tbl_transactions</code>.
      */
     public static final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
+
+    /**
+     * The table <code>public.tbl_vc_types</code>.
+     */
+    public static final TblVcTypes TBL_VC_TYPES = TblVcTypes.TBL_VC_TYPES;
 }

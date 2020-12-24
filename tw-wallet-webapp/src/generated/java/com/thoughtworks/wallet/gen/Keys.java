@@ -4,21 +4,11 @@
 package com.thoughtworks.wallet.gen;
 
 
-import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
-import com.thoughtworks.wallet.gen.tables.TblBlocks;
-import com.thoughtworks.wallet.gen.tables.TblDcep;
-import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
-import com.thoughtworks.wallet.gen.tables.TblIdentities;
-import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
-import com.thoughtworks.wallet.gen.tables.TblTransactions;
-import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblBlocksRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblDcepRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblIdentitiesRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblSuspectedPatientsPhoneListRecord;
-import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
-
+import com.thoughtworks.wallet.gen.tables.TblIssuers;
+import com.thoughtworks.wallet.gen.tables.TblVcTypes;
+import com.thoughtworks.wallet.gen.tables.*;
+import com.thoughtworks.wallet.gen.tables.records.*;
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
@@ -45,13 +35,16 @@ public class Keys {
     public static final UniqueKey<TblDcepRecord> TBL_DCEP_PKEY = UniqueKeys0.TBL_DCEP_PKEY;
     public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = UniqueKeys0.TBL_HEALTHY_VERIFICATION_CLAIM_PKEY;
     public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = UniqueKeys0.TBL_IDENTITIES_PKEY;
+    public static final UniqueKey<TblIssuersRecord> TBL_ISSUERS_PKEY = UniqueKeys0.TBL_ISSUERS_PKEY;
     public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = UniqueKeys0.TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY;
     public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = UniqueKeys0.TBL_TRANSACTIONS_PKEY;
+    public static final UniqueKey<TblVcTypesRecord> TBL_VC_TYPES_PKEY = UniqueKeys0.TBL_VC_TYPES_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<TblVcTypesRecord, TblIssuersRecord> TBL_VC_TYPES__TBL_VC_TYPES_ISSUER_FKEY = ForeignKeys0.TBL_VC_TYPES__TBL_VC_TYPES_ISSUER_FKEY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -63,7 +56,13 @@ public class Keys {
         public static final UniqueKey<TblDcepRecord> TBL_DCEP_PKEY = Internal.createUniqueKey(TblDcep.TBL_DCEP, "tbl_dcep_pkey", new TableField[] { TblDcep.TBL_DCEP.SERIAL_NUMBER }, true);
         public static final UniqueKey<TblHealthyVerificationClaimRecord> TBL_HEALTHY_VERIFICATION_CLAIM_PKEY = Internal.createUniqueKey(TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM, "tbl_healthy_verification_claim_pkey", new TableField[] { TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM.ID }, true);
         public static final UniqueKey<TblIdentitiesRecord> TBL_IDENTITIES_PKEY = Internal.createUniqueKey(TblIdentities.TBL_IDENTITIES, "tbl_identities_pkey", new TableField[] { TblIdentities.TBL_IDENTITIES.HEIGHT, TblIdentities.TBL_IDENTITIES.TX_INDEX }, true);
+        public static final UniqueKey<TblIssuersRecord> TBL_ISSUERS_PKEY = Internal.createUniqueKey(TblIssuers.TBL_ISSUERS, "tbl_issuers_pkey", new TableField[] { TblIssuers.TBL_ISSUERS.ID }, true);
         public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = Internal.createUniqueKey(TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST, "tbl_suspected_patients_phone_list_pkey", new TableField[] { TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST.PHONE }, true);
         public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = Internal.createUniqueKey(TblTransactions.TBL_TRANSACTIONS, "tbl_transactions_pkey", new TableField[] { TblTransactions.TBL_TRANSACTIONS.HEIGHT, TblTransactions.TBL_TRANSACTIONS.TX_INDEX }, true);
+        public static final UniqueKey<TblVcTypesRecord> TBL_VC_TYPES_PKEY = Internal.createUniqueKey(TblVcTypes.TBL_VC_TYPES, "tbl_vc_types_pkey", new TableField[] { TblVcTypes.TBL_VC_TYPES.ID }, true);
+    }
+
+    private static class ForeignKeys0 {
+        public static final ForeignKey<TblVcTypesRecord, TblIssuersRecord> TBL_VC_TYPES__TBL_VC_TYPES_ISSUER_FKEY = Internal.createForeignKey(Keys.TBL_ISSUERS_PKEY, TblVcTypes.TBL_VC_TYPES, "tbl_vc_types_issuer_fkey", new TableField[] { TblVcTypes.TBL_VC_TYPES.ISSUER }, true);
     }
 }
