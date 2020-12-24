@@ -28,7 +28,7 @@ public class VcTypeDAO {
         return dslContext
                 .insertInto(TBL_VC_TYPES)
                 .set(TBL_VC_TYPES.NAME, vcType.getName())
-                .set(TBL_VC_TYPES.ISSUER, String.valueOf(issuer.getId()))
+                .set(TBL_VC_TYPES.ISSUER, issuer.getId())
                 .set(TBL_VC_TYPES.CONTENT, vcType.getContent().toArray(new String[0]))
                 .execute();
     }
@@ -40,7 +40,7 @@ public class VcTypeDAO {
                         , TBL_VC_TYPES.ISSUER
                         , TBL_VC_TYPES.CONTENT)
                 .from(TBL_VC_TYPES)
-                .where(TBL_VC_TYPES.ID.eq(String.valueOf(id)))
+                .where(TBL_VC_TYPES.ID.eq(id))
                 .fetchOneInto(VcType.class)).orElseThrow(() -> new VcTypeNotFoundException(id));
     }
 
@@ -52,7 +52,7 @@ public class VcTypeDAO {
                         , TBL_VC_TYPES.ISSUER
                         , TBL_VC_TYPES.CONTENT)
                 .from(TBL_VC_TYPES)
-                .where(TBL_VC_TYPES.ISSUER.eq(String.valueOf(issuer.getId())))
+                .where(TBL_VC_TYPES.ISSUER.eq(issuer.getId()))
                 .fetchInto(VcType.class)).orElseThrow(() -> new VcTypeNotFoundException(issuer.getId()));
     }
 }

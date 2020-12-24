@@ -7,12 +7,23 @@ package com.thoughtworks.wallet.gen.tables;
 import com.thoughtworks.wallet.gen.Keys;
 import com.thoughtworks.wallet.gen.Public;
 import com.thoughtworks.wallet.gen.tables.records.TblVcTypesRecord;
-import org.jooq.*;
-import org.jooq.impl.DSL;
-import org.jooq.impl.TableImpl;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Row4;
+import org.jooq.Schema;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.TableImpl;
 
 
 /**
@@ -21,7 +32,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
 
-    private static final long serialVersionUID = -335777455;
+    private static final long serialVersionUID = -820130645;
 
     /**
      * The reference instance of <code>public.tbl_vc_types</code>
@@ -39,7 +50,7 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     /**
      * The column <code>public.tbl_vc_types.id</code>.
      */
-    public final TableField<TblVcTypesRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<TblVcTypesRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('tbl_vc_types_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>public.tbl_vc_types.name</code>.
@@ -49,7 +60,7 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     /**
      * The column <code>public.tbl_vc_types.issuer</code>.
      */
-    public final TableField<TblVcTypesRecord, String> ISSUER = createField(DSL.name("issuer"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<TblVcTypesRecord, Integer> ISSUER = createField(DSL.name("issuer"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.tbl_vc_types.content</code>.
@@ -92,6 +103,11 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<TblVcTypesRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_TBL_VC_TYPES;
     }
 
     @Override
@@ -144,7 +160,7 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, String, String[]> fieldsRow() {
+    public Row4<Integer, String, Integer, String[]> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

@@ -32,7 +32,7 @@ public class IssuerDAO {
                 .select(TBL_ISSUERS.ID
                         , TBL_ISSUERS.NAME)
                 .from(TBL_ISSUERS)
-                .where(TBL_ISSUERS.ID.eq(String.valueOf(id)))
+                .where(TBL_ISSUERS.ID.eq(id))
                 .fetchOneInto(Issuer.class)).orElseThrow(() -> new IssuerNotFoundException(id));
     }
 

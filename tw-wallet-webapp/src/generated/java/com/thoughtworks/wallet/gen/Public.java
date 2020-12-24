@@ -4,13 +4,23 @@
 package com.thoughtworks.wallet.gen;
 
 
-import com.thoughtworks.wallet.gen.tables.*;
-import org.jooq.Catalog;
-import org.jooq.Table;
-import org.jooq.impl.SchemaImpl;
+import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
+import com.thoughtworks.wallet.gen.tables.TblBlocks;
+import com.thoughtworks.wallet.gen.tables.TblDcep;
+import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
+import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblIssuers;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
+import com.thoughtworks.wallet.gen.tables.TblVcTypes;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.jooq.Catalog;
+import org.jooq.Sequence;
+import org.jooq.Table;
+import org.jooq.impl.SchemaImpl;
 
 
 /**
@@ -19,7 +29,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1524159892;
+    private static final long serialVersionUID = -584626851;
 
     /**
      * The reference instance of <code>public</code>
@@ -82,6 +92,13 @@ public class Public extends SchemaImpl {
     @Override
     public Catalog getCatalog() {
         return DefaultCatalog.DEFAULT_CATALOG;
+    }
+
+    @Override
+    public final List<Sequence<?>> getSequences() {
+        return Arrays.<Sequence<?>>asList(
+            Sequences.TBL_ISSUERS_ID_SEQ,
+            Sequences.TBL_VC_TYPES_ID_SEQ);
     }
 
     @Override

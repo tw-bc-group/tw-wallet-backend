@@ -4,11 +4,27 @@
 package com.thoughtworks.wallet.gen;
 
 
+import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
+import com.thoughtworks.wallet.gen.tables.TblBlocks;
+import com.thoughtworks.wallet.gen.tables.TblDcep;
+import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
+import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblIssuers;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.TblVcTypes;
-import com.thoughtworks.wallet.gen.tables.*;
-import com.thoughtworks.wallet.gen.tables.records.*;
+import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblBlocksRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblDcepRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblIdentitiesRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblIssuersRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblSuspectedPatientsPhoneListRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblVcTypesRecord;
+
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
@@ -25,6 +41,8 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Identities0.IDENTITY_TBL_ISSUERS;
+    public static final Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Identities0.IDENTITY_TBL_VC_TYPES;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -49,6 +67,11 @@ public class Keys {
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
+
+    private static class Identities0 {
+        public static Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Internal.createIdentity(TblIssuers.TBL_ISSUERS, TblIssuers.TBL_ISSUERS.ID);
+        public static Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Internal.createIdentity(TblVcTypes.TBL_VC_TYPES, TblVcTypes.TBL_VC_TYPES.ID);
+    }
 
     private static class UniqueKeys0 {
         public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, "flyway_schema_history_pk", new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);

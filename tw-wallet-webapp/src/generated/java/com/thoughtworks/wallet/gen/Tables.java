@@ -4,7 +4,15 @@
 package com.thoughtworks.wallet.gen;
 
 
-import com.thoughtworks.wallet.gen.tables.*;
+import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
+import com.thoughtworks.wallet.gen.tables.TblBlocks;
+import com.thoughtworks.wallet.gen.tables.TblDcep;
+import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
+import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblIssuers;
+import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
+import com.thoughtworks.wallet.gen.tables.TblTransactions;
+import com.thoughtworks.wallet.gen.tables.TblVcTypes;
 
 
 /**
