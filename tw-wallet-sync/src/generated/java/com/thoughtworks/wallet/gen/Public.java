@@ -9,8 +9,10 @@ import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblDcep;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
+import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
+import com.thoughtworks.wallet.gen.tables.TblVcTypes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +28,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 599978312;
+    private static final long serialVersionUID = -1524159892;
 
     /**
      * The reference instance of <code>public</code>
@@ -59,6 +61,11 @@ public class Public extends SchemaImpl {
     public final TblIdentities TBL_IDENTITIES = TblIdentities.TBL_IDENTITIES;
 
     /**
+     * The table <code>public.tbl_issuers</code>.
+     */
+    public final TblIssuers TBL_ISSUERS = TblIssuers.TBL_ISSUERS;
+
+    /**
      * The table <code>public.tbl_suspected_patients_phone_list</code>.
      */
     public final TblSuspectedPatientsPhoneList TBL_SUSPECTED_PATIENTS_PHONE_LIST = TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST;
@@ -67,6 +74,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.tbl_transactions</code>.
      */
     public final TblTransactions TBL_TRANSACTIONS = TblTransactions.TBL_TRANSACTIONS;
+
+    /**
+     * The table <code>public.tbl_vc_types</code>.
+     */
+    public final TblVcTypes TBL_VC_TYPES = TblVcTypes.TBL_VC_TYPES;
 
     /**
      * No further instances allowed
@@ -89,7 +101,9 @@ public class Public extends SchemaImpl {
             TblDcep.TBL_DCEP,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
             TblIdentities.TBL_IDENTITIES,
+            TblIssuers.TBL_ISSUERS,
             TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,
-            TblTransactions.TBL_TRANSACTIONS);
+            TblTransactions.TBL_TRANSACTIONS,
+            TblVcTypes.TBL_VC_TYPES);
     }
 }
