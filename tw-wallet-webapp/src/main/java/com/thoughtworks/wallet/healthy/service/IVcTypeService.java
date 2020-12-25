@@ -6,4 +6,5 @@ import com.thoughtworks.wallet.healthy.model.VcType;
 
 public interface IVcTypeService {
     VcTypeResponse createVcType(VcTypeRequest vcTypeRequest);
+    VcTypeResponse getVcTypeById(Integer id);
 }

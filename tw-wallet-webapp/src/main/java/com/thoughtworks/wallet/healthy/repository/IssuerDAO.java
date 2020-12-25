@@ -24,7 +24,8 @@ public class IssuerDAO {
         return dslContext
                 .insertInto(TBL_ISSUERS)
                 .set(TBL_ISSUERS.NAME, issuer.getName())
-                .execute();
+                .returning(TBL_ISSUERS.ID)
+                .fetchOne().getId();
     }
 
     public Issuer getIssuerById(Integer id) {

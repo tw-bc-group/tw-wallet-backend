@@ -35,7 +35,7 @@ public class IssuerController {
 
     @GetMapping
     @ApiOperation(value = "获取所有认证机构及其VC")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public List<IssuerResponse> getAllIssuers() {
         return issuerService.getAllIssuers();
     }

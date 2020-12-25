@@ -24,13 +24,14 @@ public class VcTypeDAO {
     }
 
     public int insertVcType(VcType vcType) {
-        Issuer issuer = issuerDAO.getIssuerById(vcType.getId());
+        Issuer issuer = issuerDAO.getIssuerById(vcType.getIssuerId());
         return dslContext
                 .insertInto(TBL_VC_TYPES)
                 .set(TBL_VC_TYPES.NAME, vcType.getName())
                 .set(TBL_VC_TYPES.ISSUER, issuer.getId())
                 .set(TBL_VC_TYPES.CONTENT, vcType.getContent().toArray(new String[0]))
-                .execute();
+                .returning(TBL_VC_TYPES.ID)
+                .fetchOne().getId();
     }
 
     public VcType getVcTypeById(Integer id) {

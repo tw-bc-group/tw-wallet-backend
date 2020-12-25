@@ -3,16 +3,18 @@ package com.thoughtworks.wallet.healthy.dto;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class VcTypeRequest {
     @NotBlank
     @Getter
     String name;
-    @NotBlank
+    @NotNull
     @Getter
     Integer issuerId;
-    @NotBlank
+    @NotEmpty
     @Getter
     List<String> content;
 }
