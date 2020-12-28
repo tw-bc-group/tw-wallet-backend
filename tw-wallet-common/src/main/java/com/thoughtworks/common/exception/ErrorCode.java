@@ -27,7 +27,8 @@ public enum ErrorCode {
     DCEP_NOT_FOUND(BAD_REQUEST, 400_05, "没有找到DCEP"),
 
     ISSUER_NOT_FOUND(BAD_REQUEST, 600_01, "没有找到Issuer"),
-    VC_TYPE_NOT_FOUND(BAD_REQUEST, 600_02, "没有找到VcType");
+    VC_TYPE_NOT_FOUND(BAD_REQUEST, 600_02, "没有找到VcType"),
+    VERIFIER_NOT_FOUND(BAD_REQUEST, 600_03, "没有找到Verifier");
 
     @NonNull
     private HttpStatus status;
