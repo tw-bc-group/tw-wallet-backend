@@ -17,7 +17,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblHealthyVerificationClaimV2 extends TableImpl<TblHealthyVerificationClaimV2Record> {
 
-    private static final long serialVersionUID = -2072595456;
+    private static final long serialVersionUID = -1067029099;
 
     /**
      * The reference instance of <code>public.tbl_healthy_verification_claim_v2</code>
@@ -49,14 +49,29 @@ public class TblHealthyVerificationClaimV2 extends TableImpl<TblHealthyVerificat
     }
 
     /**
-     * The column <code>public.tbl_healthy_verification_claim_v2.id</code>.
+     * The column <code>public.tbl_healthy_verification_claim_v2.owner_id</code>.
      */
-    public final TableField<TblHealthyVerificationClaimV2Record, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
+    public final TableField<TblHealthyVerificationClaimV2Record, String> OWNER_ID = createField(DSL.name("owner_id"), org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
+
+    /**
+     * The column <code>public.tbl_healthy_verification_claim_v2.claim_id</code>.
+     */
+    public final TableField<TblHealthyVerificationClaimV2Record, String> CLAIM_ID = createField(DSL.name("claim_id"), org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
+
+    /**
+     * The column <code>public.tbl_healthy_verification_claim_v2.issuer_id</code>.
+     */
+    public final TableField<TblHealthyVerificationClaimV2Record, String> ISSUER_ID = createField(DSL.name("issuer_id"), org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
      * The column <code>public.tbl_healthy_verification_claim_v2.payload</code>.
      */
     public final TableField<TblHealthyVerificationClaimV2Record, JsonNode> PAYLOAD = createField(DSL.name("payload"), org.jooq.impl.SQLDataType.JSON.nullable(false), this, "", new PostgresJSONJacksonJsonNodeBinding());
+
+    /**
+     * The column <code>public.tbl_healthy_verification_claim_v2.jwt</code>.
+     */
+    public final TableField<TblHealthyVerificationClaimV2Record, String> JWT = createField(DSL.name("jwt"), org.jooq.impl.SQLDataType.VARCHAR(2048).nullable(false), this, "");
 
     /**
      * Create a <code>public.tbl_healthy_verification_claim_v2</code> table reference
@@ -133,11 +148,11 @@ public class TblHealthyVerificationClaimV2 extends TableImpl<TblHealthyVerificat
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, JsonNode> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row5<String, String, String, JsonNode, String> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

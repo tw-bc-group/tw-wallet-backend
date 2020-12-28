@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.dto;
+package com.thoughtworks.wallet.healthy.dto.V2;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,14 +1,8 @@
-package com.thoughtworks.wallet.healthy.model.V2;
+package com.thoughtworks.wallet.healthy.dto.V2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableList;
-import com.thoughtworks.common.util.JacksonUtil;
-import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimRecord;
 import lombok.*;
-
-import java.util.List;
 
 /**
  *{

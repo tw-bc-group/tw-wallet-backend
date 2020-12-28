@@ -1,6 +1,10 @@
 package com.thoughtworks.wallet.healthy.service;
 
 import com.thoughtworks.wallet.healthy.dto.*;
+import com.thoughtworks.wallet.healthy.dto.V2.HealthVerificationClaimV2;
+import com.thoughtworks.wallet.healthy.dto.V2.HealthVerificationRequestV2;
+
+import java.util.List;
 
 public interface IHealthyClaimServiceV2 {
 
@@ -18,7 +22,7 @@ public interface IHealthyClaimServiceV2 {
      * @param ownerId
      * @return
      */
-//    HealthVerificationResponse getHealthVerification(String ownerId);
+    List<String> getHealthVerification(String ownerId);
 
     /**
      * 改变健康声明状态，测试用途
@@ -31,6 +35,7 @@ public interface IHealthyClaimServiceV2 {
 
     /**
      * 验证token
+     *
      * @param verifyJwtRequest
      * @return
      */

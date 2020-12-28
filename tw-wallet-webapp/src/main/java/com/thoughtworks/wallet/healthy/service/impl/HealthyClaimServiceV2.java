@@ -10,8 +10,8 @@ import com.thoughtworks.common.util.Jwt;
 import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.exception.*;
 import com.thoughtworks.wallet.healthy.model.*;
-import com.thoughtworks.wallet.healthy.model.V2.*;
-import com.thoughtworks.wallet.healthy.model.V2.Issuer;
+import com.thoughtworks.wallet.healthy.dto.V2.*;
+import com.thoughtworks.wallet.healthy.dto.V2.Issuer;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAOV2;
 import com.thoughtworks.wallet.healthy.service.IHealthyClaimServiceV2;
@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,7 +34,6 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
     private final ClaimIdUtil claimIdUtil;
     private final HealthVerificationClaimContract healthVerificationClaimContract;
     private final HealthVerificationDAOV2 healthVerificationDAOV2;
-    private final ModelMapper modelMapper = new ModelMapper();
     public final static String didSchema = "DID:TW:";
     private final String version = "0.1";
     final ImmutableList<String> context = ImmutableList.of("https://www.w3.org/2018/credentials/v1", "https://w3c-ccg.github.io/vc-examples/covid-19/v2/v2.jsonld");
@@ -64,6 +65,11 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
         insertClaim2DB(healthVerification, claim, token);
 
         return JwtResponse.of(token);
+    }
+
+    @Override
+    public List<String> getHealthVerification(String ownerId) {
+        return healthVerificationDAOV2.getHealthVerificationClaim(ownerId);
     }
 
     private void insertClaim2DB(HealthVerificationRequestV2 healthVerification, HealthVerificationClaimV2 claim, String token) {

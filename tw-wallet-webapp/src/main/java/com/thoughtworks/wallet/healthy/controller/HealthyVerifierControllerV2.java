@@ -1,6 +1,7 @@
 package com.thoughtworks.wallet.healthy.controller;
 
 import com.thoughtworks.wallet.healthy.dto.*;
+import com.thoughtworks.wallet.healthy.dto.V2.HealthVerificationRequestV2;
 import com.thoughtworks.wallet.healthy.service.IHealthyClaimServiceV2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,6 +31,12 @@ public class HealthyVerifierControllerV2 {
     @ResponseStatus(HttpStatus.CREATED)
     public JwtResponse createHealthVerification(@Valid @RequestBody HealthVerificationRequestV2 healthVerification) {
         return healthyVerifierServiceV2.createHealthVerification(healthVerification);
+    }
+
+    @GetMapping("/{ownerId}")
+    @ApiOperation(value = "根据 owner DID 获取 健康认证")
+    public List<String> getHealthVerification(@PathVariable(value = "ownerId") String ownerId) {
+        return healthyVerifierServiceV2.getHealthVerification(ownerId);
     }
 
     @PostMapping(value = "/verify")
