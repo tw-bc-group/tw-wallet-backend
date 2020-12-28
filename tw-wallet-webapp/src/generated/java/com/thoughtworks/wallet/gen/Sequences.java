@@ -23,4 +23,9 @@ public class Sequences {
      * The sequence <code>public.tbl_vc_types_id_seq</code>
      */
     public static final Sequence<Integer> TBL_VC_TYPES_ID_SEQ = Internal.createSequence("tbl_vc_types_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false), null, null, null, null, false, null);
+
+    /**
+     * The sequence <code>public.tbl_verifiers_id_seq</code>
+     */
+    public static final Sequence<Integer> TBL_VERIFIERS_ID_SEQ = Internal.createSequence("tbl_verifiers_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false), null, null, null, null, false, null);
 }

@@ -13,6 +13,7 @@ import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.TblVcTypes;
+import com.thoughtworks.wallet.gen.tables.TblVerifiers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -584626851;
+    private static final long serialVersionUID = 540699559;
 
     /**
      * The reference instance of <code>public</code>
@@ -82,6 +83,11 @@ public class Public extends SchemaImpl {
     public final TblVcTypes TBL_VC_TYPES = TblVcTypes.TBL_VC_TYPES;
 
     /**
+     * The table <code>public.tbl_verifiers</code>.
+     */
+    public final TblVerifiers TBL_VERIFIERS = TblVerifiers.TBL_VERIFIERS;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -98,7 +104,8 @@ public class Public extends SchemaImpl {
     public final List<Sequence<?>> getSequences() {
         return Arrays.<Sequence<?>>asList(
             Sequences.TBL_ISSUERS_ID_SEQ,
-            Sequences.TBL_VC_TYPES_ID_SEQ);
+            Sequences.TBL_VC_TYPES_ID_SEQ,
+            Sequences.TBL_VERIFIERS_ID_SEQ);
     }
 
     @Override
@@ -112,6 +119,7 @@ public class Public extends SchemaImpl {
             TblIssuers.TBL_ISSUERS,
             TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,
             TblTransactions.TBL_TRANSACTIONS,
-            TblVcTypes.TBL_VC_TYPES);
+            TblVcTypes.TBL_VC_TYPES,
+            TblVerifiers.TBL_VERIFIERS);
     }
 }
