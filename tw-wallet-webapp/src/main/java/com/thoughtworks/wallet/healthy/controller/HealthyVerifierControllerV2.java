@@ -33,6 +33,15 @@ public class HealthyVerifierControllerV2 {
         return healthyVerifierServiceV2.createHealthVerification(healthVerification);
     }
 
+    @PostMapping("/immunoglobulin-detection")
+    @ApiOperation(value = "蛋白检测")
+    @ResponseStatus(HttpStatus.CREATED)
+    public JwtResponse createImmunoglobulinDetection(@Valid @RequestBody HealthVerificationRequestV2 healthVerification) {
+        return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(healthVerification);
+    }
+
+
+
     @GetMapping("/{ownerId}")
     @ApiOperation(value = "根据 owner DID 获取 健康认证")
     public List<String> getHealthVerification(@PathVariable(value = "ownerId") String ownerId) {

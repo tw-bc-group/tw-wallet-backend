@@ -36,16 +36,6 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
     private final HealthVerificationDAOV2 healthVerificationDAOV2;
     public final static String didSchema = "DID:TW:";
     private final String version = "0.1";
-    final ImmutableList<String> context = ImmutableList.of("https://www.w3.org/2018/credentials/v1", "https://w3c-ccg.github.io/vc-examples/covid-19/v2/v2.jsonld");
-    final String TEST_TYPE = "qSARS-CoV-2-Rapid-Test-Credential";
-    final String CATALOG_NUMBER = "5515C025, 5515C050, 5515C100";
-    final String IFU = "https://cellexcovid.com/wp-content/uploads/2020/04/Cellex-rapid-ifu.pdf";
-    final ImmutableList<String> credentialType = ImmutableList.of("VerifiableCredential", TEST_TYPE);
-    final String ISSUER_TYPE = "CovidTestingFacility";
-    final String ISSUER_NAME = "Stanford Health Care";
-    final String ISSUER_URL = "https://stanfordhealthcare.org/";
-    final String VC_NAME = "qSARS-CoV-2 IgG/IgM Rapid Test Credential";
-    final String VC_DESC = "Results from antibody testing should not be used as the sole basis to diagnose or exclude SARS-CoV-2 infection. False positive results may occur due to cross-reacting antibodies from previous infections, such as other coronaviruses, or from other causes Samples with positive results should be confirmed with alternative testing method(s) and clinical findings before a diagnostic determination is made.";
 
 
     // TODO: 目前假设 claim 1 mins 过期。可以设置在配置文件
@@ -63,8 +53,49 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
         HealthVerificationClaimV2 claim = generateHealthyVerificationClaim(healthVerification);
         String token = sign(healthVerification.getDid(), claim);
         insertClaim2DB(healthVerification, claim, token);
-
         return JwtResponse.of(token);
+    }
+
+    @Override
+    public JwtResponse createImmunoglobulinDetectionVC(HealthVerificationRequestV2 healthVerification) {
+        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(healthVerification);
+        String token = sign(healthVerification.getDid(), claim);
+        insertClaim2DB(healthVerification, claim, token);
+        return JwtResponse.of(token);
+    }
+
+    private HealthVerificationClaimV2 generateImmunoglobulinDetectionVC(HealthVerificationRequestV2 healthVerification) {
+        final String holderDid = healthVerification.getDid();
+        final String claimId = claimIdUtil.generateClaimId(version);
+        String issuerDid = didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
+        final Instant now = Instant.now();
+        final long currentTime = now.getEpochSecond();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        // 填充subject
+        return HealthVerificationClaimV2.builder()
+                .ver(version)
+                .iss(issuerDid)
+                .iat(currentTime)
+                .exp(expiredTime)
+                .vc(VC.of(
+                        ConstImmunoglobulinDetectionVC.context,
+                        ConstImmunoglobulinDetectionVC.credentialType,
+                        claimId,
+                        Issuer.of(Location.of(
+                                ConstImmunoglobulinDetectionVC.ISSUER_TYPE,
+                                ConstImmunoglobulinDetectionVC.ISSUER_NAME,
+                                ConstImmunoglobulinDetectionVC.ISSUER_URL)
+                        ),
+                        ConstImmunoglobulinDetectionVC.VC_NAME,
+                        ConstImmunoglobulinDetectionVC.VC_DESC,
+                        ImmunoglobulinDetectionSub.of(
+                                holderDid,
+                                ConstImmunoglobulinDetectionVC.SUB_TYPE,
+                                true,
+                                true
+                        )
+                ))
+                .build();
     }
 
     @Override
@@ -158,20 +189,20 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
                 .iat(currentTime)
                 .exp(expiredTime)
                 .vc(VC.of(
-                        context,
-                        credentialType,
+                        ConstCoV2RapidTestCredential.context,
+                        ConstCoV2RapidTestCredential.credentialType,
                         claimId,
                         Issuer.of(Location.of(
-                                ISSUER_TYPE,
-                                ISSUER_NAME,
-                                ISSUER_URL)
+                                ConstCoV2RapidTestCredential.ISSUER_TYPE,
+                                ConstCoV2RapidTestCredential.ISSUER_NAME,
+                                ConstCoV2RapidTestCredential.ISSUER_URL)
                         ),
-                        VC_NAME,
-                        VC_DESC,
+                        ConstCoV2RapidTestCredential.VC_NAME,
+                        ConstCoV2RapidTestCredential.VC_DESC,
                         Sub.of(
-                                holderDid, ImmutableList.of(TEST_TYPE),
-                                CATALOG_NUMBER,
-                                IFU,
+                                holderDid, ImmutableList.of(ConstCoV2RapidTestCredential.TEST_TYPE),
+                                ConstCoV2RapidTestCredential.CATALOG_NUMBER,
+                                ConstCoV2RapidTestCredential.IFU,
                                 AssayStatus.Negative)
                 ))
                 .build();

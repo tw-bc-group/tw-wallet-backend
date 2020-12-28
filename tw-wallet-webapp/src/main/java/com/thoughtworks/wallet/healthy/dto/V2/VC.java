@@ -21,5 +21,5 @@ public class VC {
     private Issuer issuer;
     private String name;
     private String desc;
-    private Sub sub;
+    private ISub sub;
 }

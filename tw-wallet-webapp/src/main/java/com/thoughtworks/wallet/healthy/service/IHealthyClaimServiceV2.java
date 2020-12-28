@@ -16,6 +16,15 @@ public interface IHealthyClaimServiceV2 {
      */
     JwtResponse createHealthVerification(HealthVerificationRequestV2 healthVerification);
 
+
+    /**
+     * 蛋白检测VC
+     * @param healthVerification
+     * @return
+     */
+    JwtResponse createImmunoglobulinDetectionVC(HealthVerificationRequestV2 healthVerification);
+
+
     /**
      * 获取健康声明
      *
