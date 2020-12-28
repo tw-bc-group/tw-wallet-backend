@@ -8,6 +8,7 @@ import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblDcep;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
+import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaimV2;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
@@ -56,6 +57,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.tbl_healthy_verification_claim</code>.
      */
     public final TblHealthyVerificationClaim TBL_HEALTHY_VERIFICATION_CLAIM = TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM;
+
+    /**
+     * The table <code>public.tbl_healthy_verification_claim_v2</code>.
+     */
+    public final TblHealthyVerificationClaimV2 TBL_HEALTHY_VERIFICATION_CLAIM_V2 = TblHealthyVerificationClaimV2.TBL_HEALTHY_VERIFICATION_CLAIM_V2;
 
     /**
      * The table <code>public.tbl_identities</code>.
@@ -115,6 +121,7 @@ public class Public extends SchemaImpl {
             TblBlocks.TBL_BLOCKS,
             TblDcep.TBL_DCEP,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
+            TblHealthyVerificationClaimV2.TBL_HEALTHY_VERIFICATION_CLAIM_V2,
             TblIdentities.TBL_IDENTITIES,
             TblIssuers.TBL_ISSUERS,
             TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,

@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row2;
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblIssuers extends TableImpl<TblIssuersRecord> {
 
-    private static final long serialVersionUID = -1669104030;
+    private static final long serialVersionUID = -29386929;
 
     /**
      * The reference instance of <code>public.tbl_issuers</code>
@@ -49,7 +50,7 @@ public class TblIssuers extends TableImpl<TblIssuersRecord> {
     /**
      * The column <code>public.tbl_issuers.id</code>.
      */
-    public final TableField<TblIssuersRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<TblIssuersRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('tbl_issuers_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>public.tbl_issuers.name</code>.
@@ -95,6 +96,11 @@ public class TblIssuers extends TableImpl<TblIssuersRecord> {
     }
 
     @Override
+    public Identity<TblIssuersRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_TBL_ISSUERS;
+    }
+
+    @Override
     public UniqueKey<TblIssuersRecord> getPrimaryKey() {
         return Keys.TBL_ISSUERS_PKEY;
     }
@@ -135,7 +141,7 @@ public class TblIssuers extends TableImpl<TblIssuersRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, String> fieldsRow() {
+    public Row2<Integer, String> fieldsRow() {
         return (Row2) super.fieldsRow();
     }
 }

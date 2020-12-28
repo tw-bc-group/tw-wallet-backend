@@ -62,18 +62,6 @@ public class HealthyClaimService implements IHealthyClaimService {
     public JwtResponse createHealthVerification(HealthVerificationRequest healthVerification) {
         HealthVerificationClaim claim     = generateHealthyVerificationClaim(healthVerification);
         String                  issuerDid = generateIssuerDid();
-
-        HealthVerificationResponse healthVerificationResponse = HealthVerificationResponse.builder()
-                .context(claim.getContext())
-                .id(claim.getId())
-                .ver(claim.getVer())
-                .iss(claim.getIss())
-                .iat(claim.getIat())
-                .exp(claim.getExp())
-                .typ(claim.getTyp())
-                .sub(claim.getSub())
-                .build();
-
         String token = sign(healthVerification.getDid(), claim);
 
         insertClaim2DB(healthVerification, claim, token);
