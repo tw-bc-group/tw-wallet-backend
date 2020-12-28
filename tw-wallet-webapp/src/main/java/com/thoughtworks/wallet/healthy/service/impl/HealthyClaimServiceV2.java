@@ -141,7 +141,7 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
      */
     private HealthVerificationClaimV2 generateHealthyVerificationClaim(HealthVerificationRequestV2 healthVerification) {
         final String holderDid = healthVerification.getDid();
-        final String claimId = claimIdUtil.generateClaimId(holderDid, version);
+        final String claimId = claimIdUtil.generateClaimId(version);
         log.info("holder id : {} - claimId : {}", holderDid, claimId);
 
         //TODO: issuer did 应该是注册在链上的，这里是V1版本的简化实现

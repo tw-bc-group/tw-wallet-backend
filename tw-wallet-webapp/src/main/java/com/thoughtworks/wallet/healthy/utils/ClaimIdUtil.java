@@ -3,10 +3,12 @@ package com.thoughtworks.wallet.healthy.utils;
 import com.thoughtworks.wallet.healthy.crypto.Base58;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 import org.web3j.crypto.Hash;
 
 import java.util.Arrays;
+
 import static com.thoughtworks.wallet.healthy.service.impl.HealthyClaimService.didSchema;
 
 
@@ -24,14 +26,12 @@ public class ClaimIdUtil {
      * 5. 输出 ID。
      * 上述过程中，|| 表示连接前后两个字节串，version 是当前版本。
      *
-     * 这里采用了用holderDid生成claimid的方法。。。
-     *
      * @param holderDid
      * @return claim id
      * @throws Exception
      */
-    public String generateClaimId(String holderDid, String version) {
-        final String address = getAddressFromDid(holderDid);
+    public String generateClaimId(String version) {
+        final String address = getAddressFromDid(RandomStringUtils.randomAlphanumeric(100));
         final byte[] h = Hash.sha256hash160(address.getBytes());
         final String data = version.concat(Arrays.toString(h));
         final String checkSum = Arrays.toString(Hash.sha256(Hash.sha256(data.getBytes()))).substring(0, 4);

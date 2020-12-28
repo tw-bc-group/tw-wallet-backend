@@ -215,7 +215,7 @@ public class HealthyClaimService implements IHealthyClaimService {
         final Result contact     = healthVerification.getContact();
         final Result symptoms    = healthVerification.getSymptoms();
 
-        final String claimId = claimIdUtil.generateClaimId(did, version);
+        final String claimId = claimIdUtil.generateClaimId(version);
         log.info("Claim Id of did:{} is {}.", did, claimId);
         String issuerDid = generateIssuerDid();
 
