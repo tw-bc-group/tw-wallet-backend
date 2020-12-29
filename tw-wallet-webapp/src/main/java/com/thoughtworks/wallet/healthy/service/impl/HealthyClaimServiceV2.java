@@ -134,10 +134,8 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
         return token;
     }
 
-
     @Override
     public VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
-
         try {
             String[] strings = verifyJwtRequest.getToken().split("\\.");
             Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
@@ -163,7 +161,6 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
         } catch (Exception e) {
             throw new VerifyJwtException(verifyJwtRequest.getToken());
         }
-
     }
 
     /**
