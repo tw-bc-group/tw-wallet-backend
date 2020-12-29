@@ -23,7 +23,7 @@ public class VcTypeDAO {
         this.issuerDAO = issuerDAO;
     }
 
-    public int insertVcType(VcType vcType) {
+    public String insertVcType(VcType vcType) {
         Issuer issuer = issuerDAO.getIssuerById(vcType.getIssuerId());
         return dslContext
                 .insertInto(TBL_VC_TYPES)
@@ -34,7 +34,7 @@ public class VcTypeDAO {
                 .fetchOne().getId();
     }
 
-    public VcType getVcTypeById(Integer id) {
+    public VcType getVcTypeById(String id) {
         return Optional.ofNullable(dslContext
                 .select(TBL_VC_TYPES.ID
                         , TBL_VC_TYPES.NAME
@@ -54,6 +54,6 @@ public class VcTypeDAO {
                         , TBL_VC_TYPES.CONTENT)
                 .from(TBL_VC_TYPES)
                 .where(TBL_VC_TYPES.ISSUER.eq(issuer.getId()))
-                .fetchInto(VcType.class)).orElseThrow(() -> new VcTypeNotFoundException(issuer.getId()));
+                .fetchInto(VcType.class)).orElseThrow(() -> new VcTypeNotFoundException(issuer.getId().toString()));
     }
 }

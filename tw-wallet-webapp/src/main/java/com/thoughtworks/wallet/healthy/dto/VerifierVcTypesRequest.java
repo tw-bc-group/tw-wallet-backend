@@ -9,5 +9,5 @@ import java.util.List;
 public class VerifierVcTypesRequest {
     @NotEmpty
     @Getter
-    List<Integer> vcTypes;
+    List<String> vcTypes;
 }

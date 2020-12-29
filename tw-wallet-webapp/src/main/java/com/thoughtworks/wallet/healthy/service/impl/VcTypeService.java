@@ -21,7 +21,7 @@ public class VcTypeService implements IVcTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public VcTypeResponse createVcType(VcTypeRequest vcTypeRequest) {
-        Integer id = vcTypeDAO.insertVcType(VcType.builder()
+        String id = vcTypeDAO.insertVcType(VcType.builder()
                 .name(vcTypeRequest.getName())
                 .issuerId(vcTypeRequest.getIssuerId())
                 .content(vcTypeRequest.getContent())
@@ -37,7 +37,7 @@ public class VcTypeService implements IVcTypeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VcTypeResponse getVcTypeById(Integer id) {
+    public VcTypeResponse getVcTypeById(String id) {
         VcType vcType = vcTypeDAO.getVcTypeById(id);
         return VcTypeResponse.builder()
                 .id(vcType.getId())

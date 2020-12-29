@@ -13,5 +13,5 @@ public class Verifier {
     Integer id;
     String name;
     String privateKey;
-    List<Integer> vcTypes;
+    List<String> vcTypes;
 }

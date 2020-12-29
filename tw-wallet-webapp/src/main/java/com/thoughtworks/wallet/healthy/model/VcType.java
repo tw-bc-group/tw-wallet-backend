@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class VcType {
-    Integer id;
+    String id;
     String name;
     Integer issuerId;
     List<String> content;

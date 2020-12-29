@@ -16,5 +16,5 @@ public class VerifierRequest {
     String privateKey;
     @NotEmpty
     @Getter
-    List<Integer> vcTypes;
+    List<String> vcTypes;
 }

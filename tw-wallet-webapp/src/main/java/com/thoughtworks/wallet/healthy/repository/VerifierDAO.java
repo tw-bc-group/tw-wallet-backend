@@ -24,7 +24,7 @@ public class VerifierDAO {
                 .insertInto(TBL_VERIFIERS)
                 .set(TBL_VERIFIERS.NAME, verifier.getName())
                 .set(TBL_VERIFIERS.PRIVATE_KEY, verifier.getPrivateKey())
-                .set(TBL_VERIFIERS.VC_TYPES, verifier.getVcTypes().toArray(new Integer[0]))
+                .set(TBL_VERIFIERS.VC_TYPES, verifier.getVcTypes().toArray(new String[0]))
                 .returning(TBL_VERIFIERS.ID)
                 .fetchOne().getId();
     }
@@ -45,7 +45,7 @@ public class VerifierDAO {
                 .update(TBL_VERIFIERS)
                 .set(TBL_VERIFIERS.NAME, verifier.getName())
                 .set(TBL_VERIFIERS.PRIVATE_KEY, verifier.getPrivateKey())
-                .set(TBL_VERIFIERS.VC_TYPES, verifier.getVcTypes().toArray(new Integer[0]))
+                .set(TBL_VERIFIERS.VC_TYPES, verifier.getVcTypes().toArray(new String[0]))
                 .where(TBL_VERIFIERS.ID.eq(verifier.getId()))
                 .returning(TBL_VERIFIERS.ID)
                 .fetchOne().getId();

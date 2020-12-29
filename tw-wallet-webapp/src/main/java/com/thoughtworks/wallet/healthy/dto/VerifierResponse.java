@@ -17,5 +17,5 @@ import java.util.List;
 public class VerifierResponse {
     Integer id;
     String name;
-    List<Integer> vcTypes;
+    List<String> vcTypes;
 }

@@ -38,7 +38,7 @@ public class VcTypeController {
     @GetMapping("/{id}")
     @ApiOperation(value = "获取VC类型")
     @ResponseStatus(HttpStatus.OK)
-    public VcTypeResponse getVcTypeById(@PathVariable Integer id) {
+    public VcTypeResponse getVcTypeById(@PathVariable String id) {
         return vcTypeService.getVcTypeById(id);
     }
 }

@@ -46,7 +46,6 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Identities0.IDENTITY_TBL_ISSUERS;
-    public static final Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Identities0.IDENTITY_TBL_VC_TYPES;
     public static final Identity<TblVerifiersRecord, Integer> IDENTITY_TBL_VERIFIERS = Identities0.IDENTITY_TBL_VERIFIERS;
 
     // -------------------------------------------------------------------------
@@ -77,7 +76,6 @@ public class Keys {
 
     private static class Identities0 {
         public static Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Internal.createIdentity(TblIssuers.TBL_ISSUERS, TblIssuers.TBL_ISSUERS.ID);
-        public static Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Internal.createIdentity(TblVcTypes.TBL_VC_TYPES, TblVcTypes.TBL_VC_TYPES.ID);
         public static Identity<TblVerifiersRecord, Integer> IDENTITY_TBL_VERIFIERS = Internal.createIdentity(TblVerifiers.TBL_VERIFIERS, TblVerifiers.TBL_VERIFIERS.ID);
     }
 

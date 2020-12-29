@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
 
-    private static final long serialVersionUID = 646527678;
+    private static final long serialVersionUID = -976206804;
 
     /**
      * The reference instance of <code>public.tbl_verifiers</code>
@@ -65,7 +65,7 @@ public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
     /**
      * The column <code>public.tbl_verifiers.vc_types</code>.
      */
-    public final TableField<TblVerifiersRecord, Integer[]> VC_TYPES = createField(DSL.name("vc_types"), org.jooq.impl.SQLDataType.INTEGER.getArrayDataType(), this, "");
+    public final TableField<TblVerifiersRecord, String[]> VC_TYPES = createField(DSL.name("vc_types"), org.jooq.impl.SQLDataType.CLOB.getArrayDataType(), this, "");
 
     /**
      * Create a <code>public.tbl_verifiers</code> table reference
@@ -151,7 +151,7 @@ public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, String, Integer[]> fieldsRow() {
+    public Row4<Integer, String, String, String[]> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }
