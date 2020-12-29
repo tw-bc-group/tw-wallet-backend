@@ -10,6 +10,9 @@ import java.util.List;
 public class VcTypeRequest {
     @NotBlank
     @Getter
+    String id;
+    @NotBlank
+    @Getter
     String name;
     @NotNull
     @Getter
@@ -17,4 +20,7 @@ public class VcTypeRequest {
     @NotEmpty
     @Getter
     List<String> content;
+    @NotBlank
+    @Getter
+    String url;
 }

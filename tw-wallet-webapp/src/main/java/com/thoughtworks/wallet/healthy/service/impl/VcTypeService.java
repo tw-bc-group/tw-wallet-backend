@@ -22,9 +22,11 @@ public class VcTypeService implements IVcTypeService {
     @Override
     public VcTypeResponse createVcType(VcTypeRequest vcTypeRequest) {
         String id = vcTypeDAO.insertVcType(VcType.builder()
+                .id(vcTypeRequest.getId())
                 .name(vcTypeRequest.getName())
                 .issuerId(vcTypeRequest.getIssuerId())
                 .content(vcTypeRequest.getContent())
+                .url(vcTypeRequest.getUrl())
                 .build());
         VcType vcType = vcTypeDAO.getVcTypeById(id);
         return VcTypeResponse.builder()
@@ -32,6 +34,7 @@ public class VcTypeService implements IVcTypeService {
                 .name(vcType.getName())
                 .issuerId(vcType.getIssuerId())
                 .content(vcType.getContent())
+                .url(vcType.getUrl())
                 .build();
     }
 
@@ -44,6 +47,7 @@ public class VcTypeService implements IVcTypeService {
                 .name(vcType.getName())
                 .issuerId(vcType.getIssuerId())
                 .content(vcType.getContent())
+                .url(vcType.getUrl())
                 .build();
     }
 }

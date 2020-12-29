@@ -14,4 +14,5 @@ public class VcType {
     String name;
     Integer issuerId;
     List<String> content;
+    String url;
 }

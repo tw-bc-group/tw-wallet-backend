@@ -20,4 +20,5 @@ public class VcTypeResponse {
     String name;
     Integer issuerId;
     List<String> content;
+    String url;
 }
