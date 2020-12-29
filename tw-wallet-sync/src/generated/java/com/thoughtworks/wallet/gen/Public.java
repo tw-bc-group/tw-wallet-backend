@@ -8,6 +8,7 @@ import com.thoughtworks.wallet.gen.tables.FlywaySchemaHistory;
 import com.thoughtworks.wallet.gen.tables.TblBlocks;
 import com.thoughtworks.wallet.gen.tables.TblDcep;
 import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaim;
+import com.thoughtworks.wallet.gen.tables.TblHealthyVerificationClaimV2;
 import com.thoughtworks.wallet.gen.tables.TblIdentities;
 import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jooq.Catalog;
+import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
@@ -28,7 +30,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1524159892;
+    private static final long serialVersionUID = -1171233127;
 
     /**
      * The reference instance of <code>public</code>
@@ -54,6 +56,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.tbl_healthy_verification_claim</code>.
      */
     public final TblHealthyVerificationClaim TBL_HEALTHY_VERIFICATION_CLAIM = TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM;
+
+    /**
+     * The table <code>public.tbl_healthy_verification_claim_v2</code>.
+     */
+    public final TblHealthyVerificationClaimV2 TBL_HEALTHY_VERIFICATION_CLAIM_V2 = TblHealthyVerificationClaimV2.TBL_HEALTHY_VERIFICATION_CLAIM_V2;
 
     /**
      * The table <code>public.tbl_identities</code>.
@@ -94,12 +101,20 @@ public class Public extends SchemaImpl {
     }
 
     @Override
+    public final List<Sequence<?>> getSequences() {
+        return Arrays.<Sequence<?>>asList(
+            Sequences.TBL_ISSUERS_ID_SEQ,
+            Sequences.TBL_VC_TYPES_ID_SEQ);
+    }
+
+    @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             TblBlocks.TBL_BLOCKS,
             TblDcep.TBL_DCEP,
             TblHealthyVerificationClaim.TBL_HEALTHY_VERIFICATION_CLAIM,
+            TblHealthyVerificationClaimV2.TBL_HEALTHY_VERIFICATION_CLAIM_V2,
             TblIdentities.TBL_IDENTITIES,
             TblIssuers.TBL_ISSUERS,
             TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST,
