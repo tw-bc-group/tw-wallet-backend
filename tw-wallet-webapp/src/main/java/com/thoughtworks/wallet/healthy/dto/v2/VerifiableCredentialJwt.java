@@ -46,7 +46,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class HealthVerificationClaimV2 {
+public class VerifiableCredentialJwt {
 
     // 颁发者 ID
     private String iss;

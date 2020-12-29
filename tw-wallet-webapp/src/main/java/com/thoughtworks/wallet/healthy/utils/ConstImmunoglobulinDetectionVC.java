@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.dto.v2;
+package com.thoughtworks.wallet.healthy.utils;
 
 import com.google.common.collect.ImmutableList;
 

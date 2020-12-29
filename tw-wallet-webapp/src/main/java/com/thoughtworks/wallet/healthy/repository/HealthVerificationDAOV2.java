@@ -3,7 +3,7 @@ package com.thoughtworks.wallet.healthy.repository;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimV2Record;
 import com.thoughtworks.wallet.healthy.exception.HealthVerificationNotFoundException;
-import com.thoughtworks.wallet.healthy.dto.v2.HealthVerificationClaimV2;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifiableCredentialJwt;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -24,7 +24,7 @@ public class HealthVerificationDAOV2 {
         this.dslContext = dslContext;
     }
 
-    public int insertHealthVerificationClaim(HealthVerificationClaimV2 claim) {
+    public int insertHealthVerificationClaim(VerifiableCredentialJwt claim) {
         return dslContext
                 .insertInto(TBL_HEALTHY_VERIFICATION_CLAIM_V2)
                 .set(TBL_HEALTHY_VERIFICATION_CLAIM_V2.CLAIM_ID, claim.getVc().getId())

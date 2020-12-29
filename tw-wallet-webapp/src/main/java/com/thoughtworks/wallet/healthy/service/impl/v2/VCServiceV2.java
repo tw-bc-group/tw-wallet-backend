@@ -18,6 +18,9 @@ import com.thoughtworks.wallet.healthy.service.impl.HealthyClaimContractService;
 import com.thoughtworks.wallet.healthy.service.impl.SuspectedPatientService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import com.thoughtworks.wallet.healthy.utils.ClaimIdUtil;
+import com.thoughtworks.wallet.healthy.utils.ConstCoV2RapidTestCredential;
+import com.thoughtworks.wallet.healthy.utils.ConstImmunoglobulinDetectionVC;
+import com.thoughtworks.wallet.healthy.utils.ConstPassportVC;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -50,7 +53,7 @@ public class VCServiceV2 implements IVCService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public JwtResponse createHealthVerification(CreateVCRequest healthVerification) {
-        HealthVerificationClaimV2 claim = generateHealthyVerificationClaim(healthVerification);
+        VerifiableCredentialJwt claim = generateHealthyVerificationClaim(healthVerification);
         String token = sign(healthVerification.getDid(), claim);
         insertClaim2DB(healthVerification, claim, token);
         return JwtResponse.of(token);
@@ -59,7 +62,7 @@ public class VCServiceV2 implements IVCService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public JwtResponse createImmunoglobulinDetectionVC(CreateVCRequest createVCRequest) {
-        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(createVCRequest);
+        VerifiableCredentialJwt claim = generateImmunoglobulinDetectionVC(createVCRequest);
         String token = sign(createVCRequest.getDid(), claim);
         insertClaim2DB(createVCRequest, claim, token);
         return JwtResponse.of(token);
@@ -67,16 +70,49 @@ public class VCServiceV2 implements IVCService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public JwtResponse createPassportVC(CreateVCRequest createVCRequest){
-        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(createVCRequest);
+    public JwtResponse createPassportVC(CreateVCRequest createVCRequest) {
+        VerifiableCredentialJwt claim = generatePassportVC(createVCRequest);
         String token = sign(createVCRequest.getDid(), claim);
         insertClaim2DB(createVCRequest, claim, token);
         return JwtResponse.of(token);
     }
 
+    private VerifiableCredentialJwt generatePassportVC(CreateVCRequest createVCRequest) {
+        final String holderDid = createVCRequest.getDid();
+        final String claimId = claimIdUtil.generateClaimId(version);
+        String issuerDid = didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
+        final Instant now = Instant.now();
+        final long currentTime = now.getEpochSecond();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        // 填充subject
+        return VerifiableCredentialJwt.builder()
+                .ver(version)
+                .iss(issuerDid)
+                .iat(currentTime)
+                .exp(expiredTime)
+                .vc(VC.of(
+                        ConstPassportVC.context,
+                        ConstPassportVC.credentialType,
+                        claimId,
+                        Issuer.of(Location.of(
+                                ConstPassportVC.ISSUER_TYPE,
+                                ConstPassportVC.ISSUER_NAME,
+                                ConstPassportVC.ISSUER_URL)
+                        ),
+                        ConstPassportVC.VC_NAME,
+                        ConstPassportVC.VC_DESC,
+                        PassportSub.of(
+                                holderDid,
+                                "your name",
+                                "your family name",
+                                "中国"
+                        )
+                ))
+                .build();
+    }
 
 
-    private HealthVerificationClaimV2 generateImmunoglobulinDetectionVC(CreateVCRequest healthVerification) {
+    private VerifiableCredentialJwt generateImmunoglobulinDetectionVC(CreateVCRequest healthVerification) {
         final String holderDid = healthVerification.getDid();
         final String claimId = claimIdUtil.generateClaimId(version);
         String issuerDid = didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
@@ -84,7 +120,7 @@ public class VCServiceV2 implements IVCService {
         final long currentTime = now.getEpochSecond();
         final long expiredTime = now.plus(expiredDuration).getEpochSecond();
         // 填充subject
-        return HealthVerificationClaimV2.builder()
+        return VerifiableCredentialJwt.builder()
                 .ver(version)
                 .iss(issuerDid)
                 .iat(currentTime)
@@ -115,7 +151,7 @@ public class VCServiceV2 implements IVCService {
         return healthVerificationDAOV2.getHealthVerificationClaim(ownerId);
     }
 
-    private void insertClaim2DB(CreateVCRequest healthVerification, HealthVerificationClaimV2 claim, String token) {
+    private void insertClaim2DB(CreateVCRequest healthVerification, VerifiableCredentialJwt claim, String token) {
         final int insertedNumber;
         try {
             claim.setToken(token);
@@ -131,7 +167,7 @@ public class VCServiceV2 implements IVCService {
         }
     }
 
-    private String sign(String did, HealthVerificationClaimV2 claim) {
+    private String sign(String did, VerifiableCredentialJwt claim) {
         String token = "";
         try {
             Jwt jwt = Jwt.builder()
@@ -179,7 +215,7 @@ public class VCServiceV2 implements IVCService {
      * @param healthVerification
      * @return
      */
-    private HealthVerificationClaimV2 generateHealthyVerificationClaim(CreateVCRequest healthVerification) {
+    private VerifiableCredentialJwt generateHealthyVerificationClaim(CreateVCRequest healthVerification) {
         final String holderDid = healthVerification.getDid();
         final String claimId = claimIdUtil.generateClaimId(version);
         log.info("holder id : {} - claimId : {}", holderDid, claimId);
@@ -192,7 +228,7 @@ public class VCServiceV2 implements IVCService {
         final long expiredTime = now.plus(expiredDuration).getEpochSecond();
 
         // 填充subject
-        return HealthVerificationClaimV2.builder()
+        return VerifiableCredentialJwt.builder()
                 .ver(version)
                 .iss(issuerDid)
                 .iat(currentTime)
