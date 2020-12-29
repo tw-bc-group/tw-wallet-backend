@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblHealthyVerificationClaimV2 extends TableImpl<TblHealthyVerificationClaimV2Record> {
 
-    private static final long serialVersionUID = 1995016406;
+    private static final long serialVersionUID = -1067029099;
 
     /**
      * The reference instance of <code>public.tbl_healthy_verification_claim_v2</code>
@@ -71,7 +71,7 @@ public class TblHealthyVerificationClaimV2 extends TableImpl<TblHealthyVerificat
     /**
      * The column <code>public.tbl_healthy_verification_claim_v2.jwt</code>.
      */
-    public final TableField<TblHealthyVerificationClaimV2Record, String> JWT = createField(DSL.name("jwt"), org.jooq.impl.SQLDataType.VARCHAR(1024).nullable(false), this, "");
+    public final TableField<TblHealthyVerificationClaimV2Record, String> JWT = createField(DSL.name("jwt"), org.jooq.impl.SQLDataType.VARCHAR(2048).nullable(false), this, "");
 
     /**
      * Create a <code>public.tbl_healthy_verification_claim_v2</code> table reference
