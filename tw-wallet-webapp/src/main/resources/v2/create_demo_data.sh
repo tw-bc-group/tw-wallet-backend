@@ -5,7 +5,7 @@ addIssuer() {
   curl -i \
   -H "Accept: application/json" \
   -H "Content-Type:application/json" \
-  -X POST --data '{"name":"'"$name"'"}' "localhost:8080/v2/issuers"
+  -X POST --data '{"name":"'"$name"'"}' "localhost:8080/v2/vc-market/issuer"
 }
 
 addVcType() {
@@ -17,7 +17,7 @@ addVcType() {
   curl -i \
   -H "Accept: application/json" \
   -H "Content-Type:application/json" \
-  -X POST --data '{"id":"'"$id"'","name":"'"$name"'","issuerId":'"$issuerId"',"content":'"$content"',"url":"'"$url"'"}' "localhost:8080/v2/vctypes"
+  -X POST --data '{"id":"'"$id"'","name":"'"$name"'","issuerId":'"$issuerId"',"content":'"$content"',"url":"'"$url"'"}' "localhost:8080/v2/vc-market/vc-type"
 }
 
 addVerifier() {
@@ -31,9 +31,11 @@ addVerifier() {
 
 addIssuer "信通院"
 addIssuer "北医三院"
+addIssuer "海关"
 
-addVcType "ItineraryHealthCode" "健康行程码" "1" '["姓名","地域"]' "localhost:8080/v2/health-certifications"
-addVcType "ImmunoglobulinDetection" "核酸检测" "2" '["姓名","检测结果"]' "localhost:8080/v2/health-certifications/immunoglobulin-detection"
+addVcType "ItineraryHealthCode" "健康行程码" "1" '["姓名","地域"]' "localhost:8080/v2/vc-market/health-certifications"
+addVcType "ImmunoglobulinDetection" "核酸检测" "2" '["姓名","检测结果"]' "localhost:8080/v2/vc-market/health-certifications/immunoglobulin-detection"
+addVcType "Passport" "出入境证明" "3" '["姓名","出入境记录"]' "localhost:8080/v2/vc-market/health-certifications/passport"
 
 addVerifier "地坛公园" '["ItineraryHealthCode"]'
 addVerifier "地坛医院" '["ItineraryHealthCode","ImmunoglobulinDetection"]'

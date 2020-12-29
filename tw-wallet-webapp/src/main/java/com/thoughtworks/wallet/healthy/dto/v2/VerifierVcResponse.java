@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.dto;
+package com.thoughtworks.wallet.healthy.dto.v2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -7,15 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class VerifierResponse {
-    Integer id;
-    String name;
-    List<String> vcTypes;
+public class VerifierVcResponse {
+    String vc;
 }

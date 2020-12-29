@@ -1,9 +1,9 @@
 package com.thoughtworks.wallet.healthy.controller.v2;
 
-import com.thoughtworks.wallet.healthy.dto.JwtResponse;
-import com.thoughtworks.wallet.healthy.dto.v2.CreateVCRequest;
-import com.thoughtworks.wallet.healthy.dto.VerifyJwtRequest;
-import com.thoughtworks.wallet.healthy.dto.VerifyJwtResponse;
+import com.thoughtworks.wallet.healthy.dto.*;
+import com.thoughtworks.wallet.healthy.dto.v2.*;
+import com.thoughtworks.wallet.healthy.service.impl.v2.IssuerService;
+import com.thoughtworks.wallet.healthy.service.impl.v2.VcTypeService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +23,13 @@ import java.util.List;
 public class VCMarketController {
 
     private final IVCService healthyVerifierServiceV2;
+    private final IssuerService issuerService;
+    private final VcTypeService vcTypeService;
 
-    public VCMarketController(IVCService healthyVerifierService) {
-        this.healthyVerifierServiceV2 = healthyVerifierService;
+    public VCMarketController(IVCService healthyVerifierServiceV2, IssuerService issuerService, VcTypeService vcTypeService) {
+        this.healthyVerifierServiceV2 = healthyVerifierServiceV2;
+        this.issuerService = issuerService;
+        this.vcTypeService = vcTypeService;
     }
 
     @PostMapping("/health-certification")
@@ -43,7 +47,7 @@ public class VCMarketController {
     }
 
     @PostMapping("/passport")
-    @ApiOperation(value = "蛋白检测")
+    @ApiOperation(value = "出境记录")
     @ResponseStatus(HttpStatus.CREATED)
     public JwtResponse createPassportVC(@Valid @RequestBody CreateVCRequest createVCRequest) {
         return healthyVerifierServiceV2.createPassportVC(createVCRequest);
@@ -60,5 +64,33 @@ public class VCMarketController {
     @ResponseStatus(HttpStatus.OK)
     public VerifyJwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
         return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest);
+    }
+
+    @PostMapping("/issuer")
+    @ApiOperation(value = "添加认证机构")
+    @ResponseStatus(HttpStatus.CREATED)
+    public IssuerResponse createIssuer(@Valid @RequestBody IssuerRequest issuerRequest) {
+        return issuerService.createIssuer(issuerRequest);
+    }
+
+    @GetMapping("/issuer")
+    @ApiOperation(value = "获取所有认证机构及其VC类型")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IssuerResponse> getAllIssuers() {
+        return issuerService.getAllIssuers();
+    }
+
+    @PostMapping("/vc-type")
+    @ApiOperation(value = "添加VC类型")
+    @ResponseStatus(HttpStatus.CREATED)
+    public VcTypeResponse createVcType(@Valid @RequestBody VcTypeRequest vcTypeRequest) {
+        return vcTypeService.createVcType(vcTypeRequest);
+    }
+
+    @GetMapping("/vc-type/{id}")
+    @ApiOperation(value = "获取VC类型")
+    @ResponseStatus(HttpStatus.OK)
+    public VcTypeResponse getVcTypeById(@PathVariable String id) {
+        return vcTypeService.getVcTypeById(id);
     }
 }

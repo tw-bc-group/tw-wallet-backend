@@ -1,15 +1,14 @@
-package com.thoughtworks.wallet.healthy.service.impl;
+package com.thoughtworks.wallet.healthy.service.impl.v2;
 
-import com.thoughtworks.common.crypto.CryptoFacade;
-import com.thoughtworks.common.crypto.Curve;
-import com.thoughtworks.common.crypto.SignatureScheme;
-import com.thoughtworks.common.util.Jwt;
 import com.thoughtworks.common.util.JacksonUtil;
-import com.thoughtworks.wallet.healthy.dto.*;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierRequest;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcTypesRequest;
 import com.thoughtworks.wallet.healthy.model.Verifier;
 import com.thoughtworks.wallet.healthy.repository.VcTypeDAO;
 import com.thoughtworks.wallet.healthy.repository.VerifierDAO;
-import com.thoughtworks.wallet.healthy.service.IVerifierService;
+import com.thoughtworks.wallet.healthy.service.v2.IVerifierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class VerifierService implements IVerifierService {
     private final VcTypeDAO vcTypeDAO;
     private final JacksonUtil jacksonUtil;
 
-    private static final String VERIFIER_VC_TEMPLATE_PATH = "/ssi/VerifierVc.json";
+    private static final String VERIFIER_VC_TEMPLATE_PATH = "/v2/VerifierVc.json";
     private static final String VERIFIER_NAME_KEY = "VERIFIER_NAME_KEY";
     private static final String VC_TYPES_KEY = "VC_TYPES_KEY";
 

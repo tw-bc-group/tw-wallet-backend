@@ -1,7 +1,7 @@
-package com.thoughtworks.wallet.healthy.service;
+package com.thoughtworks.wallet.healthy.service.v2;
 
-import com.thoughtworks.wallet.healthy.dto.IssuerRequest;
-import com.thoughtworks.wallet.healthy.dto.IssuerResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.IssuerRequest;
+import com.thoughtworks.wallet.healthy.dto.v2.IssuerResponse;
 
 import java.util.List;
 

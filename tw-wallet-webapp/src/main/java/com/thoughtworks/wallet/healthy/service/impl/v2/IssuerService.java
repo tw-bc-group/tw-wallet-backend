@@ -1,14 +1,13 @@
-package com.thoughtworks.wallet.healthy.service.impl;
+package com.thoughtworks.wallet.healthy.service.impl.v2;
 
-import com.thoughtworks.wallet.healthy.dto.IssuerRequest;
-import com.thoughtworks.wallet.healthy.dto.IssuerResponse;
-import com.thoughtworks.wallet.healthy.dto.VcTypeResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.IssuerRequest;
+import com.thoughtworks.wallet.healthy.dto.v2.IssuerResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.VcTypeResponse;
 import com.thoughtworks.wallet.healthy.model.Issuer;
 import com.thoughtworks.wallet.healthy.repository.IssuerDAO;
 import com.thoughtworks.wallet.healthy.repository.VcTypeDAO;
-import com.thoughtworks.wallet.healthy.service.IIssuerService;
+import com.thoughtworks.wallet.healthy.service.v2.IIssuerService;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,10 @@
-package com.thoughtworks.wallet.healthy.controller;
+package com.thoughtworks.wallet.healthy.controller.v2;
 
-import com.thoughtworks.wallet.healthy.dto.*;
-import com.thoughtworks.wallet.healthy.service.impl.VerifierService;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierRequest;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcTypesRequest;
+import com.thoughtworks.wallet.healthy.service.impl.v2.VerifierService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
