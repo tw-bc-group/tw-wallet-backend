@@ -18,6 +18,7 @@ public interface IVCService {
 
     /**
      * 蛋白检测VC
+     *
      * @param createVCRequest
      * @return
      */
@@ -25,11 +26,11 @@ public interface IVCService {
 
     /**
      * 创建护照
+     *
      * @param createVCRequest
      * @return
      */
     JwtResponse createPassportVC(CreateVCRequest createVCRequest);
-
 
     /**
      * 获取健康声明
@@ -43,7 +44,7 @@ public interface IVCService {
      * 验证token
      *
      * @param verifyJwtRequest
-     * @return
+     * @return 通行证token
      */
-    VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest);
+    JwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest);
 }

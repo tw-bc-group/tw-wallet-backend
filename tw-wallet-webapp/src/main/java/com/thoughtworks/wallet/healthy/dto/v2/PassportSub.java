@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PassportSub implements ISub {
+public class PassportSub extends ISub {
     // 持有者 id
     private String id;
     private String yourName;

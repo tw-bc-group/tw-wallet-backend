@@ -17,10 +17,7 @@ import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAOV2;
 import com.thoughtworks.wallet.healthy.service.impl.HealthyClaimContractService;
 import com.thoughtworks.wallet.healthy.service.impl.SuspectedPatientService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
-import com.thoughtworks.wallet.healthy.utils.ClaimIdUtil;
-import com.thoughtworks.wallet.healthy.utils.ConstCoV2RapidTestCredential;
-import com.thoughtworks.wallet.healthy.utils.ConstImmunoglobulinDetectionVC;
-import com.thoughtworks.wallet.healthy.utils.ConstPassportVC;
+import com.thoughtworks.wallet.healthy.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -182,12 +179,57 @@ public class VCServiceV2 implements IVCService {
         return token;
     }
 
+    public JwtResponse createTravelBadgeVC(String holderDid) {
+        VerifiableCredentialJwt claim = generateTravelBadgeVC(holderDid);
+        String token = sign(holderDid, claim);
+        return JwtResponse.of(token);
+    }
+
+    private VerifiableCredentialJwt generateTravelBadgeVC(String holderDid) {
+        final String claimId = claimIdUtil.generateClaimId(version);
+        String issuerDid = didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
+        final Instant now = Instant.now();
+        final long currentTime = now.getEpochSecond();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        // 填充subject
+        return VerifiableCredentialJwt.builder()
+                .ver(version)
+                .iss(issuerDid)
+                .iat(currentTime)
+                .exp(expiredTime)
+                .vc(VC.of(
+                        ConstTravelBadgeVC.context,
+                        ConstTravelBadgeVC.credentialType,
+                        claimId,
+                        Issuer.of(Location.of(
+                                ConstTravelBadgeVC.ISSUER_TYPE,
+                                ConstTravelBadgeVC.ISSUER_NAME,
+                                ConstTravelBadgeVC.ISSUER_URL)
+                        ),
+                        ConstTravelBadgeVC.VC_NAME,
+                        ConstTravelBadgeVC.VC_DESC,
+                        TravelBadgeSub.of(
+                                holderDid,
+                                ConstTravelBadgeVC.SUB_TYPE,
+                                ConstTravelBadgeVC.IMAGE_URL
+                        )
+                ))
+                .build();
+    }
+
     @Override
-    public VerifyJwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
+    public JwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
         try {
             String[] strings = verifyJwtRequest.getToken().split("\\.");
             Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
-            HealthVerificationResponse payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
+            VerifiableCredentialJwt payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), VerifiableCredentialJwt.class);
+
+            boolean containsAllTypes = payload.getVc().getTyp().containsAll(ConstCoV2RapidTestCredential.credentialType);
+
+            if (!containsAllTypes) {
+                throw new VerifyHealthyVCJwtException("VC 类型不符合");
+            }
+
             String signature = Base64.decode(strings[2]);
             String headerPayload = String.format("%s.%s", strings[0], strings[1]);
 
@@ -196,16 +238,14 @@ public class VCServiceV2 implements IVCService {
                     .build();
 
             boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
-            boolean outdate = payload.getExp() > Instant.now().getEpochSecond();
-
-            return VerifyJwtResponse.builder()
-                    .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
-                    .onchain(VerifyResultEnum.NOT_SUPPORT)
-                    .outdate(outdate ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
-                    .revoked(VerifyResultEnum.NOT_SUPPORT)
-                    .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
-                    .verifyIssuer(VerifyResultEnum.NOT_SUPPORT)
-                    .build();
+            boolean inDate = payload.getExp() > Instant.now().getEpochSecond();
+            if (verifySignature && inDate) {
+                return createTravelBadgeVC(payload.getVc().getSub().getId());
+            } else {
+                throw new VerifyHealthyVCJwtException("过期或者验证签名失败");
+            }
+        } catch (VerifyHealthyVCJwtException verifyHealthyVCJwtException) {
+            throw verifyHealthyVCJwtException;
         } catch (Exception e) {
             throw new VerifyJwtException(verifyJwtRequest.getToken());
         }
@@ -244,7 +284,7 @@ public class VCServiceV2 implements IVCService {
                         ),
                         ConstCoV2RapidTestCredential.VC_NAME,
                         ConstCoV2RapidTestCredential.VC_DESC,
-                        Sub.of(
+                        HealthySub.of(
                                 holderDid, ImmutableList.of(ConstCoV2RapidTestCredential.TEST_TYPE),
                                 ConstCoV2RapidTestCredential.CATALOG_NUMBER,
                                 ConstCoV2RapidTestCredential.IFU,

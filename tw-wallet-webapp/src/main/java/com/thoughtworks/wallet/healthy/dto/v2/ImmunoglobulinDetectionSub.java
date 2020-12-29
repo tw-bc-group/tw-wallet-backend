@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ImmunoglobulinDetectionSub implements ISub {
+public class ImmunoglobulinDetectionSub extends ISub {
     // 持有者 id
     private String            id;
     private List<String> typ;

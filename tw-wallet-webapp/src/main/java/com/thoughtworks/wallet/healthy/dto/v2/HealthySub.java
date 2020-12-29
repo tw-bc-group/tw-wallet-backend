@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Sub implements ISub{
+public class HealthySub extends ISub{
     // 持有者 id
     private String            id;
     private List<String> typ;
