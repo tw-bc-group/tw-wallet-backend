@@ -1,10 +1,10 @@
-package com.thoughtworks.wallet.healthy.controller;
+package com.thoughtworks.wallet.healthy.controller.v2;
 
 import com.thoughtworks.wallet.healthy.dto.JwtResponse;
-import com.thoughtworks.wallet.healthy.dto.V2.HealthVerificationRequestV2;
+import com.thoughtworks.wallet.healthy.dto.v2.CreateVCRequest;
 import com.thoughtworks.wallet.healthy.dto.VerifyJwtRequest;
 import com.thoughtworks.wallet.healthy.dto.VerifyJwtResponse;
-import com.thoughtworks.wallet.healthy.service.IHealthyClaimServiceV2;
+import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,24 +22,31 @@ import java.util.List;
 @Api(tags = "VC大市场接口")
 public class VCMarketController {
 
-    private final IHealthyClaimServiceV2 healthyVerifierServiceV2;
+    private final IVCService healthyVerifierServiceV2;
 
-    public VCMarketController(IHealthyClaimServiceV2 healthyVerifierService) {
+    public VCMarketController(IVCService healthyVerifierService) {
         this.healthyVerifierServiceV2 = healthyVerifierService;
     }
 
     @PostMapping("/health-certification")
     @ApiOperation(value = "添加健康认证")
     @ResponseStatus(HttpStatus.CREATED)
-    public JwtResponse createHealthVerification(@Valid @RequestBody HealthVerificationRequestV2 healthVerification) {
-        return healthyVerifierServiceV2.createHealthVerification(healthVerification);
+    public JwtResponse createHealthVerification(@Valid @RequestBody CreateVCRequest createVCRequest) {
+        return healthyVerifierServiceV2.createHealthVerification(createVCRequest);
     }
 
     @PostMapping("/immunoglobulin-detection")
     @ApiOperation(value = "蛋白检测")
     @ResponseStatus(HttpStatus.CREATED)
-    public JwtResponse createImmunoglobulinDetection(@Valid @RequestBody HealthVerificationRequestV2 healthVerification) {
-        return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(healthVerification);
+    public JwtResponse createImmunoglobulinDetection(@Valid @RequestBody CreateVCRequest createVCRequest) {
+        return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(createVCRequest);
+    }
+
+    @PostMapping("/passport")
+    @ApiOperation(value = "蛋白检测")
+    @ResponseStatus(HttpStatus.CREATED)
+    public JwtResponse createPassportVC(@Valid @RequestBody CreateVCRequest createVCRequest) {
+        return healthyVerifierServiceV2.createPassportVC(createVCRequest);
     }
 
     @GetMapping("/{ownerId}")

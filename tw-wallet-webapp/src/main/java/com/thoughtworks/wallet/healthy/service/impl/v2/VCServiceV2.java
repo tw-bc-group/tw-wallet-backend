@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.service.impl;
+package com.thoughtworks.wallet.healthy.service.impl.v2;
 
 import com.google.common.collect.ImmutableList;
 import com.thoughtworks.common.crypto.Base64;
@@ -10,15 +10,16 @@ import com.thoughtworks.common.util.Jwt;
 import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.exception.*;
 import com.thoughtworks.wallet.healthy.model.*;
-import com.thoughtworks.wallet.healthy.dto.V2.*;
-import com.thoughtworks.wallet.healthy.dto.V2.Issuer;
+import com.thoughtworks.wallet.healthy.dto.v2.*;
+import com.thoughtworks.wallet.healthy.dto.v2.Issuer;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAOV2;
-import com.thoughtworks.wallet.healthy.service.IHealthyClaimServiceV2;
+import com.thoughtworks.wallet.healthy.service.impl.HealthyClaimContractService;
+import com.thoughtworks.wallet.healthy.service.impl.SuspectedPatientService;
+import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import com.thoughtworks.wallet.healthy.utils.ClaimIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
+public class VCServiceV2 implements IVCService {
     private final ClaimIdUtil claimIdUtil;
     private final HealthVerificationClaimContract healthVerificationClaimContract;
     private final HealthVerificationDAOV2 healthVerificationDAOV2;
@@ -41,7 +41,7 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
     // TODO: 目前假设 claim 1 mins 过期。可以设置在配置文件
     Duration expiredDuration = Duration.ofMinutes(1);
 
-    public HealthyClaimServiceV2(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO, HealthVerificationDAOV2 healthVerificationDAOV2) {
+    public VCServiceV2(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO, HealthVerificationDAOV2 healthVerificationDAOV2) {
         this.claimIdUtil = claimIdUtil;
         this.healthVerificationClaimContract = healthVerificationClaimContract;
         this.healthVerificationDAOV2 = healthVerificationDAOV2;
@@ -49,22 +49,34 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public JwtResponse createHealthVerification(HealthVerificationRequestV2 healthVerification) {
+    public JwtResponse createHealthVerification(CreateVCRequest healthVerification) {
         HealthVerificationClaimV2 claim = generateHealthyVerificationClaim(healthVerification);
         String token = sign(healthVerification.getDid(), claim);
         insertClaim2DB(healthVerification, claim, token);
         return JwtResponse.of(token);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public JwtResponse createImmunoglobulinDetectionVC(HealthVerificationRequestV2 healthVerification) {
-        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(healthVerification);
-        String token = sign(healthVerification.getDid(), claim);
-        insertClaim2DB(healthVerification, claim, token);
+    public JwtResponse createImmunoglobulinDetectionVC(CreateVCRequest createVCRequest) {
+        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(createVCRequest);
+        String token = sign(createVCRequest.getDid(), claim);
+        insertClaim2DB(createVCRequest, claim, token);
         return JwtResponse.of(token);
     }
 
-    private HealthVerificationClaimV2 generateImmunoglobulinDetectionVC(HealthVerificationRequestV2 healthVerification) {
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public JwtResponse createPassportVC(CreateVCRequest createVCRequest){
+        HealthVerificationClaimV2 claim = generateImmunoglobulinDetectionVC(createVCRequest);
+        String token = sign(createVCRequest.getDid(), claim);
+        insertClaim2DB(createVCRequest, claim, token);
+        return JwtResponse.of(token);
+    }
+
+
+
+    private HealthVerificationClaimV2 generateImmunoglobulinDetectionVC(CreateVCRequest healthVerification) {
         final String holderDid = healthVerification.getDid();
         final String claimId = claimIdUtil.generateClaimId(version);
         String issuerDid = didSchema + healthVerificationClaimContract.getIssuerAddress().substring(2);
@@ -103,7 +115,7 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
         return healthVerificationDAOV2.getHealthVerificationClaim(ownerId);
     }
 
-    private void insertClaim2DB(HealthVerificationRequestV2 healthVerification, HealthVerificationClaimV2 claim, String token) {
+    private void insertClaim2DB(CreateVCRequest healthVerification, HealthVerificationClaimV2 claim, String token) {
         final int insertedNumber;
         try {
             claim.setToken(token);
@@ -167,7 +179,7 @@ public class HealthyClaimServiceV2 implements IHealthyClaimServiceV2 {
      * @param healthVerification
      * @return
      */
-    private HealthVerificationClaimV2 generateHealthyVerificationClaim(HealthVerificationRequestV2 healthVerification) {
+    private HealthVerificationClaimV2 generateHealthyVerificationClaim(CreateVCRequest healthVerification) {
         final String holderDid = healthVerification.getDid();
         final String claimId = claimIdUtil.generateClaimId(version);
         log.info("holder id : {} - claimId : {}", holderDid, claimId);

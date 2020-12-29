@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.dto.V2;
+package com.thoughtworks.wallet.healthy.dto.v2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

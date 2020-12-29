@@ -1,4 +1,4 @@
-package com.thoughtworks.wallet.healthy.dto.V2;
+package com.thoughtworks.wallet.healthy.dto.v2;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

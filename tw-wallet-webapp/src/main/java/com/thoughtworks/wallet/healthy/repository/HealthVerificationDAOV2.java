@@ -1,15 +1,9 @@
 package com.thoughtworks.wallet.healthy.repository;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.gen.tables.records.TblHealthyVerificationClaimV2Record;
 import com.thoughtworks.wallet.healthy.exception.HealthVerificationNotFoundException;
-import com.thoughtworks.wallet.healthy.dto.V2.HealthVerificationClaimV2;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import com.thoughtworks.wallet.healthy.dto.v2.HealthVerificationClaimV2;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.Result;
