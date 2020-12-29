@@ -1,9 +1,6 @@
 package com.thoughtworks.wallet.healthy.controller;
 
-import com.thoughtworks.wallet.healthy.dto.VcTypeRequest;
-import com.thoughtworks.wallet.healthy.dto.VcTypeResponse;
-import com.thoughtworks.wallet.healthy.dto.VerifierRequest;
-import com.thoughtworks.wallet.healthy.dto.VerifierResponse;
+import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.service.impl.VerifierService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -39,5 +37,20 @@ public class VerifierController {
     @ResponseStatus(HttpStatus.OK)
     public VerifierResponse getVerifier(@PathVariable Integer id) {
         return verifierService.getVerifierById(id);
+    }
+
+    @PatchMapping("/{id}")
+    @ApiOperation(value = "更新验证者所需VC类型")
+    @ResponseStatus(HttpStatus.OK)
+    public VerifierResponse updateVerifierVcType(@PathVariable Integer id, @Valid @RequestBody VerifierVcTypesRequest request) {
+        return verifierService.updateVerifierVcTypes(id, request);
+    }
+
+
+    @GetMapping("/{id}/vc")
+    @ApiOperation(value = "获取验证者所需VC类型(json-ld格式)")
+    @ResponseStatus(HttpStatus.OK)
+    public VerifierVcResponse getVerifierVc(@PathVariable Integer id) throws IOException {
+        return verifierService.getVerifierVc(id);
     }
 }

@@ -40,8 +40,8 @@ public class VerifierDAO {
                 .fetchOneInto(Verifier.class)).orElseThrow(() -> new VerifierNotFoundException(id));
     }
 
-    public int updateVerifier(Verifier verifier) {
-        return dslContext
+    public Verifier updateVerifier(Verifier verifier) {
+        Integer id = dslContext
                 .update(TBL_VERIFIERS)
                 .set(TBL_VERIFIERS.NAME, verifier.getName())
                 .set(TBL_VERIFIERS.PRIVATE_KEY, verifier.getPrivateKey())
@@ -49,5 +49,6 @@ public class VerifierDAO {
                 .where(TBL_VERIFIERS.ID.eq(verifier.getId()))
                 .returning(TBL_VERIFIERS.ID)
                 .fetchOne().getId();
+        return getVerifierById(id);
     }
 }

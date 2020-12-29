@@ -42,6 +42,7 @@ dependencies {
     implementation Deps.okhttpUrlConnection
     implementation Deps.loggingInterceptor
     implementation Deps.jwt
+    implementation Deps.apacheCommonsText
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

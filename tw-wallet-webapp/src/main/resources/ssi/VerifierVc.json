@@ -1,0 +1,33 @@
+{
+  "@context": "https://schema.org",
+  "@type": "RegisterAction",
+  "agent": {
+    "@type": "Hospital",
+    "legalName": "${VERIFIER_NAME_KEY}",
+    "location": "北京市海淀区...",
+    "telephone": "010-88888888",
+    "taxID": "123456789"
+  },
+  "location": "门诊楼",
+  "result": {
+    "@type": "Permit",
+    "name": "门诊楼通行证",
+    "identifier": "用户did",
+    "issuedBy": "",
+    "validIn": "",
+    "validUntil": "",
+    "potentialAction": ""
+  },
+  "target": {
+    "@Type": "EntryPoint",
+    "name": "${VERIFIER_NAME_KEY}后端",
+    "identifier": "${VERIFIER_NAME_KEY}did",
+    "url": "http://hospital.org/passport"
+  },
+  "object": {
+    "@type": "ItemList",
+    "name": "VC Types",
+    "description": "id of VC types",
+    "itemListElement": ${VC_TYPES_KEY}
+  }
+}
