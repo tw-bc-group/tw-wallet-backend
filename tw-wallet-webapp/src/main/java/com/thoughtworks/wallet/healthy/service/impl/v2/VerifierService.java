@@ -10,6 +10,7 @@ import com.thoughtworks.wallet.healthy.repository.VcTypeDAO;
 import com.thoughtworks.wallet.healthy.repository.VerifierDAO;
 import com.thoughtworks.wallet.healthy.service.v2.IVerifierService;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.tools.json.JSONArray;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.text.StringSubstitutor;
@@ -79,9 +80,11 @@ public class VerifierService implements IVerifierService {
         Verifier verifier = verifierDAO.getVerifierById(id);
 
         String vcTemplate = jacksonUtil.readJsonFile(VERIFIER_VC_TEMPLATE_PATH);
+        JSONArray vcTypes = new JSONArray();
+        vcTypes.addAll(verifier.getVcTypes());
         Map<String, String> vcValues = new HashMap<String, String>() {{
             put(VERIFIER_NAME_KEY, verifier.getName());
-            put(VC_TYPES_KEY, verifier.getVcTypes().toString());
+            put(VC_TYPES_KEY, vcTypes.toString());
         }};
         String vc = new StringSubstitutor(vcValues).replace(vcTemplate);
 
