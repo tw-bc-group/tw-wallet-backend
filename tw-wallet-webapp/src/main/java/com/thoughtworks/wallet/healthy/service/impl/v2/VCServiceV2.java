@@ -273,6 +273,34 @@ public class VCServiceV2 implements IVCService {
         }
     }
 
+    @Override
+    public VerifyJwtResponse VerifyTravelBadgeVC(VerifyJwtRequest verifyJwtRequest) {
+        try {
+            String[]                   strings       = verifyJwtRequest.getToken().split("\\.");
+            Jwt.Header                 header        = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
+            HealthVerificationResponse payload       = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
+            String                     signature     = Base64.decode(strings[2]);
+            String                     headerPayload = String.format("%s.%s", strings[0], strings[1]);
+
+            Jwt jwt = Jwt.builder().header(new Jwt.Header(header.getAlg(), header.getTyp()))
+                    .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                    .build();
+
+            boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
+            boolean overdue         = payload.getExp() < Instant.now().getEpochSecond();
+
+            return VerifyJwtResponse.builder()
+                    .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                    .onchain(VerifyResultEnum.NOT_SUPPORT)
+                    .overdue(overdue ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                    .revoked(VerifyResultEnum.NOT_SUPPORT)
+                    .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
+                    .build();
+        } catch (Exception e) {
+            throw new VerifyJwtException(verifyJwtRequest.getToken());
+        }
+    }
+
     /**
      * @param healthVerification
      * @return

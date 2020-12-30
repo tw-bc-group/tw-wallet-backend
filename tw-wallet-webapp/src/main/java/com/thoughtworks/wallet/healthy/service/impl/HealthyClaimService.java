@@ -197,7 +197,7 @@ public class HealthyClaimService implements IHealthyClaimService {
             return VerifyJwtResponse.builder()
                     .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
                     .onchain(VerifyResultEnum.NOT_SUPPORT)
-                    .outdate(outdate ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
+                    .overdue(outdate ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
                     .revoked(VerifyResultEnum.NOT_SUPPORT)
                     .verifyHolder(VerifyResultEnum.NOT_SUPPORT)
                     .verifyIssuer(VerifyResultEnum.NOT_SUPPORT)

@@ -1,10 +1,11 @@
 package com.thoughtworks.wallet.healthy.controller.v2;
 
-import com.thoughtworks.wallet.healthy.dto.v2.VerifierRequest;
-import com.thoughtworks.wallet.healthy.dto.v2.VerifierResponse;
-import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcResponse;
-import com.thoughtworks.wallet.healthy.dto.v2.VerifierVcTypesRequest;
+import com.thoughtworks.wallet.healthy.dto.JwtResponse;
+import com.thoughtworks.wallet.healthy.dto.VerifyJwtRequest;
+import com.thoughtworks.wallet.healthy.dto.VerifyJwtResponse;
+import com.thoughtworks.wallet.healthy.dto.v2.*;
 import com.thoughtworks.wallet.healthy.service.impl.v2.VerifierService;
+import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +20,14 @@ import java.io.IOException;
 @RestController
 @Validated
 @RequestMapping(value = "/v2/verifier")
-@Api(tags = "验证者服务")
+@Api(tags = "V2-验证者服务")
 public class VerifierController {
 
+    private final IVCService healthyVerifierServiceV2;
     private final VerifierService verifierService;
 
-    public VerifierController(VerifierService verifierService) {
+    public VerifierController(IVCService healthyVerifierServiceV2, VerifierService verifierService) {
+        this.healthyVerifierServiceV2 = healthyVerifierServiceV2;
         this.verifierService = verifierService;
     }
 
@@ -55,5 +58,19 @@ public class VerifierController {
     @ResponseStatus(HttpStatus.OK)
     public VerifierVcResponse getVerifierVc(@PathVariable Integer id) throws IOException {
         return verifierService.getVerifierVc(id);
+    }
+
+    @PostMapping(value = "/health-certification/verify")
+    @ApiOperation(value = "验证健康认证")
+    @ResponseStatus(HttpStatus.OK)
+    public JwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtTokensRequest verifyJwtRequest) {
+        return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest);
+    }
+
+    @PostMapping(value = "/travel-badge/verify")
+    @ApiOperation(value = "验证通行证")
+    @ResponseStatus(HttpStatus.OK)
+    public VerifyJwtResponse verifyravelBadgeVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
+        return healthyVerifierServiceV2.VerifyTravelBadgeVC(verifyJwtRequest);
     }
 }

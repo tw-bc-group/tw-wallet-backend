@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @Validated
 @RequestMapping(value = "/v2/vc-market")
-@Api(tags = "VC大市场接口")
+@Api(tags = "V2-VC大市场接口")
 public class VCMarketController {
 
     private final IVCService healthyVerifierServiceV2;
@@ -57,13 +57,6 @@ public class VCMarketController {
     @ApiOperation(value = "根据 owner DID 获取 健康认证")
     public List<String> getHealthVerification(@PathVariable(value = "ownerId") String ownerId) {
         return healthyVerifierServiceV2.getHealthVerification(ownerId);
-    }
-
-    @PostMapping(value = "/verify")
-    @ApiOperation(value = "验证健康认证")
-    @ResponseStatus(HttpStatus.OK)
-    public JwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtTokensRequest verifyJwtRequest) {
-        return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest);
     }
 
     @PostMapping("/issuer")
