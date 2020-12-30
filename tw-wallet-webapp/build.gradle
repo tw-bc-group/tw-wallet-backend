@@ -42,6 +42,7 @@ dependencies {
     implementation Deps.okhttpUrlConnection
     implementation Deps.loggingInterceptor
     implementation Deps.jwt
+    implementation Deps.apacheCommonsText
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor
@@ -88,7 +89,7 @@ jooq {
                     forcedType {
                         userType = 'com.fasterxml.jackson.databind.JsonNode'
                         binding = 'com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
-                        includeExpression = '.*\\.sub.*'
+                        includeExpression = '.*\\.(sub|payload).*'
                         includeTypes = '.*'
                     }
                     forcedType {

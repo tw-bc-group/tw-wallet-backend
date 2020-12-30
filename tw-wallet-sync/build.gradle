@@ -79,7 +79,7 @@ jooq {
                     forcedType {
                         userType = 'com.fasterxml.jackson.databind.JsonNode'
                         binding = 'com.thoughtworks.common.config.PostgresJSONJacksonJsonNodeBinding'
-                        includeExpression = '.*\\.sub.*'
+                        includeExpression = '.*\\.(sub|payload).*'
                         includeTypes = '.*'
                     }
                     forcedType {

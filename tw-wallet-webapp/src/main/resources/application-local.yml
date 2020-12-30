@@ -13,7 +13,7 @@ spring:
       inputSchema: public
 
   flyway:
-    enabled: true
+    enabled: false
     locations: filesystem:src/main/resources/migration,classpath:migration
 
 quorum:

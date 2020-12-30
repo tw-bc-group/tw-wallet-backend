@@ -20,6 +20,7 @@ object Versions {
     const val snakeyaml = "1.26"
     const val bouncycastle = "1.65"
     const val jwt="3.10.3"
+    const val apacheCommonsText="1.9"
 }
 
 object Deps {
@@ -58,4 +59,5 @@ object Deps {
     const val okhttpUrlConnection = "com.squareup.okhttp3:okhttp-urlconnection:${Versions.okhttp}"
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
     const val failsafe = "net.jodah:failsafe:${Versions.failsafe}"
+    const val apacheCommonsText = "org.apache.commons:commons-text:${Versions.apacheCommonsText}"
 }
