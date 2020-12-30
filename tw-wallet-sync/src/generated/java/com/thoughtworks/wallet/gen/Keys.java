@@ -14,6 +14,7 @@ import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.TblVcTypes;
+import com.thoughtworks.wallet.gen.tables.TblVerifiers;
 import com.thoughtworks.wallet.gen.tables.records.FlywaySchemaHistoryRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblBlocksRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblDcepRecord;
@@ -24,6 +25,7 @@ import com.thoughtworks.wallet.gen.tables.records.TblIssuersRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblSuspectedPatientsPhoneListRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblTransactionsRecord;
 import com.thoughtworks.wallet.gen.tables.records.TblVcTypesRecord;
+import com.thoughtworks.wallet.gen.tables.records.TblVerifiersRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
@@ -44,7 +46,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Identities0.IDENTITY_TBL_ISSUERS;
-    public static final Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Identities0.IDENTITY_TBL_VC_TYPES;
+    public static final Identity<TblVerifiersRecord, Integer> IDENTITY_TBL_VERIFIERS = Identities0.IDENTITY_TBL_VERIFIERS;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -60,6 +62,7 @@ public class Keys {
     public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = UniqueKeys0.TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY;
     public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = UniqueKeys0.TBL_TRANSACTIONS_PKEY;
     public static final UniqueKey<TblVcTypesRecord> TBL_VC_TYPES_PKEY = UniqueKeys0.TBL_VC_TYPES_PKEY;
+    public static final UniqueKey<TblVerifiersRecord> TBL_VERIFIERS_PKEY = UniqueKeys0.TBL_VERIFIERS_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -73,7 +76,7 @@ public class Keys {
 
     private static class Identities0 {
         public static Identity<TblIssuersRecord, Integer> IDENTITY_TBL_ISSUERS = Internal.createIdentity(TblIssuers.TBL_ISSUERS, TblIssuers.TBL_ISSUERS.ID);
-        public static Identity<TblVcTypesRecord, Integer> IDENTITY_TBL_VC_TYPES = Internal.createIdentity(TblVcTypes.TBL_VC_TYPES, TblVcTypes.TBL_VC_TYPES.ID);
+        public static Identity<TblVerifiersRecord, Integer> IDENTITY_TBL_VERIFIERS = Internal.createIdentity(TblVerifiers.TBL_VERIFIERS, TblVerifiers.TBL_VERIFIERS.ID);
     }
 
     private static class UniqueKeys0 {
@@ -87,6 +90,7 @@ public class Keys {
         public static final UniqueKey<TblSuspectedPatientsPhoneListRecord> TBL_SUSPECTED_PATIENTS_PHONE_LIST_PKEY = Internal.createUniqueKey(TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST, "tbl_suspected_patients_phone_list_pkey", new TableField[] { TblSuspectedPatientsPhoneList.TBL_SUSPECTED_PATIENTS_PHONE_LIST.PHONE }, true);
         public static final UniqueKey<TblTransactionsRecord> TBL_TRANSACTIONS_PKEY = Internal.createUniqueKey(TblTransactions.TBL_TRANSACTIONS, "tbl_transactions_pkey", new TableField[] { TblTransactions.TBL_TRANSACTIONS.HEIGHT, TblTransactions.TBL_TRANSACTIONS.TX_INDEX }, true);
         public static final UniqueKey<TblVcTypesRecord> TBL_VC_TYPES_PKEY = Internal.createUniqueKey(TblVcTypes.TBL_VC_TYPES, "tbl_vc_types_pkey", new TableField[] { TblVcTypes.TBL_VC_TYPES.ID }, true);
+        public static final UniqueKey<TblVerifiersRecord> TBL_VERIFIERS_PKEY = Internal.createUniqueKey(TblVerifiers.TBL_VERIFIERS, "tbl_verifiers_pkey", new TableField[] { TblVerifiers.TBL_VERIFIERS.ID }, true);
     }
 
     private static class ForeignKeys0 {

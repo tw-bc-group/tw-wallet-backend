@@ -53,14 +53,6 @@ docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tw-wallet-2020 -e P
 ./gradlew flywayMigrate
 ```
 
-
-* If you want to deploy the whole service, you have to export the below environment variable before you do `docker-compose up` in `./docker` folder.
-    * DB_USERNAME
-    * DB_PASSWORD
-    * RPC_URL (it's url of quorum network)
-    * TWPOINT_CONTRACT_ADDRESS
-    * NODE1_PRIVATE_KEY
-
 #### Conduct of commit
 > format: type: content
 > eg: feat: add getUserInfo api

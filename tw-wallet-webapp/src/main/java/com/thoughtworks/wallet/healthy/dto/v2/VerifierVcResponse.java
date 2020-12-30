@@ -1,5 +1,6 @@
 package com.thoughtworks.wallet.healthy.dto.v2;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -13,5 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class VerifierVcResponse {
-    String vc;
+    JsonNode vc;
 }

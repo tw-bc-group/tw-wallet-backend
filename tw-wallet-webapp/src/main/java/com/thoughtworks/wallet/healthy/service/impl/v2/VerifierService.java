@@ -1,5 +1,9 @@
 package com.thoughtworks.wallet.healthy.service.impl.v2;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.wallet.healthy.dto.v2.VerifierRequest;
 import com.thoughtworks.wallet.healthy.dto.v2.VerifierResponse;
@@ -10,6 +14,8 @@ import com.thoughtworks.wallet.healthy.repository.VcTypeDAO;
 import com.thoughtworks.wallet.healthy.repository.VerifierDAO;
 import com.thoughtworks.wallet.healthy.service.v2.IVerifierService;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.tools.json.JSONArray;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.text.StringSubstitutor;
@@ -79,13 +85,19 @@ public class VerifierService implements IVerifierService {
         Verifier verifier = verifierDAO.getVerifierById(id);
 
         String vcTemplate = jacksonUtil.readJsonFile(VERIFIER_VC_TEMPLATE_PATH);
+        JSONArray vcTypes = new JSONArray();
+        vcTypes.addAll(verifier.getVcTypes());
         Map<String, String> vcValues = new HashMap<String, String>() {{
             put(VERIFIER_NAME_KEY, verifier.getName());
-            put(VC_TYPES_KEY, verifier.getVcTypes().toString());
+            put(VC_TYPES_KEY, vcTypes.toString());
         }};
         String vc = new StringSubstitutor(vcValues).replace(vcTemplate);
 
-        String minimizedVc = Pattern.compile("\\n\\s*").matcher(vc).replaceAll("");
-        return new VerifierVcResponse(minimizedVc);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode vcJsonNode = mapper.readTree(
+                mapper.getFactory().createParser(vc)
+        );
+
+        return new VerifierVcResponse(vcJsonNode);
     }
 }

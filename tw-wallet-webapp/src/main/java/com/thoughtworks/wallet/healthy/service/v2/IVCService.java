@@ -2,6 +2,7 @@ package com.thoughtworks.wallet.healthy.service.v2;
 
 import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.dto.v2.CreateVCRequest;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifyJwtTokensRequest;
 
 import java.util.List;
 
@@ -46,5 +47,5 @@ public interface IVCService {
      * @param verifyJwtRequest
      * @return 通行证token
      */
-    JwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest);
+    JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest);
 }
