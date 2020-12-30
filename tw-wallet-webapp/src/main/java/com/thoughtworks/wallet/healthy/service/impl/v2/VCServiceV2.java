@@ -36,10 +36,7 @@ public class VCServiceV2 implements IVCService {
     private final HealthVerificationDAOV2 healthVerificationDAOV2;
     public final static String didSchema = "DID:TW:";
     private final String version = "0.1";
-
-
-    // TODO: 目前假设 claim 1 mins 过期。可以设置在配置文件
-    Duration expiredDuration = Duration.ofMinutes(1);
+    Duration expiredDuration = Duration.ofMinutes(30);
 
     public VCServiceV2(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO, HealthVerificationDAOV2 healthVerificationDAOV2) {
         this.claimIdUtil = claimIdUtil;
