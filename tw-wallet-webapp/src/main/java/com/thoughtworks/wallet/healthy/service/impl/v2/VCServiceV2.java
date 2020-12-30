@@ -14,6 +14,7 @@ import com.thoughtworks.wallet.healthy.dto.v2.*;
 import com.thoughtworks.wallet.healthy.dto.v2.Issuer;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAOV2;
+import com.thoughtworks.wallet.healthy.repository.VerifierDAO;
 import com.thoughtworks.wallet.healthy.service.impl.HealthyClaimContractService;
 import com.thoughtworks.wallet.healthy.service.impl.SuspectedPatientService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
@@ -38,10 +39,13 @@ public class VCServiceV2 implements IVCService {
     private final String version = "0.1";
     Duration expiredDuration = Duration.ofMinutes(30);
 
-    public VCServiceV2(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO, HealthVerificationDAOV2 healthVerificationDAOV2) {
+    private final VerifierDAO verifierDAO;
+
+    public VCServiceV2(DSLContext dslContext, ClaimIdUtil claimIdUtil, HealthyClaimContractService healthyClaimContractService, HealthVerificationClaimContract healthVerificationClaimContract, SuspectedPatientService suspectedPatientService, HealthVerificationDAO healthVerificationDAO, HealthVerificationDAOV2 healthVerificationDAOV2, VerifierDAO verifierDAO) {
         this.claimIdUtil = claimIdUtil;
         this.healthVerificationClaimContract = healthVerificationClaimContract;
         this.healthVerificationDAOV2 = healthVerificationDAOV2;
+        this.verifierDAO = verifierDAO;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -215,36 +219,57 @@ public class VCServiceV2 implements IVCService {
     }
 
     @Override
-    public JwtResponse VerifyHealthVerification(VerifyJwtRequest verifyJwtRequest) {
+    public JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest) {
         try {
-            String[] strings = verifyJwtRequest.getToken().split("\\.");
-            Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
-            VerifiableCredentialJwt payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), VerifiableCredentialJwt.class);
+            String holderDID = "";
+            Verifier verifier = verifierDAO.getVerifierById(1);
+            List<String> vcTypes = verifier.getVcTypes();
+            int needVcNums = vcTypes.size();
+            for (String token : verifyJwtRequest.getTokens()) {
+                String[] strings = token.split("\\.");
+                Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
+                VerifiableCredentialJwt payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), VerifiableCredentialJwt.class);
 
-            boolean containsAllTypes = payload.getVc().getTyp().containsAll(ConstCoV2RapidTestCredential.credentialType);
+                // 查找是否有符合要求的vc
+                boolean containsType = false;
+                for (String vcType : vcTypes) {
+                    containsType = payload.getVc().getTyp().contains(vcType);
+                    if (containsType) break;
+                }
 
-            if (!containsAllTypes) {
-                throw new VerifyHealthyVCJwtException("VC 类型不符合");
+                if (!containsType) {
+                    // 发送了不符合要求的vc
+                    throw new VerifyHealthyVCJwtException("VC 类型不符合");
+                }
+
+                holderDID = payload.getVc().getSub().getId();
+
+                String signature = Base64.decode(strings[2]);
+                String headerPayload = String.format("%s.%s", strings[0], strings[1]);
+
+                Jwt jwt = Jwt.builder().header(new Jwt.Header(header.getAlg(), header.getTyp()))
+                        .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
+                        .build();
+
+                boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
+                boolean inDate = payload.getExp() > Instant.now().getEpochSecond();
+                if (verifySignature && inDate) {
+                    // 找到一个可以用的vc
+                    needVcNums--;
+                    continue;
+                } else {
+                    throw new VerifyHealthyVCJwtException("过期或者验证签名失败");
+                }
             }
-
-            String signature = Base64.decode(strings[2]);
-            String headerPayload = String.format("%s.%s", strings[0], strings[1]);
-
-            Jwt jwt = Jwt.builder().header(new Jwt.Header(header.getAlg(), header.getTyp()))
-                    .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
-                    .build();
-
-            boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
-            boolean inDate = payload.getExp() > Instant.now().getEpochSecond();
-            if (verifySignature && inDate) {
-                return createTravelBadgeVC(payload.getVc().getSub().getId());
+            if (needVcNums == 0) {
+                return createTravelBadgeVC(holderDID);
             } else {
-                throw new VerifyHealthyVCJwtException("过期或者验证签名失败");
+                throw new VerifyHealthyVCJwtException("所需要的VC数量与提供的不一致");
             }
         } catch (VerifyHealthyVCJwtException verifyHealthyVCJwtException) {
             throw verifyHealthyVCJwtException;
         } catch (Exception e) {
-            throw new VerifyJwtException(verifyJwtRequest.getToken());
+            throw new VerifyJwtTokensException(verifyJwtRequest.getTokens());
         }
     }
 

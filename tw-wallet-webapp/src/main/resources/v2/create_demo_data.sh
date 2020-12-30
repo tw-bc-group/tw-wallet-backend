@@ -1,7 +1,7 @@
 #!/bin/bash
 
-baseUrl="https://wallet.cn.blockchain.thoughtworks.cn"
-#baseUrl="localhost:8080"
+#baseUrl="https://wallet.cn.blockchain.thoughtworks.cn"
+baseUrl="http://localhost:8080"
 
 addIssuer() {
   name=$1
@@ -36,8 +36,8 @@ addIssuer "信通院"
 addIssuer "北医三院"
 addIssuer "海关"
 
-addVcType "ItineraryHealthCode" "健康行程码" "1" '["姓名","地域"]' "${baseUrl}/v2/vc-market/health-certifications"
-addVcType "ImmunoglobulinDetection" "核酸检测" "2" '["姓名","检测结果"]' "${baseUrl}/v2/vc-market/health-certifications/immunoglobulin-detection"
-addVcType "Passport" "出入境证明" "3" '["姓名","出入境记录"]' "${baseUrl}/v2/vc-market/health-certifications/passport"
+addVcType "qSARS-CoV-2-Rapid-Test-Credential" "健康行程码" "1" '["姓名","地域"]' "${baseUrl}/v2/vc-market/health-certifications"
+addVcType "ImmunoglobulinDetectionTestCard" "核酸检测" "2" '["姓名","检测结果"]' "${baseUrl}/v2/vc-market/health-certifications/immunoglobulin-detection"
+addVcType "qSARS-CoV-2-Travel-Badge-Credential" "出入境证明" "3" '["姓名","出入境记录"]' "${baseUrl}/v2/vc-market/health-certifications/passport"
 
 addVerifier "地坛医院" '["ItineraryHealthCode","ImmunoglobulinDetection"]'

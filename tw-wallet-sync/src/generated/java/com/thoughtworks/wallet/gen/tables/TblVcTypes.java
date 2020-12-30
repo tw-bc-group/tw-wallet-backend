@@ -13,10 +13,9 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
 
-    private static final long serialVersionUID = -820130645;
+    private static final long serialVersionUID = 569897695;
 
     /**
      * The reference instance of <code>public.tbl_vc_types</code>
@@ -50,7 +49,7 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     /**
      * The column <code>public.tbl_vc_types.id</code>.
      */
-    public final TableField<TblVcTypesRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('tbl_vc_types_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<TblVcTypesRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * The column <code>public.tbl_vc_types.name</code>.
@@ -66,6 +65,11 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
      * The column <code>public.tbl_vc_types.content</code>.
      */
     public final TableField<TblVcTypesRecord, String[]> CONTENT = createField(DSL.name("content"), org.jooq.impl.SQLDataType.CLOB.getArrayDataType(), this, "");
+
+    /**
+     * The column <code>public.tbl_vc_types.url</code>.
+     */
+    public final TableField<TblVcTypesRecord, String> URL = createField(DSL.name("url"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * Create a <code>public.tbl_vc_types</code> table reference
@@ -103,11 +107,6 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
-    }
-
-    @Override
-    public Identity<TblVcTypesRecord, Integer> getIdentity() {
-        return Keys.IDENTITY_TBL_VC_TYPES;
     }
 
     @Override
@@ -156,11 +155,11 @@ public class TblVcTypes extends TableImpl<TblVcTypesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, Integer, String[]> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<String, String, Integer, String[], String> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

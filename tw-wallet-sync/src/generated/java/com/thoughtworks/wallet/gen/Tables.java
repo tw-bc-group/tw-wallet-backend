@@ -14,6 +14,7 @@ import com.thoughtworks.wallet.gen.tables.TblIssuers;
 import com.thoughtworks.wallet.gen.tables.TblSuspectedPatientsPhoneList;
 import com.thoughtworks.wallet.gen.tables.TblTransactions;
 import com.thoughtworks.wallet.gen.tables.TblVcTypes;
+import com.thoughtworks.wallet.gen.tables.TblVerifiers;
 
 
 /**
@@ -71,4 +72,9 @@ public class Tables {
      * The table <code>public.tbl_vc_types</code>.
      */
     public static final TblVcTypes TBL_VC_TYPES = TblVcTypes.TBL_VC_TYPES;
+
+    /**
+     * The table <code>public.tbl_verifiers</code>.
+     */
+    public static final TblVerifiers TBL_VERIFIERS = TblVerifiers.TBL_VERIFIERS;
 }

@@ -62,7 +62,7 @@ public class VCMarketController {
     @PostMapping(value = "/verify")
     @ApiOperation(value = "验证健康认证")
     @ResponseStatus(HttpStatus.OK)
-    public JwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
+    public JwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtTokensRequest verifyJwtRequest) {
         return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest);
     }
 
