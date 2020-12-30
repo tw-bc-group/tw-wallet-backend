@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class VerifyJwtResponse {
-    VerifyResultEnum outdate;
+    VerifyResultEnum overdue;
     VerifyResultEnum revoked;
     VerifyResultEnum onchain;
     VerifyResultEnum verifyIssuer;

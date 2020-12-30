@@ -48,4 +48,12 @@ public interface IVCService {
      * @return 通行证token
      */
     JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest);
+
+
+    /**
+     * 验证通行证
+     * @param verifyJwtRequest
+     * @return
+     */
+    VerifyJwtResponse VerifyTravelBadgeVC(VerifyJwtRequest verifyJwtRequest);
 }
