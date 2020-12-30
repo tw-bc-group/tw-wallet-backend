@@ -230,11 +230,15 @@ public class VCServiceV2 implements IVCService {
                 Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
                 VerifiableCredentialJwt payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), VerifiableCredentialJwt.class);
 
-                // 查找是否有符合要求的vc
+                // 查找是否有符合要求的vc，保证所有类型都有
                 boolean containsType = false;
                 for (String vcType : vcTypes) {
                     containsType = payload.getVc().getTyp().contains(vcType);
-                    if (containsType) break;
+                    if (containsType){
+                        // 删除已经匹配到的vc，防止传递两个一样的vc
+                        vcTypes.remove(vcType);
+                        break;
+                    }
                 }
 
                 if (!containsType) {
@@ -254,7 +258,7 @@ public class VCServiceV2 implements IVCService {
                 boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
                 boolean inDate = payload.getExp() > Instant.now().getEpochSecond();
                 if (verifySignature && inDate) {
-                    // 找到一个可以用的vc
+                    // 找到一个可以用的vc，减去数量，保证vc数量要求符合要求
                     needVcNums--;
                     continue;
                 } else {
