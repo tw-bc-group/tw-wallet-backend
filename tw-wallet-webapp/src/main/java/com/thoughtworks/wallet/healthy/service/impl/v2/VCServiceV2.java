@@ -224,17 +224,20 @@ public class VCServiceV2 implements IVCService {
             String holderDID = "";
             Verifier verifier = verifierDAO.getVerifierById(1);
             List<String> vcTypes = verifier.getVcTypes();
+            log.info("verifier getVcTypes: {}", vcTypes);
             int needVcNums = vcTypes.size();
             for (String token : verifyJwtRequest.getTokens()) {
                 String[] strings = token.split("\\.");
                 Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
                 VerifiableCredentialJwt payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), VerifiableCredentialJwt.class);
 
+                log.info("payload.getVc().getTyp(): {}", payload.getVc().getTyp());
+
                 // 查找是否有符合要求的vc，保证所有类型都有
                 boolean containsType = false;
                 for (String vcType : vcTypes) {
                     containsType = payload.getVc().getTyp().contains(vcType);
-                    if (containsType){
+                    if (containsType) {
                         // 删除已经匹配到的vc，防止传递两个一样的vc
                         vcTypes.remove(vcType);
                         break;
@@ -280,18 +283,18 @@ public class VCServiceV2 implements IVCService {
     @Override
     public VerifyJwtResponse VerifyTravelBadgeVC(VerifyJwtRequest verifyJwtRequest) {
         try {
-            String[]                   strings       = verifyJwtRequest.getToken().split("\\.");
-            Jwt.Header                 header        = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
-            HealthVerificationResponse payload       = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
-            String                     signature     = Base64.decode(strings[2]);
-            String                     headerPayload = String.format("%s.%s", strings[0], strings[1]);
+            String[] strings = verifyJwtRequest.getToken().split("\\.");
+            Jwt.Header header = JacksonUtil.jsonStrToBean(Base64.decode(strings[0]), Jwt.Header.class);
+            HealthVerificationResponse payload = JacksonUtil.jsonStrToBean(Base64.decode(strings[1]), HealthVerificationResponse.class);
+            String signature = Base64.decode(strings[2]);
+            String headerPayload = String.format("%s.%s", strings[0], strings[1]);
 
             Jwt jwt = Jwt.builder().header(new Jwt.Header(header.getAlg(), header.getTyp()))
                     .cryptoFacade(CryptoFacade.fromPrivateKey(healthVerificationClaimContract.getIssuerPrivateKey(), SignatureScheme.SHA256WITHECDSA, Curve.SECP256K1))
                     .build();
 
             boolean verifySignature = jwt.getCryptoFacade().verifySignature(headerPayload, signature);
-            boolean overdue         = payload.getExp() < Instant.now().getEpochSecond();
+            boolean overdue = payload.getExp() < Instant.now().getEpochSecond();
 
             return VerifyJwtResponse.builder()
                     .verifySignature(verifySignature ? VerifyResultEnum.TRUE : VerifyResultEnum.FALSE)
