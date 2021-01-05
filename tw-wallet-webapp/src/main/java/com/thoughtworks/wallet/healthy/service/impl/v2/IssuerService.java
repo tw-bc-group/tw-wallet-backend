@@ -46,6 +46,7 @@ public class IssuerService implements IIssuerService {
                         .name(vcType.getName())
                         .issuerId(vcType.getIssuerId())
                         .content(vcType.getContent())
+                        .url(vcType.getUrl())
                         .build())
                 .collect(Collectors.toList());
         return IssuerResponse.builder()
