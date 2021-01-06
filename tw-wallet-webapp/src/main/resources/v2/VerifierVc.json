@@ -22,7 +22,7 @@
     "@Type": "EntryPoint",
     "name": "${VERIFIER_NAME_KEY}后端",
     "identifier": "${VERIFIER_NAME_KEY}did",
-    "url": "http://hospital.org/passport"
+    "url": "https://wallet.cn.blockchain.thoughtworks.cn/v2/verifier/health-certification/verify"
   },
   "object": {
     "@type": "ItemList",
