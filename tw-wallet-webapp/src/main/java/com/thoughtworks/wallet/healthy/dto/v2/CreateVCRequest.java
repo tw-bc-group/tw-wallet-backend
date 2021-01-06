@@ -16,7 +16,7 @@ public class CreateVCRequest {
 
     @NotBlank
     @Getter
-    @Size(min=5, max=255,message = "The length of phone is  between 3 and 255")
+    @Size(min=5, max=255,message = "The length of phone is  between 5 and 255")
     String phone;
 
     @NotBlank

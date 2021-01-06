@@ -2,10 +2,14 @@ package com.thoughtworks.wallet.healthy.controller.v2;
 
 import com.thoughtworks.wallet.healthy.dto.*;
 import com.thoughtworks.wallet.healthy.dto.v2.*;
+import com.thoughtworks.wallet.healthy.exception.VcTypeNotFoundException;
 import com.thoughtworks.wallet.healthy.service.impl.v2.IssuerService;
 import com.thoughtworks.wallet.healthy.service.impl.v2.VcTypeService;
 import com.thoughtworks.wallet.healthy.service.impl.v2.VerifierService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
+import com.thoughtworks.wallet.healthy.utils.ConstCoV2RapidTestCredential;
+import com.thoughtworks.wallet.healthy.utils.ConstImmunoglobulinDetectionVC;
+import com.thoughtworks.wallet.healthy.utils.ConstPassportVC;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +38,21 @@ public class VCMarketController {
         this.issuerService = issuerService;
         this.vcTypeService = vcTypeService;
         this.verifierService = verifierService;
+    }
+
+    @PostMapping("vcs")
+    @ApiOperation(value = "申请认证通用接口")
+    @ResponseStatus(HttpStatus.CREATED)
+    public JwtResponse createVC(@Valid @RequestBody CreateVCGeneralRequest createVCRequest) {
+        if (ConstCoV2RapidTestCredential.TEST_TYPE.equals(createVCRequest.getVcType())) {
+            return healthyVerifierServiceV2.createHealthVerification(createVCRequest);
+        } else if (ConstImmunoglobulinDetectionVC.TEST_TYPE.equals(createVCRequest.getVcType())) {
+            return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(createVCRequest);
+        } else if (ConstPassportVC.TEST_TYPE.equals(createVCRequest.getVcType())) {
+            return healthyVerifierServiceV2.createPassportVC(createVCRequest);
+        }else {
+            throw new VcTypeNotFoundException(createVCRequest.getVcType());
+        }
     }
 
     @PostMapping("vcs/health-certification")
