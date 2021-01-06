@@ -4,23 +4,25 @@ import lombok.Getter;
 
 import javax.validation.constraints.*;
 
+import static javax.validation.constraints.Pattern.Flag.CASE_INSENSITIVE;
+
 /**
- 申请VC的API
-*/
+ * 申请VC的API
+ */
 
 public class CreateVCRequest {
     @NotBlank
     @Getter
-    @Pattern(regexp = "^DID:TW:.{1,255}")
+    @Pattern(regexp = "^DID:TW:.{1,255}", flags = CASE_INSENSITIVE)
     String did;
 
     @NotBlank
     @Getter
-    @Size(min=5, max=255,message = "The length of phone is  between 5 and 255")
+    @Size(min = 5, max = 255, message = "The length of phone is  between 5 and 255")
     String phone;
 
     @NotBlank
     @Getter
-    @Size(min=3, max=255,message = "The length of name is between 3 and 255")
+    @Size(min = 3, max = 255, message = "The length of name is between 3 and 255")
     String name;
 }
