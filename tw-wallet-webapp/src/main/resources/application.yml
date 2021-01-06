@@ -21,6 +21,12 @@ spring:
   flyway:
     enabled: false
 
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+
 quorum:
   rpc:
     url: ${RPC_URL}
