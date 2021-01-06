@@ -38,7 +38,7 @@ public class HealthVerificationDAOV2 {
     public List<String> getHealthVerificationClaim(String ownerId) {
         Result<TblHealthyVerificationClaimV2Record> claims =  Optional.ofNullable(dslContext
                 .selectFrom(TBL_HEALTHY_VERIFICATION_CLAIM_V2)
-                .where(TBL_HEALTHY_VERIFICATION_CLAIM_V2.OWNER_ID.equal(ownerId))
+                .where(TBL_HEALTHY_VERIFICATION_CLAIM_V2.OWNER_ID.equalIgnoreCase(ownerId))
                 .fetch()).orElseThrow(() -> new HealthVerificationNotFoundException(ownerId));
 
         return claims.stream().map(hvcs->hvcs.getJwt()).collect(Collectors.toList());
