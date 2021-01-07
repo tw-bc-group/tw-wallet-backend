@@ -13,7 +13,7 @@ import static javax.validation.constraints.Pattern.Flag.CASE_INSENSITIVE;
 public class CreateVCRequest {
     @NotBlank
     @Getter
-    @Pattern(regexp = "^DID:TW:.{1,255}", flags = CASE_INSENSITIVE)
+    @Size(min = 5, max = 100, message = "The length of issueId is  between 5 and 100")
     String did;
 
     @NotBlank
