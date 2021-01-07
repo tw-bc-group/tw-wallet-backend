@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 public class CreateVCGeneralRequest extends CreateVCRequest {
     @NotBlank
     @Getter
-    @Size(min = 5, max = 255, message = "The length of issueId is  between 5 and 255")
+    @Size(min = 5, max = 100, message = "The length of issueId is  between 5 and 100")
     String issueId;
 
     @NotBlank
