@@ -10,4 +10,8 @@ public class VerifierVcTypesRequest {
     @NotEmpty
     @Getter
     List<String> vcTypes;
+
+    @NotEmpty
+    @Getter
+    String name;
 }

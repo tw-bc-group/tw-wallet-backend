@@ -71,7 +71,7 @@ public class VerifierService implements IVerifierService {
         Verifier verifier = verifierDAO.getVerifierById(id);
         Verifier updatedVerifier = verifierDAO.updateVerifier(Verifier.builder()
                 .id(id)
-                .name(verifier.getName())
+                .name(request.getName())
                 .privateKey(verifier.getPrivateKey())
                 .vcTypes(request.getVcTypes())
                 .build()
