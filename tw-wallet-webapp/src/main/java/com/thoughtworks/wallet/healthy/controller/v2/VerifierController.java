@@ -3,7 +3,7 @@ package com.thoughtworks.wallet.healthy.controller.v2;
 import com.thoughtworks.wallet.healthy.dto.JwtResponse;
 import com.thoughtworks.wallet.healthy.dto.VerifyJwtRequest;
 import com.thoughtworks.wallet.healthy.dto.VerifyJwtResponse;
-import com.thoughtworks.wallet.healthy.dto.v2.*;
+import com.thoughtworks.wallet.healthy.dto.v2.VerifyJwtTokensRequest;
 import com.thoughtworks.wallet.healthy.service.impl.v2.VerifierService;
 import com.thoughtworks.wallet.healthy.service.v2.IVCService;
 import io.swagger.annotations.Api;
@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -31,19 +30,19 @@ public class VerifierController {
         this.verifierService = verifierService;
     }
 
-
-
     @PostMapping(value = "/health-certification/verify")
     @ApiOperation(value = "验证健康认证")
     @ResponseStatus(HttpStatus.OK)
-    public JwtResponse verifyHealthVerification(@Valid @RequestBody VerifyJwtTokensRequest verifyJwtRequest) {
-        return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest);
+    public JwtResponse verifyHealthVerification(
+            @Valid @RequestBody VerifyJwtTokensRequest verifyJwtRequest,
+            @RequestParam(value = "simple", required = false, defaultValue = "false") Boolean isSimple) {
+        return healthyVerifierServiceV2.VerifyHealthVerification(verifyJwtRequest, isSimple);
     }
 
     @PostMapping(value = "/travel-badge/verify")
     @ApiOperation(value = "验证通行证")
     @ResponseStatus(HttpStatus.OK)
-    public VerifyJwtResponse verifyravelBadgeVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
+    public VerifyJwtResponse verifyTravelBadgeVerification(@Valid @RequestBody VerifyJwtRequest verifyJwtRequest) {
         return healthyVerifierServiceV2.VerifyTravelBadgeVC(verifyJwtRequest);
     }
 }

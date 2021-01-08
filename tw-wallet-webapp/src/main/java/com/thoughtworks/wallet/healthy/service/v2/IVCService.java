@@ -47,7 +47,7 @@ public interface IVCService {
      * @param verifyJwtRequest
      * @return 通行证token
      */
-    JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest);
+    JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest, Boolean isSimple);
 
 
     /**

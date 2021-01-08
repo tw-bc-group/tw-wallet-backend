@@ -8,10 +8,10 @@ import com.thoughtworks.common.crypto.SignatureScheme;
 import com.thoughtworks.common.util.JacksonUtil;
 import com.thoughtworks.common.util.Jwt;
 import com.thoughtworks.wallet.healthy.dto.*;
-import com.thoughtworks.wallet.healthy.exception.*;
-import com.thoughtworks.wallet.healthy.model.*;
 import com.thoughtworks.wallet.healthy.dto.v2.*;
-import com.thoughtworks.wallet.healthy.dto.v2.Issuer;
+import com.thoughtworks.wallet.healthy.exception.*;
+import com.thoughtworks.wallet.healthy.model.HealthVerificationClaimContract;
+import com.thoughtworks.wallet.healthy.model.Verifier;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAO;
 import com.thoughtworks.wallet.healthy.repository.HealthVerificationDAOV2;
 import com.thoughtworks.wallet.healthy.repository.VerifierDAO;
@@ -165,7 +165,7 @@ public class VCServiceV2 implements IVCService {
         }
     }
 
-    private String sign(String did, VerifiableCredentialJwt claim) {
+    private String sign(String did, Object claim) {
         String token = "";
         try {
             Jwt jwt = Jwt.builder()
@@ -183,6 +183,16 @@ public class VCServiceV2 implements IVCService {
     public JwtResponse createTravelBadgeVC(String holderDid) {
         VerifiableCredentialJwt claim = generateTravelBadgeVC(holderDid);
         String token = sign(holderDid, claim);
+        return JwtResponse.of(token);
+    }
+
+    public JwtResponse createSimpleTravelBadgeVC(String holderDid) {
+        final Instant now = Instant.now();
+        final long currentTime = now.getEpochSecond();
+        final long expiredTime = now.plus(expiredDuration).getEpochSecond();
+        String token = sign(holderDid, TravelBadge.builder()
+                .exp(expiredTime)
+                .build());
         return JwtResponse.of(token);
     }
 
@@ -219,7 +229,7 @@ public class VCServiceV2 implements IVCService {
     }
 
     @Override
-    public JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest) {
+    public JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest, Boolean isSimple) {
         try {
             String holderDID = "";
             Verifier verifier = verifierDAO.getVerifierById(1);
@@ -269,6 +279,9 @@ public class VCServiceV2 implements IVCService {
                 }
             }
             if (needVcNums == 0) {
+                if (isSimple) {
+                    return createSimpleTravelBadgeVC(holderDID);
+                }
                 return createTravelBadgeVC(holderDID);
             } else {
                 throw new VerifyHealthyVCJwtException("所需要的VC数量与提供的不一致");
