@@ -103,9 +103,7 @@ public class VCMarketController {
         return issuerService.getAllIssuers();
     }
 
-
-
-    @GetMapping("/verifiers/vc-type/{id}")
+    @GetMapping("/vcs/vc-type/{id}")
     @ApiOperation(value = "获取VC类型")
     @ResponseStatus(HttpStatus.OK)
     public VcTypeResponse getVcTypeById(@PathVariable String id) {
