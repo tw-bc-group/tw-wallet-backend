@@ -46,9 +46,9 @@ public class VerifierService implements IVerifierService {
     @Override
     public VerifierResponse createVerifier(VerifierRequest verifierRequest) {
         verifierRequest.getVcTypes().forEach(vcTypeDAO::getVcTypeById);
-        Integer id = verifierDAO.insertVerifier(Verifier.builder()
+        String id = verifierDAO.insertVerifier(Verifier.builder()
+                .id(verifierRequest.getId())
                 .name(verifierRequest.getName())
-                .privateKey(verifierRequest.getPrivateKey())
                 .vcTypes(verifierRequest.getVcTypes())
                 .build());
         return getVerifierById(id);
@@ -56,7 +56,7 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierResponse getVerifierById(Integer id) {
+    public VerifierResponse getVerifierById(String id) {
         Verifier verifier = verifierDAO.getVerifierById(id);
         return VerifierResponse.builder()
                 .id(verifier.getId())
@@ -67,12 +67,11 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierResponse updateVerifierVcTypes(Integer id, VerifierVcTypesRequest request) {
-        Verifier verifier = verifierDAO.getVerifierById(id);
+    public VerifierResponse updateVerifierVcTypes(String id, VerifierVcTypesRequest request) {
+        Verifier verifier = verifierDAO.getVerifierById(id, true);
         Verifier updatedVerifier = verifierDAO.updateVerifier(Verifier.builder()
                 .id(id)
                 .name(request.getName())
-                .privateKey(verifier.getPrivateKey())
                 .vcTypes(request.getVcTypes())
                 .build()
         );
@@ -81,7 +80,7 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierVcResponse getVerifierVc(Integer id) throws IOException {
+    public VerifierVcResponse getVerifierVc(String id) throws IOException {
         Verifier verifier = verifierDAO.getVerifierById(id);
 
         String vcTemplate = jacksonUtil.readJsonFile(VERIFIER_VC_TEMPLATE_PATH);

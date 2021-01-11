@@ -232,8 +232,7 @@ public class VCServiceV2 implements IVCService {
     public JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest, Boolean isSimple) {
         try {
             String holderDID = "";
-            // ToDo(ssi): change hard code number
-            Verifier verifier = verifierDAO.getVerifierById(6);
+            Verifier verifier = verifierDAO.getVerifierById(verifyJwtRequest.getVerifierId());
             List<String> vcTypes = verifier.getVcTypes();
             log.info("verifier getVcTypes: {}", vcTypes);
             int needVcNums = vcTypes.size();

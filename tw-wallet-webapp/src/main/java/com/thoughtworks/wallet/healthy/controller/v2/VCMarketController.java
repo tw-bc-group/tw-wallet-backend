@@ -120,14 +120,14 @@ public class VCMarketController {
     @GetMapping("/verifiers/{id}")
     @ApiOperation(value = "获取验证者")
     @ResponseStatus(HttpStatus.OK)
-    public VerifierResponse getVerifier(@PathVariable Integer id) {
+    public VerifierResponse getVerifier(@PathVariable String id) {
         return verifierService.getVerifierById(id);
     }
 
     @PatchMapping("/verifiers/{id}")
     @ApiOperation(value = "更新验证者所需VC类型")
     @ResponseStatus(HttpStatus.OK)
-    public VerifierResponse updateVerifierVcType(@PathVariable Integer id, @Valid @RequestBody VerifierVcTypesRequest request) {
+    public VerifierResponse updateVerifierVcType(@PathVariable String id, @Valid @RequestBody VerifierVcTypesRequest request) {
         return verifierService.updateVerifierVcTypes(id, request);
     }
 
@@ -135,7 +135,7 @@ public class VCMarketController {
     @GetMapping("/verifiers/{id}/vc")
     @ApiOperation(value = "获取验证者所需VC类型(json-ld格式)")
     @ResponseStatus(HttpStatus.OK)
-    public VerifierVcResponse getVerifierVc(@PathVariable Integer id) throws IOException {
+    public VerifierVcResponse getVerifierVc(@PathVariable String id) throws IOException {
         return verifierService.getVerifierVc(id);
     }
 }

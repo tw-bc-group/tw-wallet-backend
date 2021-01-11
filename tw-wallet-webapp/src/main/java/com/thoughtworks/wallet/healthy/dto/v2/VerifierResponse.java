@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class VerifierResponse {
-    Integer id;
+    String id;
     String name;
     List<String> vcTypes;
 }
