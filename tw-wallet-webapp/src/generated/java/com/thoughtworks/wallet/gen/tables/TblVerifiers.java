@@ -13,10 +13,9 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
 
-    private static final long serialVersionUID = -976206804;
+    private static final long serialVersionUID = 393880460;
 
     /**
      * The reference instance of <code>public.tbl_verifiers</code>
@@ -50,17 +49,12 @@ public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
     /**
      * The column <code>public.tbl_verifiers.id</code>.
      */
-    public final TableField<TblVerifiersRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('tbl_verifiers_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<TblVerifiersRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * The column <code>public.tbl_verifiers.name</code>.
      */
     public final TableField<TblVerifiersRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
-
-    /**
-     * The column <code>public.tbl_verifiers.private_key</code>.
-     */
-    public final TableField<TblVerifiersRecord, String> PRIVATE_KEY = createField(DSL.name("private_key"), org.jooq.impl.SQLDataType.VARCHAR(256).nullable(false), this, "");
 
     /**
      * The column <code>public.tbl_verifiers.vc_types</code>.
@@ -106,11 +100,6 @@ public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
     }
 
     @Override
-    public Identity<TblVerifiersRecord, Integer> getIdentity() {
-        return Keys.IDENTITY_TBL_VERIFIERS;
-    }
-
-    @Override
     public UniqueKey<TblVerifiersRecord> getPrimaryKey() {
         return Keys.TBL_VERIFIERS_PKEY;
     }
@@ -147,11 +136,11 @@ public class TblVerifiers extends TableImpl<TblVerifiersRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, String, String[]> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row3<String, String, String[]> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }
