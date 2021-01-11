@@ -34,6 +34,7 @@ public class VerifierService implements IVerifierService {
 
     private static final String VERIFIER_VC_TEMPLATE_PATH = "/v2/VerifierVc.json";
     private static final String VERIFIER_NAME_KEY = "VERIFIER_NAME_KEY";
+    private static final String VERIFIER_DID_KEY = "VERIFIER_DID_KEY";
     private static final String VC_TYPES_KEY = "VC_TYPES_KEY";
 
     public VerifierService(VerifierDAO verifierDAO, VcTypeDAO vcTypeDAO, JacksonUtil jacksonUtil) {
@@ -88,6 +89,7 @@ public class VerifierService implements IVerifierService {
         vcTypes.addAll(verifier.getVcTypes());
         Map<String, String> vcValues = new HashMap<String, String>() {{
             put(VERIFIER_NAME_KEY, verifier.getName());
+            put(VERIFIER_DID_KEY, verifier.getId());
             put(VC_TYPES_KEY, vcTypes.toString());
         }};
         String vc = new StringSubstitutor(vcValues).replace(vcTemplate);
