@@ -50,30 +50,9 @@ public class VCMarketController {
             return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(createVCRequest);
         } else if (ConstPassportVC.TEST_TYPE.equals(createVCRequest.getVcType())) {
             return healthyVerifierServiceV2.createPassportVC(createVCRequest);
-        }else {
+        } else {
             throw new VcTypeNotFoundException(createVCRequest.getVcType());
         }
-    }
-
-    @PostMapping("vcs/health-certification")
-    @ApiOperation(value = "添加健康认证")
-    @ResponseStatus(HttpStatus.CREATED)
-    public JwtResponse createHealthVerification(@Valid @RequestBody CreateVCRequest createVCRequest) {
-        return healthyVerifierServiceV2.createHealthVerification(createVCRequest);
-    }
-
-    @PostMapping("vcs/immunoglobulin-detection")
-    @ApiOperation(value = "蛋白检测")
-    @ResponseStatus(HttpStatus.CREATED)
-    public JwtResponse createImmunoglobulinDetection(@Valid @RequestBody CreateVCRequest createVCRequest) {
-        return healthyVerifierServiceV2.createImmunoglobulinDetectionVC(createVCRequest);
-    }
-
-    @PostMapping("vcs/passport")
-    @ApiOperation(value = "出境记录")
-    @ResponseStatus(HttpStatus.CREATED)
-    public JwtResponse createPassportVC(@Valid @RequestBody CreateVCRequest createVCRequest) {
-        return healthyVerifierServiceV2.createPassportVC(createVCRequest);
     }
 
     @GetMapping("vcs/{ownerId}")
@@ -82,11 +61,19 @@ public class VCMarketController {
         return healthyVerifierServiceV2.getHealthVerification(ownerId);
     }
 
-    @PostMapping("vcs/vc-type")
+    @PostMapping("vcs/vc-types")
     @ApiOperation(value = "添加VC类型")
     @ResponseStatus(HttpStatus.CREATED)
     public VcTypeResponse createVcType(@Valid @RequestBody VcTypeRequest vcTypeRequest) {
         return vcTypeService.createVcType(vcTypeRequest);
+    }
+
+
+    @GetMapping("vcs/vc-types/{id}")
+    @ApiOperation(value = "获取VC类型")
+    @ResponseStatus(HttpStatus.OK)
+    public VcTypeResponse getVcTypeById(@PathVariable String id) {
+        return vcTypeService.getVcTypeById(id);
     }
 
     @PostMapping("/issuers")
@@ -103,12 +90,6 @@ public class VCMarketController {
         return issuerService.getAllIssuers();
     }
 
-    @GetMapping("/vcs/vc-type/{id}")
-    @ApiOperation(value = "获取VC类型")
-    @ResponseStatus(HttpStatus.OK)
-    public VcTypeResponse getVcTypeById(@PathVariable String id) {
-        return vcTypeService.getVcTypeById(id);
-    }
 
     @PostMapping("/verifiers")
     @ApiOperation(value = "添加验证者")
