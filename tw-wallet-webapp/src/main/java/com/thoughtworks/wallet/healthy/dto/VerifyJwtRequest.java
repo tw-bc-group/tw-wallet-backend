@@ -10,7 +10,7 @@ public class VerifyJwtRequest {
     @NotBlank
     @Getter
     @Size(min = 5, max = 100, message = "The length of id is between 5 and 100")
-    String id;
+    String verifierId;
     @NotBlank
     @Getter
     String token;
