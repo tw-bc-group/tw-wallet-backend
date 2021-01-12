@@ -23,6 +23,6 @@ public class CreateVCRequest {
 
     @NotBlank
     @Getter
-    @Size(min = 3, max = 255, message = "The length of name is between 3 and 255")
+    @Size(min = 2, max = 255, message = "The length of name is between 2 and 255")
     String name;
 }
