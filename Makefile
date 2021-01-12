@@ -2,6 +2,7 @@
 
 APP	      := tw-wallet-backend
 TAG       ?= tw-wallet:latest
+NAME_SPACE := tw-wallet-backend-ns
 
 CACHE     := $(shell pwd | md5sum | awk '{ print "$(APP)-"$$1 }')
 JDK_IMAGE := openjdk:8u212-jdk-alpine3.9
@@ -35,16 +36,16 @@ k8s.namespace:
 	kubectl apply -f docker/k8s/tw-wallet-namespace.yaml
 
 k8s.resetconfig:
-	kubectl -n tw-wallet delete configmap tw-wallet-env
+	kubectl -n $(NAME_SPACE) delete configmap tw-wallet-env
 
 k8s.configmap:
-	kubectl -n tw-wallet create configmap tw-wallet-env --from-env-file=.env
+	kubectl -n $(NAME_SPACE) create configmap tw-wallet-env --from-env-file=.env
 
 k8s.showconfig:
-	kubectl -n tw-wallet get configmap tw-wallet-env -o yaml
+	kubectl -n $(NAME_SPACE) get configmap tw-wallet-env -o yaml
 
 k8s.logs:
-	kubectl -n tw-wallet logs $(pod) -f
+	kubectl -n $(NAME_SPACE) logs $(pod) -f
 
 k8s.show:
-	kubectl -n tw-wallet get all
+	kubectl -n $(NAME_SPACE) get all
