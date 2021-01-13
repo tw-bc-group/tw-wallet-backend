@@ -42,7 +42,7 @@ public class VCServiceV2Test {
     final String MOCK_PRIVATE_KEY = "4762e04d10832808a0aebdaa79c12de54afbe006bfffd228b3abcc494fe986f9";
 
     @Test
-    public void should_create_health_verification_vc() {
+    public void should_create_verifiable_credential() {
         CreateVCRequest createVCRequest = new CreateVCRequest(
                 MOCK_DID,
                 MOCK_PHONE_NUMBER,
@@ -56,6 +56,12 @@ public class VCServiceV2Test {
         when(healthVerificationClaimContract.getIssuerPrivateKey()).thenReturn(MOCK_PRIVATE_KEY);
 
         JwtResponse jwtResponse = vcServiceV2.createHealthVerification(createVCRequest);
+        Assertions.assertNotNull(jwtResponse.getToken());
+
+        jwtResponse = vcServiceV2.createImmunoglobulinDetectionVC(createVCRequest);
+        Assertions.assertNotNull(jwtResponse.getToken());
+
+        jwtResponse = vcServiceV2.createPassportVC(createVCRequest);
         Assertions.assertNotNull(jwtResponse.getToken());
     }
 }
