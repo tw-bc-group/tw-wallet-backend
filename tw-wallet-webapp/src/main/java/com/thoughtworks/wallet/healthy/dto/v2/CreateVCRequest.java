@@ -1,6 +1,9 @@
 package com.thoughtworks.wallet.healthy.dto.v2;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
@@ -10,6 +13,9 @@ import static javax.validation.constraints.Pattern.Flag.CASE_INSENSITIVE;
  * 申请VC的API
  */
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateVCRequest {
     @NotBlank
     @Getter
