@@ -34,6 +34,7 @@ public class VerifierService implements IVerifierService {
 
     private static final String VERIFIER_VC_TEMPLATE_PATH = "/v2/VerifierVc.json";
     private static final String VERIFIER_NAME_KEY = "VERIFIER_NAME_KEY";
+    private static final String VERIFIER_DID_KEY = "VERIFIER_DID_KEY";
     private static final String VC_TYPES_KEY = "VC_TYPES_KEY";
 
     public VerifierService(VerifierDAO verifierDAO, VcTypeDAO vcTypeDAO, JacksonUtil jacksonUtil) {
@@ -46,9 +47,9 @@ public class VerifierService implements IVerifierService {
     @Override
     public VerifierResponse createVerifier(VerifierRequest verifierRequest) {
         verifierRequest.getVcTypes().forEach(vcTypeDAO::getVcTypeById);
-        Integer id = verifierDAO.insertVerifier(Verifier.builder()
+        String id = verifierDAO.insertVerifier(Verifier.builder()
+                .id(verifierRequest.getId())
                 .name(verifierRequest.getName())
-                .privateKey(verifierRequest.getPrivateKey())
                 .vcTypes(verifierRequest.getVcTypes())
                 .build());
         return getVerifierById(id);
@@ -56,7 +57,7 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierResponse getVerifierById(Integer id) {
+    public VerifierResponse getVerifierById(String id) {
         Verifier verifier = verifierDAO.getVerifierById(id);
         return VerifierResponse.builder()
                 .id(verifier.getId())
@@ -67,12 +68,11 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierResponse updateVerifierVcTypes(Integer id, VerifierVcTypesRequest request) {
-        Verifier verifier = verifierDAO.getVerifierById(id);
+    public VerifierResponse updateVerifierVcTypes(String id, VerifierVcTypesRequest request) {
+        Verifier verifier = verifierDAO.getVerifierById(id, true);
         Verifier updatedVerifier = verifierDAO.updateVerifier(Verifier.builder()
                 .id(id)
                 .name(request.getName())
-                .privateKey(verifier.getPrivateKey())
                 .vcTypes(request.getVcTypes())
                 .build()
         );
@@ -81,7 +81,7 @@ public class VerifierService implements IVerifierService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public VerifierVcResponse getVerifierVc(Integer id) throws IOException {
+    public VerifierVcResponse getVerifierVc(String id) throws IOException {
         Verifier verifier = verifierDAO.getVerifierById(id);
 
         String vcTemplate = jacksonUtil.readJsonFile(VERIFIER_VC_TEMPLATE_PATH);
@@ -89,6 +89,7 @@ public class VerifierService implements IVerifierService {
         vcTypes.addAll(verifier.getVcTypes());
         Map<String, String> vcValues = new HashMap<String, String>() {{
             put(VERIFIER_NAME_KEY, verifier.getName());
+            put(VERIFIER_DID_KEY, verifier.getId());
             put(VC_TYPES_KEY, vcTypes.toString());
         }};
         String vc = new StringSubstitutor(vcValues).replace(vcTemplate);

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface IVerifierService {
     VerifierResponse createVerifier(VerifierRequest verifierRequest);
-    VerifierResponse getVerifierById(Integer id);
-    VerifierResponse updateVerifierVcTypes(Integer id, VerifierVcTypesRequest request);
-    VerifierVcResponse getVerifierVc(Integer id) throws IOException;
+    VerifierResponse getVerifierById(String id);
+    VerifierResponse updateVerifierVcTypes(String id, VerifierVcTypesRequest request);
+    VerifierVcResponse getVerifierVc(String id) throws IOException;
 }

@@ -27,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -232,9 +234,9 @@ public class VCServiceV2 implements IVCService {
     public JwtResponse VerifyHealthVerification(VerifyJwtTokensRequest verifyJwtRequest, Boolean isSimple) {
         try {
             String holderDID = "";
-            // ToDo(ssi): change hard code number
-            Verifier verifier = verifierDAO.getVerifierById(6);
-            List<String> vcTypes = verifier.getVcTypes();
+            Verifier verifier = verifierDAO.getVerifierById(verifyJwtRequest.getVerifierId());
+            List<String> vcTypes = new ArrayList<>();
+            vcTypes.addAll(verifier.getVcTypes());
             log.info("verifier getVcTypes: {}", vcTypes);
             int needVcNums = vcTypes.size();
             for (String token : verifyJwtRequest.getTokens()) {

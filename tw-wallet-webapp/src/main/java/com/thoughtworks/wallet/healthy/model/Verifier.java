@@ -10,8 +10,7 @@ import java.util.List;
 @Setter
 @Builder
 public class Verifier {
-    Integer id;
+    String id;
     String name;
-    String privateKey;
     List<String> vcTypes;
 }
