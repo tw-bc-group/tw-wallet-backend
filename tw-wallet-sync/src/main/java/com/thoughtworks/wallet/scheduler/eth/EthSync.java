@@ -2,7 +2,6 @@ package com.thoughtworks.wallet.scheduler.eth;
 
 
 import com.thoughtworks.wallet.scheduler.base.BaseSync;
-import com.thoughtworks.wallet.scheduler.base.SyncJob;
 import com.thoughtworks.wallet.scheduler.eth.strategy.BaseEventStrategy;
 import com.thoughtworks.wallet.scheduler.eth.strategy.BcEvent;
 import com.thoughtworks.wallet.scheduler.util.DBAdptor;
@@ -11,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-@SyncJob
+@Service
 public class EthSync extends BaseSync {
 
     @Autowired

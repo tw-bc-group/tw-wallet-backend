@@ -40,6 +40,7 @@ dependencies {
     implementation Deps.okhttpUrlConnection
     implementation Deps.loggingInterceptor
     implementation Deps.failsafe
+    implementation Deps.xxlJob
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

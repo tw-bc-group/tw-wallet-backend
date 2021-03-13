@@ -21,9 +21,11 @@ object Versions {
     const val bouncycastle = "1.65"
     const val jwt="3.10.3"
     const val apacheCommonsText="1.9"
+    const val xxlJob="2.3.0"
 }
 
 object Deps {
+    const val xxlJob ="com.xuxueli:xxl-job-core:${Versions.xxlJob}"
     const val jwt ="com.auth0:java-jwt:${Versions.jwt}"
     const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:${Versions.bouncycastle}"
     const val springBootStarterAmqp = "org.springframework.boot:spring-boot-starter-amqp:${Versions.boot}"
