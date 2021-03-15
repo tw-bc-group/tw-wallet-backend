@@ -22,9 +22,13 @@ object Versions {
     const val jwt="3.10.3"
     const val apacheCommonsText="1.9"
     const val xxlJob="2.3.0"
+    const val aspectj="1.9.6"
+
 }
 
 object Deps {
+
+    const val aspectj ="org.aspectj:aspectjrt:${Versions.aspectj}"
     const val xxlJob ="com.xuxueli:xxl-job-core:${Versions.xxlJob}"
     const val jwt ="com.auth0:java-jwt:${Versions.jwt}"
     const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:${Versions.bouncycastle}"

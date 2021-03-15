@@ -1,6 +1,8 @@
 package com.thoughtworks.wallet.scheduler.eth;
 
 
+import com.thoughtworks.wallet.BizTypeEnum;
+import com.thoughtworks.wallet.retry.RetryListener;
 import com.thoughtworks.wallet.scheduler.base.BaseSync;
 import com.thoughtworks.wallet.scheduler.eth.strategy.BaseEventStrategy;
 import com.thoughtworks.wallet.scheduler.eth.strategy.BcEvent;
@@ -10,10 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,9 +81,9 @@ public class EthSync extends BaseSync {
     }
 
 
-    @SneakyThrows
+    @RetryListener(bizType = BizTypeEnum.BLOCK, noRetryFor = DuplicateKeyException.class)
     @Override
-    public void parseBlock(Long height) {
+    public void parseBlock(Long height) throws IOException {
         EthBlock.Block block = ethClientAdaptor.getBlockByNumber(height, true);
         List<EthBlock.TransactionObject> transactionObjects = block.getTransactions().stream()
                 .map(txResult -> (EthBlock.TransactionObject) txResult.get())

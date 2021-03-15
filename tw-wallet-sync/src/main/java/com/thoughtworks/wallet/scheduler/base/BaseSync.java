@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
 import java.util.concurrent.*;
 
 import static java.util.stream.LongStream.range;
@@ -87,7 +88,7 @@ public abstract class BaseSync implements ISyncJob {
 
     public abstract void parseTx(String hash) throws Exception;
 
-    public abstract void parseBlock(Long height);
+    public abstract void parseBlock(Long height) throws IOException;
 
     protected long getLocalBlockNum() {
         return 0;

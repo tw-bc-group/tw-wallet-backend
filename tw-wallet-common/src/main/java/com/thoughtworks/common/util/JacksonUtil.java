@@ -3,10 +3,7 @@ package com.thoughtworks.common.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
@@ -123,7 +120,6 @@ public final class JacksonUtil {
     static public <T> T fromJsonNode(JsonNode node,  Class<T> valueType) {
         return objectMapper.readValue(node.toString(), valueType);
     }
-
 
     @SneakyThrows
     static public JsonNode toJsonNode(Object object) {

@@ -41,6 +41,7 @@ dependencies {
     implementation Deps.loggingInterceptor
     implementation Deps.failsafe
     implementation Deps.xxlJob
+    implementation Deps.aspectj
     compileOnly Deps.lombok
     annotationProcessor Deps.lombok
     annotationProcessor Deps.springBootConfigurationProcessor

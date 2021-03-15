@@ -37,3 +37,8 @@
     
 ## admin 中注册执行器
     1. 注意在网页中配置正确的ip地址，如果都是用docker来启动的，则需要用 docker inspect 查看正确的 ip 地址
+    
+    
+ ## 重试机制
+ 1. 请看 retry package。
+ 2. 没有测试，只是搭建了框架。
