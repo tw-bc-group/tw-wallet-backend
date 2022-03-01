@@ -35,7 +35,7 @@ src/main/resources/.DS_Store
 
 logs/
 
-gradle/wrapper/
+!gradle/wrapper/
 
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
