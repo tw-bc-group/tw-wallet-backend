@@ -19,9 +19,8 @@ jobs:
       HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
       HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
       RPC_URL: ${{ secrets.RPC_URL }}
-      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       HOST_IP: ${{ secrets.HOST_IP }}
-      IMAGE_NAME: ${{ env.DOCKER_REGISTRY }}/tw-wallet
+      IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
       IMAGE_TAG_PREFIX : build
       NAMESPACE: tw-wallet-backend-ns
 
@@ -54,7 +53,7 @@ jobs:
       - name: Login to Amazon ECR
         uses: docker/login-action@v1.13.0
         with:
-          registry: ${{ env.DOCKER_REGISTRY }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Build and push image to Amazon ECR
         run: |
