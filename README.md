@@ -1,3 +1,5 @@
+[![TWallet backend CI](https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml/badge.svg)](https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml)
+<br />
 ## TW Wallet backend
 ### This project provide backend service for TW Wallet.
 
