@@ -21,82 +21,92 @@ jobs:
       RPC_URL: ${{ secrets.RPC_URL }}
       HOST_IP: ${{ secrets.HOST_IP }}
       IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
-      IMAGE_TAG_PREFIX : build
+      IMAGE_TAG_PREFIX : gba-build
       NAMESPACE: tw-wallet-backend-ns
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: 11
-          distribution: 'adopt'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2.1.1
-
-      - name: Migration
-        run: ./gradlew --no-daemon -Penv=dev flywayMigrate
-
-      - name: Build
-        run: ./gradlew --no-daemon -Penv=dev clean build -x test
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        uses: docker/login-action@v1.13.0
-        with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-
-      - name: Build and push image to Amazon ECR
+      - name: Test cache
         run: |
-          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
-          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-
-      - name: Create namespace if not exist
-        run: |
-          curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
-          chmod +x ./kubectl
-          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
-          kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
-
-      - name: Deploy
-        env:
-          RELEASE_NAME: tw-wallet-backend
-          CHART: ./helm
-        run: |
-          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-          chmod 700 get_helm.sh
-          ./get_helm.sh
-          rm get_helm.sh
-          helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
-
-      - name: Get Status
-        id: get_status
-        run: |
-          if [[ ${{ job.status }} == 'success' ]]
-          then
-            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml|build #${{ github.run_number }}> is deployed"
-          else
-            MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml|build #${{ github.run_number }}> is not deployed"
+          if ! [ -x "$(command -v kubectl)" ]; then
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
           fi
-          echo "::set-output name=message::$MESSAGE"
+          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
+          kubectl version
+
+      # - name: Set up JDK 11
+      #   uses: actions/setup-java@v2
+      #   with:
+      #     java-version: 11
+      #     distribution: 'adopt'
+
+      # - name: Setup Gradle
+      #   uses: gradle/gradle-build-action@v2.1.1
+
+      # - name: Migration
+      #   run: ./gradlew --no-daemon -Penv=dev flywayMigrate
+
+      # - name: Build
+      #   run: ./gradlew --no-daemon -Penv=dev clean build -x test
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ secrets.AWS_REGION }}
+
+      # - name: Login to Amazon ECR
+      #   uses: docker/login-action@v1.13.0
+      #   with:
+      #     registry: ${{ secrets.DOCKER_REGISTRY }}
+
+      # - name: Build and push image to Amazon ECR
+      #   run: |
+      #     docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
+      #     docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+      #     docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+
+      # - name: Create namespace if not exist
+      #   run: |
+      #     curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+      #     chmod +x ./kubectl
+      #     mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+      #     aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
+      #     kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
+
+      # - name: Deploy
+      #   env:
+      #     RELEASE_NAME: tw-wallet-backend
+      #     CHART: ./helm
+      #   run: |
+      #     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      #     chmod 700 get_helm.sh
+      #     ./get_helm.sh
+      #     rm get_helm.sh
+      #     helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
+
+      # - name: Get Status
+      #   id: get_status
+      #   run: |
+      #     if [[ ${{ job.status }} == 'success' ]]
+      #     then
+      #       MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml|build #${{ github.run_number }}> is deployed"
+      #     else
+      #       MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/workflows/main.yml|build #${{ github.run_number }}> is not deployed"
+      #     fi
+      #     echo "::set-output name=message::$MESSAGE"
           
-      - name: Send message to Slack when deployment is success
-        if: always()
-        uses: archive/github-actions-slack@v2.0.0
-        id: notify
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-text: ${{ steps.get_status.outputs.message }}
-          slack-optional-icon_emoji: ":fire:"
+      # - name: Send message to Slack when deployment is success
+      #   if: always()
+      #   uses: archive/github-actions-slack@v2.0.0
+      #   id: notify
+      #   with:
+      #     slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+      #     slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
+      #     slack-text: ${{ steps.get_status.outputs.message }}
+      #     slack-optional-icon_emoji: ":fire:"
