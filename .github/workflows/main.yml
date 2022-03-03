@@ -38,7 +38,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.1.1
 
       - name: Migration
-        run: ./gradlew --no-daemon -Penv=dev flywayMigrate
+        run: ./gradlew --no-daemon -Penv=dev flywayMigrate -i
 
       - name: Build
         run: ./gradlew --no-daemon -Penv=dev clean build -x test
