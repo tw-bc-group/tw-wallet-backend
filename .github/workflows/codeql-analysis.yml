@@ -17,8 +17,9 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
-  schedule:
-    - cron: '24 11 * * 1'
+    # 定时扫描
+#  schedule:
+#    - cron: '24 11 * * 1'
 
 jobs:
   analyze:
@@ -62,9 +63,9 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: |
-       make bootstrap
-       make release
+#    - run: |
+#       make bootstrap
+#       make release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
