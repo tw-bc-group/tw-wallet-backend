@@ -24,11 +24,27 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     permissions:
       actions: read
       contents: read
       security-events: write
+    env:
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
+      TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
+      IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
+      RPC_URL: ${{ secrets.RPC_URL }}
+      HOST_IP: ${{ secrets.HOST_IP }}
+      IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
+      IMAGE_TAG_PREFIX: gba-build
+      NAMESPACE: tw-wallet-backend-ns
 
     strategy:
       fail-fast: false
@@ -66,6 +82,20 @@ jobs:
 #    - run: |
 #       make bootstrap
 #       make release
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: 8
+        distribution: 'adopt'
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2.1.1
+
+    - name: Migration
+      run: ./gradlew --no-daemon -Penv=dev flywayMigrate -i
+
+    - name: Build
+      run: ./gradlew --no-daemon -Penv=dev clean build -x test
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
