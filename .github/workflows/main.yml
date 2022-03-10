@@ -28,6 +28,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Talisman 
+        run: |
+          if [ ! -f "~/.talisman/talisman_linux_386" ]
+          then
+            mkdir ~/.talisman
+            cd ~/.talisman
+            curl -L -O https://github.com/thoughtworks/talisman/releases/download/v1.25.0/talisman_linux_386
+            chmod +x talisman_linux_386
+          fi
+          cd -
+          ~/.talisman/talisman_linux_386 --scan --ignoreHistory
+
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
