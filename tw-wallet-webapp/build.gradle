@@ -21,6 +21,7 @@ sonarqube {
     }
 }
 
+
 dependencies {
     compile project(':tw-wallet-common')
     implementation Deps.springBootStarterAmqp
