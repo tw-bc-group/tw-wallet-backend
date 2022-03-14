@@ -69,12 +69,12 @@ task installLocalGitHook() {
         if (GITHUB_TOKEN) {
             exec {
                 workingDir root
-                commandLine "sh", "scripts/install-talisman.sh", "pre-commit", GITHUB_TOKEN
+                commandLine "./scripts/install-talisman.sh", "pre-commit", GITHUB_TOKEN
             }
         } else {
             exec {
                 workingDir root
-                commandLine "sh", "scripts/install-talisman.sh", "pre-commit"
+                commandLine "./scripts/install-talisman.sh", "pre-commit"
             }
         }
     }
