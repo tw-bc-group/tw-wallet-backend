@@ -33,4 +33,4 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}  clean build -x test sonarqube -PSONAR_TOKEN=${{ secrets.SONAR_TOKEN }} --info
+        run: ./gradlew --no-daemon  -Penv=dev  clean build -x test sonarqube --info -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
