@@ -38,10 +38,10 @@ jobs:
         uses: gradle/gradle-build-action@v2.1.1
 
       - name: Migration
-        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} flywayMigrate -i
+        run: ./gradlew --no-daemon -Penv=dev flywayMigrate -i
 
       - name: Build
-        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} clean build -x test
+        run: ./gradlew --no-daemon -Penv=dev clean build -x test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
