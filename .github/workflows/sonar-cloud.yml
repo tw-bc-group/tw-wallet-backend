@@ -32,5 +32,6 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build and analyze
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew --no-daemon  -Penv=dev  clean build -x test sonarqube --info
+        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} clean build -x test sonarqube --info
