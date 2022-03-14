@@ -5,7 +5,7 @@
 #   <https://thoughtworks.github.io/talisman/install.sh> gets updated too.
 # Thanks!
 set -euo pipefail
-
+GITHUB_TOKEN="${2:-""}"
 DEBUG=${DEBUG:-''}
 HOOK_NAME="${1:-pre-push}"
 case "$HOOK_NAME" in
@@ -26,8 +26,13 @@ run() {
   IFS=$'\n'
 
   GITHUB_URL="https://github.com/thoughtworks/talisman"
-  
-  VERSION=$(curl --silent "https://api.github.com/repos/thoughtworks/talisman/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  VERSION_URL="https://api.github.com/repos/thoughtworks/talisman/releases/latest"
+  VERSION=0
+  if [[ $GITHUB_TOKEN == "" ]]; then
+ 			VERSION=$(curl --silent  "$VERSION_URL" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+ 	else
+ 	    VERSION=$(curl --silent --header "authorization: Bearer $GITHUB_TOKEN" "$VERSION_URL" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  fi
 
   BINARY_BASE_URL="$GITHUB_URL/releases/download/$VERSION"
   REPO_HOOK_BIN_DIR=".git/hooks/bin"
