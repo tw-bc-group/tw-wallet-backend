@@ -10,6 +10,15 @@ plugins {
     id "org.flywaydb.flyway" version "6.3.2"
     id 'nu.studer.jooq' version '4.2'
     id 'java'
+    id "org.sonarqube" version "3.3"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "tw-bc-group_tw-wallet-backend"
+        property "sonar.organization", "tw-bc-group"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 
