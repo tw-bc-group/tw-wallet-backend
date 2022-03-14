@@ -9,6 +9,7 @@ plugins {
     id "org.springframework.boot"
     id 'nu.studer.jooq' version '4.1'
     id 'java'
+    id "org.sonarqube" version "3.3"
 }
 
 dependencies {
