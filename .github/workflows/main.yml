@@ -2,9 +2,9 @@ name: TWallet backend CI
 
 on:
   push:
-    branches: [ master ,sonar*,perf/improve_ci_config ]
+    branches: [ master ,sonar* ]
   pull_request:
-    branches: [ master,perf/improve_ci_config ]
+    branches: [ master ]
 
 
 jobs:
@@ -90,7 +90,7 @@ jobs:
         run: ./gradlew --no-daemon -Penv=dev sonarqube --info
 
   delpoy:
-    needs: [ build,sonar]
+    needs: [ build,sonar ]
     name: deploy
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
@@ -144,38 +144,38 @@ jobs:
       - name: Build and push image to Amazon ECR
         run: |
           docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
-#          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-#          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
 
-#      - name: Create namespace if not exist
-#        run: |
-#          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
-#          kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
-#
-#      - name: Deploy
-#        env:
-#          RELEASE_NAME: tw-wallet-backend
-#          CHART: ./helm
-#        run: |
-#          helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
-#
-#      - name: Get Status
-#        id: get_status
-#        run: |
-#          if [[ ${{ job.status }} == 'success' ]]
-#          then
-#            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed"
-#          else
-#            MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is not deployed"
-#          fi
-#          echo "::set-output name=message::$MESSAGE"
-#
-#      - name: Send message to Slack when deployment is success
-#        if: always()
-#        uses: archive/github-actions-slack@v2.0.0
-#        id: notify
-#        with:
-#          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-#          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
-#          slack-text: ${{ steps.get_status.outputs.message }}
-#          slack-optional-icon_emoji: ":fire:"
+      - name: Create namespace if not exist
+        run: |
+          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
+          kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
+
+      - name: Deploy
+        env:
+          RELEASE_NAME: tw-wallet-backend
+          CHART: ./helm
+        run: |
+          helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
+
+      - name: Get Status
+        id: get_status
+        run: |
+          if [[ ${{ job.status }} == 'success' ]]
+          then
+            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed"
+          else
+            MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is not deployed"
+          fi
+          echo "::set-output name=message::$MESSAGE"
+
+      - name: Send message to Slack when deployment is success
+        if: always()
+        uses: archive/github-actions-slack@v2.0.0
+        id: notify
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-text: ${{ steps.get_status.outputs.message }}
+          slack-optional-icon_emoji: ":fire:"
