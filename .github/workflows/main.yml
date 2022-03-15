@@ -5,22 +5,7 @@ on:
     branches: [ master ,sonar*,perf/improve_ci_config ]
   pull_request:
     branches: [ master,perf/improve_ci_config ]
-env:
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_URL: ${{ secrets.DB_URL }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
-  TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
-  IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
-  HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
-  HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
-  HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
-  RPC_URL: ${{ secrets.RPC_URL }}
-  HOST_IP: ${{ secrets.HOST_IP }}
-  IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
-  IMAGE_TAG_PREFIX: gba-build
-  NAMESPACE: tw-wallet-backend-ns
+
 
 jobs:
   build:
@@ -43,9 +28,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.1.1
-
-      - name: Migration
-        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} flywayMigrate -i
 
       - name: Build
         run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} clean build -x test
@@ -75,7 +57,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -108,43 +90,63 @@ jobs:
         run: ./gradlew --no-daemon -Penv=dev sonarqube --info
 
   delpoy:
-    needs: [ build,sonar ]
+    needs: [ build,sonar]
     name: deploy
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
+    env:
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
+      TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
+      IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
+      HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
+      RPC_URL: ${{ secrets.RPC_URL }}
+      HOST_IP: ${{ secrets.HOST_IP }}
+      IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
+      IMAGE_TAG_PREFIX: gba-build
+      NAMESPACE: tw-wallet-backend-ns
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: download
-        uses: actions/download-artifact@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
-          name: tw-wallet-backend
+          java-version: 11
+          distribution: 'adopt'
 
-      - name: test
-        run: ls
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2.1.1
 
-      - name: Build  image
+      - name: Migration
+        run: ./gradlew --no-daemon -Penv=dev flywayMigrate -i
+
+      - name: Build
+        run: ./gradlew --no-daemon -Penv=dev clean build -x test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: docker/login-action@v1.13.0
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+
+      - name: Build and push image to Amazon ECR
         run: |
           docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ secrets.AWS_REGION }}
-#
-#      - name: Login to Amazon ECR
-#        uses: docker/login-action@v1.13.0
-#        with:
-#          registry: ${{ secrets.DOCKER_REGISTRY }}
-#
-#      - name: Build and push image to Amazon ECR
-#        run: |
-#          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
 #          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
 #          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-##
+
 #      - name: Create namespace if not exist
 #        run: |
 #          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
