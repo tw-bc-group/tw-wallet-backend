@@ -2,9 +2,9 @@ name: TWallet backend CI
 
 on:
   push:
-    branches: [ master ,sonar*]
+    branches: [ master ,sonar*,perf/improve_ci_config ]
   pull_request:
-    branches: [ master ]
+    branches: [ master,perf/improve_ci_config ]
 env:
   DB_USERNAME: ${{ secrets.DB_USERNAME }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
