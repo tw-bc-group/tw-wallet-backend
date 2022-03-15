@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}"
     }
 }
 
@@ -15,6 +16,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.sonarqube'
 
 
     group = 'com.thoughtworks'
@@ -58,4 +60,39 @@ allprojects {
             mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
         }
     }
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "tw-bc-group_tw-wallet-backend"
+            property "sonar.organization", "tw-bc-group"
+            property "sonar.host.url", "https://sonarcloud.io"
+        }
+    }
 }
+
+task installLocalGitHook() {
+    def GITHUB_TOKEN = this.properties['GITHUB_TOKEN']
+    def root = rootProject.rootDir.toString()
+    def path = root + "/.git/hooks/pre-commit"
+    File preCommit = new File(path)
+    if (!preCommit.exists()) {
+        if (GITHUB_TOKEN) {
+            exec {
+                workingDir root
+                commandLine "./scripts/install-talisman.sh", "pre-commit", GITHUB_TOKEN
+            }
+        } else {
+            exec {
+                workingDir root
+                commandLine "./scripts/install-talisman.sh", "pre-commit"
+            }
+        }
+    }
+    def content = preCommit.text
+    if (content && !content.contains("exec < /dev/tty")) {
+        content = content.replace("#!/bin/bash\n", "#!/bin/bash\nexec < /dev/tty\n")
+        preCommit.write(content)
+    }
+}
+
+build.dependsOn installLocalGitHook
