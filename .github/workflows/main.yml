@@ -79,35 +79,35 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew --no-daemon -Penv=dev sonarqube --info
 
-  code_ql:
-    needs: build
-    name: code_ql
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'java' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
-        with:
-          languages: ${{ matrix.language }}
-
-      - name: download
-        uses: actions/download-artifact@v2
-        with:
-          name: tw-wallet-backend
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
+#  code_ql:
+#    needs: build
+#    name: code_ql
+#    runs-on: ubuntu-latest
+#    permissions:
+#      actions: read
+#      contents: read
+#      security-events: write
+#
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        language: [ 'java' ]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Initialize CodeQL
+#        uses: github/codeql-action/init@v1
+#        with:
+#          languages: ${{ matrix.language }}
+#
+#      - name: download
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: tw-wallet-backend
+#
+#      - name: Perform CodeQL Analysis
+#        uses: github/codeql-action/analyze@v1
 
   delpoy:
     needs: [ build,sonar,code_ql ]
