@@ -1,5 +1,4 @@
 name: TWallet backend CI
-
 on:
   push:
     branches: [ master ,sonar* ]
@@ -55,13 +54,12 @@ jobs:
     needs: build
     name: sonar
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request }}
     steps:
-      - name: download
-      - uses: actions/download-artifact@v2
-        with:
-          name: tw-wallet-backend
-          path: build/
+#      - name: download
+#      - uses: actions/download-artifact@v2
+#        with:
+#          name: tw-wallet-backend
+#          path: build/
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -124,8 +122,8 @@ jobs:
           name: tw-wallet-backend
           path: build/
 
-#      - name: test
-#        run: echo "==============="
+      - name: test
+        run: echo "==============="
 #      - name: Configure AWS credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
