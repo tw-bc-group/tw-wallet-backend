@@ -23,4 +23,4 @@ jobs:
     needs: [job1, job2]
     if: ${{ github.event_name == "push" }}
     steps:
-      - run: echo "job3 run"
+      - run: echo "job3 run..."
