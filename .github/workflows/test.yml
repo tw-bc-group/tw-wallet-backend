@@ -22,6 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     name: job3
     needs: [job1, job2]
-    if: ${{ github.event.push }}
+    if: ${{ github.event.pull_request.merged == true }}
     steps:
       - run: echo "job3 run"
