@@ -101,41 +101,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Build and analyze
+      - name: sonar check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew --no-daemon -Penv=dev sonarqube --info
-
-#  code_ql:
-#    needs: build
-#    name: code_ql
-#    runs-on: ubuntu-latest
-#    permissions:
-#      actions: read
-#      contents: read
-#      security-events: write
-#
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        language: [ 'java' ]
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#
-#      - name: Initialize CodeQL
-#        uses: github/codeql-action/init@v1
-#        with:
-#          languages: ${{ matrix.language }}
-#
-#      - name: download
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: tw-wallet-backend
-#
-#      - name: Perform CodeQL Analysis
-#        uses: github/codeql-action/analyze@v1
 
   delpoy:
     needs: [ build,sonar ]
@@ -143,6 +113,8 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: download
         uses: actions/download-artifact@v2
@@ -151,6 +123,10 @@ jobs:
 
       - name: test
         run: ls
+
+      - name: Build  image
+        run: |
+          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
 #      - name: Configure AWS credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
@@ -168,7 +144,7 @@ jobs:
 #          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
 #          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
 #          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-#
+##
 #      - name: Create namespace if not exist
 #        run: |
 #          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
