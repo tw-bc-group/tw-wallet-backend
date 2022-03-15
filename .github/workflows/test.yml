@@ -5,6 +5,8 @@ on:
     branches: [ sonar_cloud, citest ]
   pull_request:
     branches: [ master, citest ]
+    types:
+      - closed
 
 jobs:
   job1:
