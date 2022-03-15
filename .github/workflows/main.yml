@@ -2,27 +2,29 @@ name: TWallet backend CI
 
 on:
   push:
+    branches: [ master ,sonar*]
+  pull_request:
     branches: [ master ]
+env:
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
+  TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
+  IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
+  RPC_URL: ${{ secrets.RPC_URL }}
+  HOST_IP: ${{ secrets.HOST_IP }}
+  IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
+  IMAGE_TAG_PREFIX: gba-build
+  NAMESPACE: tw-wallet-backend-ns
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-20.04
-    env:
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
-      TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
-      IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
-      HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
-      HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
-      HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
-      RPC_URL: ${{ secrets.RPC_URL }}
-      HOST_IP: ${{ secrets.HOST_IP }}
-      IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
-      IMAGE_TAG_PREFIX : gba-build
-      NAMESPACE: tw-wallet-backend-ns
 
     steps:
       - name: Checkout
@@ -43,53 +45,134 @@ jobs:
       - name: Build
         run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} clean build -x test
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Cache
+        uses: actions/upload-artifact@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          name: tw-wallet-backend
+          path: build/
 
-      - name: Login to Amazon ECR
-        uses: docker/login-action@v1.13.0
+  sonar:
+    needs: build
+    name: sonar
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.pull_request }}
+    steps:
+      - name: download
+      - uses: actions/download-artifact@v2
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-
-      - name: Build and push image to Amazon ECR
-        run: |
-          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
-          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
-
-      - name: Create namespace if not exist
-        run: |
-          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
-          kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
-
-      - name: Deploy
+          name: tw-wallet-backend
+          path: build/
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
         env:
-          RELEASE_NAME: tw-wallet-backend
-          CHART: ./helm
-        run: |
-          helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew --no-daemon -Penv=dev sonarqube --info
 
-      - name: Get Status
-        id: get_status
-        run: |
-          if [[ ${{ job.status }} == 'success' ]]
-          then
-            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed"
-          else
-            MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is not deployed"
-          fi
-          echo "::set-output name=message::$MESSAGE"
-          
-      - name: Send message to Slack when deployment is success
-        if: always()
-        uses: archive/github-actions-slack@v2.0.0
-        id: notify
+  code_ql:
+    needs: build
+    name: code_ql
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
         with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-text: ${{ steps.get_status.outputs.message }}
-          slack-optional-icon_emoji: ":fire:"
+          languages: ${{ matrix.language }}
+
+      - name: download
+      - uses: actions/download-artifact@v2
+        with:
+          name: tw-wallet-backend
+          path: build/
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+  delpoy:
+    needs: [ build,sonar,code_ql ]
+    name: deploy
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: download
+      - uses: actions/download-artifact@v2
+        with:
+          name: tw-wallet-backend
+          path: build/
+
+      - name: test
+        run: echo "==============="
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ secrets.AWS_REGION }}
+#
+#      - name: Login to Amazon ECR
+#        uses: docker/login-action@v1.13.0
+#        with:
+#          registry: ${{ secrets.DOCKER_REGISTRY }}
+#
+#      - name: Build and push image to Amazon ECR
+#        run: |
+#          docker build -t $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER .
+#          docker push $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+#          docker rmi $IMAGE_NAME:$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER
+#
+#      - name: Create namespace if not exist
+#        run: |
+#          aws eks update-kubeconfig --region cn-northwest-1 --name cn-eks-c0
+#          kubectl get namespaces $NAMESPACE || kubectl create namespace $NAMESPACE
+#
+#      - name: Deploy
+#        env:
+#          RELEASE_NAME: tw-wallet-backend
+#          CHART: ./helm
+#        run: |
+#          helm -n $NAMESPACE upgrade --install $RELEASE_NAME $CHART --set image.tag=$IMAGE_TAG_PREFIX-$GITHUB_RUN_NUMBER --set image.repository=$IMAGE_NAME
+#
+#      - name: Get Status
+#        id: get_status
+#        run: |
+#          if [[ ${{ job.status }} == 'success' ]]
+#          then
+#            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed"
+#          else
+#            MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is not deployed"
+#          fi
+#          echo "::set-output name=message::$MESSAGE"
+#
+#      - name: Send message to Slack when deployment is success
+#        if: always()
+#        uses: archive/github-actions-slack@v2.0.0
+#        id: notify
+#        with:
+#          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+#          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
+#          slack-text: ${{ steps.get_status.outputs.message }}
+#          slack-optional-icon_emoji: ":fire:"

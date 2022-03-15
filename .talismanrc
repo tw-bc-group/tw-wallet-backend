@@ -1,0 +1,455 @@
+fileignoreconfig:
+- filename: .env.keys
+  checksum: 01f088d04496016a522f1b0cb2b1ea55d138d0760fbb0fde4094fe7a3220f2e4
+- filename: DecodeTxTest.java
+  allowed_patterns:
+  - address
+fileignoreconfig:
+- filename: V1.4__create_tbl_healthy_verification.sql
+  checksum: 7255c380b5ed2bc12a709e518521918d105f2ba0ff91a2e0ebe9d3c56e8d4
+fileignoreconfig:
+- filename: enviroments.gradle
+  checksum: 3bf0a489054b020d38a84f58baba3de6d852e07d39a5ef9d27a7938eda673
+fileignoreconfig:
+- filename: V1.4__create_tbl_healthy_verification.sql
+  checksum: 7255c380b5ed2bc12a709e518521918d105f2ba0ff91a2e0ebe9d3c56e8d4
+fileignoreconfig:
+- filename: V1.15__create_tbl_verifiers.sql
+  checksum: 1725e1e803a28c1ef87b4d346f31be4136c9065721daf0afd38584de360a3
+fileignoreconfig:
+- filename: idea-env-plugin.jpg
+  checksum: b9469b49007ef971711a12a586869269eb82d79472e56e08ad20fc882c9c2
+fileignoreconfig:
+- filename: V1.1__create_tbl_transactions_and_add_records.sql
+  checksum: 2a65c1d8c5c9fb4e4bbc32d07718caa2dacaf1f43ec7dd5c47dab38c8d086
+fileignoreconfig:
+- filename: enviroments.gradle
+  checksum: 3bf0a489054b020d38a84f58baba3de6d852e07d39a5ef9d27a7938eda673
+fileignoreconfig:
+- filename: V1.3__create_tbl_identities.sql
+  checksum: 2521574968e64973f57bd92dfef54ba2ef5cab9bc29d2eae74981736b1b63
+fileignoreconfig:
+- filename: V1.12__create_tbl_issuers.sql
+  checksum: 312f43d7cb12662ab195da042398ca06a736ac65dd091685cc44cda6f2ea9
+fileignoreconfig:
+- filename: V1.9__update_tbl_healthy_verification_claim_table__add_signature.sql
+  checksum: 9242bc40a099f5f029cca98ae2bc482d785f2a5897c0c625fcf5669192095
+fileignoreconfig:
+- filename: V1.10__update_tbl_healthy_verification_claim_table__change_signature.sql
+  checksum: abcf8570262582efddc4dd337f46349402fdf5509b164477d8361d02d6102
+fileignoreconfig:
+- filename: V1.2__create_tbl_blocks.sql
+  checksum: 283b4aae2350ceec979c5bae60a86e9cabfb839be9ad838eee0db21cee08e
+fileignoreconfig:
+- filename: V1.7__change_data_type_of_tbl_healthy_verification_claim_table.sql
+  checksum: 9433d94e23cc37633ad7d371170727848124c09e0b77ab3f14a06e0e8ebc3
+fileignoreconfig:
+- filename: V1.8__create_table_suspected_patients_phone_list.sql
+  checksum: 6aa6d64d0ecea65ccb57085bf497a5ed3d5b2410f3b8c17277f171fee276f
+fileignoreconfig:
+- filename: V1.5__update_healthy_verification_table.sql
+  checksum: 6bf63bc0828310d69dc97515df7540825fa1efc568e9ce1bf9d65bc9c4a3d
+fileignoreconfig:
+- filename: V1.13__create_tbl_vc_types.sql
+  checksum: 6515c6d17e2511db92648ebae446c71db93852957fa631df8c573ff683f88
+fileignoreconfig:
+- filename: V1.18__update_tbl_verifiers.sql
+  checksum: 30f6fc893389ff935e47eff8fc3553a5289c2b1db8bf7c67521f1f490a171
+fileignoreconfig:
+- filename: V1.3__create_tbl_identities.sql
+  checksum: 2521574968e64973f57bd92dfef54ba2ef5cab9bc29d2eae74981736b1b63
+fileignoreconfig:
+- filename: V1.16__update_tbl_vc_types.sql
+  checksum: d30548ca34dfeca9aa4162d7b0a0239c6c11fbe9a51d3607f4c8708157c2d
+fileignoreconfig:
+- filename: V1.3__create_tbl_identities.sql
+  checksum: 2521574968e64973f57bd92dfef54ba2ef5cab9bc29d2eae74981736b1b63
+fileignoreconfig:
+- filename: V1.1__create_tbl_transactions_and_add_records.sql
+  checksum: 2a65c1d8c5c9fb4e4bbc32d07718caa2dacaf1f43ec7dd5c47dab38c8d086
+fileignoreconfig:
+- filename: V1.17__update_tbl_verifiers.sql
+  checksum: c1d48fe28f2572990e16e7c2c33aaeea90857d1b17c71684cd15edfbb1548
+fileignoreconfig:
+- filename: V1.2__create_tbl_blocks.sql
+  checksum: 283b4aae2350ceec979c5bae60a86e9cabfb839be9ad838eee0db21cee08e
+fileignoreconfig:
+- filename: V1.2__create_tbl_blocks.sql
+  checksum: 283b4aae2350ceec979c5bae60a86e9cabfb839be9ad838eee0db21cee08e
+fileignoreconfig:
+- filename: V1.2__create_tbl_blocks.sql
+  checksum: 283b4aae2350ceec979c5bae60a86e9cabfb839be9ad838eee0db21cee08e
+fileignoreconfig:
+- filename: V1.14__create_healthy_verification_v2.sql
+  checksum: 89a9e252126c4397f48744e2af713869d37b61acf74de0b2877954fdb04c4
+fileignoreconfig:
+- filename: V1.3__create_tbl_identities.sql
+  checksum: 2521574968e64973f57bd92dfef54ba2ef5cab9bc29d2eae74981736b1b63
+fileignoreconfig:
+- filename: V1.1__create_tbl_transactions_and_add_records.sql
+  checksum: 2a65c1d8c5c9fb4e4bbc32d07718caa2dacaf1f43ec7dd5c47dab38c8d086
+fileignoreconfig:
+- filename: V1.11__create_tbl_dcep.sql
+  checksum: 34195d59b31b8435ba49ecf720ae40aaca39e60be520c7ff079095f0c425e
+fileignoreconfig:
+- filename: V1.1__create_tbl_transactions.sql
+  checksum: a129f9d22905b209f741619d901bb691bf3e9325859015a2f03b1e7eb325c
+fileignoreconfig:
+- filename: V1.1__create_tbl_transactions.sql
+  checksum: a129f9d22905b209f741619d901bb691bf3e9325859015a2f03b1e7eb325c
+fileignoreconfig:
+- filename: V1.5__update_healthy_verification_table.sql
+  checksum: 6bf63bc0828310d69dc97515df7540825fa1efc568e9ce1bf9d65bc9c4a3d
+fileignoreconfig:
+- filename: V1.4__create_tbl_healthy_verification.sql
+  checksum: 7255c380b5ed2bc12a709e518521918d105f2ba0ff91a2e0ebe9d3c56e8d4
+fileignoreconfig:
+- filename: V1.6__update_table_tbl_healthy_verification_claim_design.sql
+  checksum: 98d56f658bffbad8361bc1382436f580589874cae4e782c3cadc45f45e400
+fileignoreconfig:
+- filename: V1.4__create_tbl_healthy_verification.sql
+  checksum: 7255c380b5ed2bc12a709e518521918d105f2ba0ff91a2e0ebe9d3c56e8d4
+fileignoreconfig:
+- filename: application-local.yml
+  checksum: 1475f48ccb1284134b1f54754af93e0cf4f2ad016c90b0dd576cf9a265380
+fileignoreconfig:
+- filename: IdentityTest.java
+  checksum: 8dc2b0bc14339f6e68e427431a8ec9679a26c6c908308fa84f4b97b653ee8
+fileignoreconfig:
+- filename: BaseSync.java
+  checksum: 789bf7f26c928c0c71be6776d4a9225bf9efd4801c3de7c62314e4989ab9a
+fileignoreconfig:
+- filename: DECPTest.java
+  checksum: ceae8dac0bd0056b458113f5b44e7dcd73dffb56f0acbe8747e71d264da5e
+fileignoreconfig:
+- filename: application-test.yml
+  checksum: 5d440da328fe6d522c9d07529addeb2de42d595bc9e8db9d57c38cee7dfcd
+fileignoreconfig:
+- filename: application-local.yml
+  checksum: 1475f48ccb1284134b1f54754af93e0cf4f2ad016c90b0dd576cf9a265380
+fileignoreconfig:
+- filename: create_demo_data.sh
+  checksum: f9c2b881df302965c67dde25174d7a5d8bd36aa1541d5ffc9addf8434b287
+fileignoreconfig:
+- filename: DecodeTxTest.java
+  checksum: 7d72432a8c2567325073be734d1386f579b3b817fa3763524264d12190a6e
+fileignoreconfig:
+- filename: application-uat.yml
+  checksum: 8c89906954e74d64205663c818b3d0e76aff647521345adae10b82cc24cbc
+fileignoreconfig:
+- filename: application-local.yml
+  checksum: 1475f48ccb1284134b1f54754af93e0cf4f2ad016c90b0dd576cf9a265380
+fileignoreconfig:
+- filename: application-integ.yml
+  checksum: 11433ee584b001a2fe3309cb412ec61c7cbe2ee1ef05abbabfcd94085f4d1
+fileignoreconfig:
+- filename: application-uat.yml
+  checksum: 8c89906954e74d64205663c818b3d0e76aff647521345adae10b82cc24cbc
+fileignoreconfig:
+- filename: application-uat.yml
+  checksum: 8c89906954e74d64205663c818b3d0e76aff647521345adae10b82cc24cbc
+fileignoreconfig:
+- filename: BaseSync.java
+  checksum: 789bf7f26c928c0c71be6776d4a9225bf9efd4801c3de7c62314e4989ab9a
+fileignoreconfig:
+- filename: SignClaimTest.java
+  checksum: 9cadd6f8e79806d04818618dbac735d4a342bfe351f53620663542d24f63e
+fileignoreconfig:
+- filename: SignDataTest.java
+  checksum: 02d44259d1938616292138820a5db02250aed6d3a95401774f27410518ed2
+fileignoreconfig:
+- filename: create_demo_data.sh
+  checksum: f9c2b881df302965c67dde25174d7a5d8bd36aa1541d5ffc9addf8434b287
+fileignoreconfig:
+- filename: application-integ.yml
+  checksum: 11433ee584b001a2fe3309cb412ec61c7cbe2ee1ef05abbabfcd94085f4d1
+fileignoreconfig:
+- filename: SignDataTest.java
+  checksum: 02d44259d1938616292138820a5db02250aed6d3a95401774f27410518ed2
+fileignoreconfig:
+- filename: application-test.yml
+  checksum: 5d440da328fe6d522c9d07529addeb2de42d595bc9e8db9d57c38cee7dfcd
+fileignoreconfig:
+- filename: IdentityTest.java
+  checksum: 8dc2b0bc14339f6e68e427431a8ec9679a26c6c908308fa84f4b97b653ee8
+fileignoreconfig:
+- filename: 0013-json-ld格式描述vc.md
+  checksum: 1905c784d7787ced61fd1d5053ade8c75b2fe0a6206ce1b7480d18ba5fb3b
+fileignoreconfig:
+- filename: 0015-基础设施，合约部署和事件同步.md
+  checksum: 1d40ecf86d05390d386dfae0d1cfabea0d4646d602465a5b48f24dc5bf05b
+fileignoreconfig:
+- filename: application-test.yml
+  checksum: 5d440da328fe6d522c9d07529addeb2de42d595bc9e8db9d57c38cee7dfcd
+fileignoreconfig:
+- filename: IdentityTest.java
+  checksum: 8dc2b0bc14339f6e68e427431a8ec9679a26c6c908308fa84f4b97b653ee8
+fileignoreconfig:
+- filename: DCEP研讨-双离线.png
+  checksum: 69b8a9a27d94cdd7385633de8a804661d8ab556cdb908e9005e5c68846559
+fileignoreconfig:
+- filename: VCServiceV2Test.java
+  checksum: ada3d10c4b2c12c89cf2161814ea121590976cd75925c4c931037d82e9717
+fileignoreconfig:
+- filename: DCEP研讨-双离线-quorum简化版.png
+  checksum: 9c0344cf33f1ecb70a15273bfc8e8706fbc320fff7c5e20eea08f5538ddea
+fileignoreconfig:
+- filename: 0009-原始规划框架.md
+  checksum: 2cd87cc7158c2c15e6c48b668d2ecc32e889690cf7d176c73c5e62c266c5c
+fileignoreconfig:
+- filename: VerifiableCredentialJwt.java
+  checksum: 117eb8333b98ab177296f420562f15745fe0153a9a0392b33f573089d3ca6
+fileignoreconfig:
+- filename: HealthySub.java
+  checksum: 0a6e75200cedb0fba627f42aa8b25cebd9f8fe919a527f688c42e9dfdf328
+fileignoreconfig:
+- filename: APP.jpg
+  checksum: 952e2a38e97eb7874e2f7a3d1f3f92f2d8d04df1a301479da2796ad87d26d
+fileignoreconfig:
+- filename: TravelBadgeSub.java
+  checksum: 4ba4b27b1e212c0a77ea098c64cb4349499395558ba119be81e32715cdeb3
+fileignoreconfig:
+- filename: Base58.java
+  checksum: a406cabae04637723ee8307dcf93fe90bde48c46463674c9b18b4a783e259
+fileignoreconfig:
+- filename: Base58.java
+  checksum: a406cabae04637723ee8307dcf93fe90bde48c46463674c9b18b4a783e259
+fileignoreconfig:
+- filename: IdentityRegistry.json
+  checksum: 7c0b0e2e40145f3a0ab716c4fbcf4b83c7fdcf558faf07b8435de2adce3aa
+fileignoreconfig:
+- filename: 0011-双离线支付.md
+  checksum: fec7ba31d736d850ed9f0cc29d3bc33a202ac942db9803ba46ed0897891bd
+fileignoreconfig:
+- filename: Base58.java
+  checksum: a406cabae04637723ee8307dcf93fe90bde48c46463674c9b18b4a783e259
+fileignoreconfig:
+- filename: IdentityRegistry.json
+  checksum: 7c0b0e2e40145f3a0ab716c4fbcf4b83c7fdcf558faf07b8435de2adce3aa
+fileignoreconfig:
+- filename: owl.jpg
+  checksum: f5b42009cf891cb473d296af0340adc2afe1d114cfef4a3386bdb237d82fc
+fileignoreconfig:
+- filename: Identities.json
+  checksum: d5b90dce20b663b2acbc914d6815e7c0ee9682682da72825b4fcf696ee972
+fileignoreconfig:
+- filename: IdentityRegistry.json
+  checksum: 7c0b0e2e40145f3a0ab716c4fbcf4b83c7fdcf558faf07b8435de2adce3aa
+fileignoreconfig:
+- filename: RSA.java
+  checksum: 4f4d480071b7875f28d4d7eaee661a144dead487ecc25717d5e5f7621d819
+fileignoreconfig:
+- filename: ddd-vc.jpg
+  checksum: f7400fb37092441b4dd15944798c922451ef939f265486963a2809ec40176
+fileignoreconfig:
+- filename: vc大市场.jpg
+  checksum: 8e9fa4685b7d325ca2feb352d1cf1be2cd100f931bcb854647a825bd57f28
+fileignoreconfig:
+- filename: TWPointERC20.json
+  checksum: 951d66616d40991a8dff8692a75afe92a290a6ce31cbd9dba3b50f29f516e
+fileignoreconfig:
+- filename: ConstTravelBadgeVC.java
+  checksum: da604c48242e5c8f9a5703979a6b20fda2a783eb5e5003fc4a019c5ea4b84
+fileignoreconfig:
+- filename: TWPointERC20.json
+  checksum: 951d66616d40991a8dff8692a75afe92a290a6ce31cbd9dba3b50f29f516e
+fileignoreconfig:
+- filename: DC_EP_ERC20.json
+  checksum: ca80020d13a9d623ae1715bb8975bc7ec610dd8ff8427ec3d6529ccb18e6d
+fileignoreconfig:
+- filename: DCEPContract.java
+  checksum: 80409c29e7dd0c1e5cd0f4f53f3d013b44d473d144ab2a1b512bb78cc7291
+fileignoreconfig:
+- filename: DCEPContract.java
+  checksum: 80409c29e7dd0c1e5cd0f4f53f3d013b44d473d144ab2a1b512bb78cc7291
+fileignoreconfig:
+- filename: RMB.json
+  checksum: 7b2f2870a267890c2fcf88b21a4e9290649ce025adef157a6eeaa7e533a92
+fileignoreconfig:
+- filename: ImmunoglobulinDetectionSub.java
+  checksum: 52a0ed51d369812db18d3f5fbe75c63edc3ad795fa2bc718ba6da3adeb2f5
+fileignoreconfig:
+- filename: ConstImmunoglobulinDetectionVC.java
+  checksum: 01dfb8c1b047d9f2c8e4cad8f30b515b10ccc693432ebfdec91b65ca83fe0
+fileignoreconfig:
+- filename: ConstImmunoglobulinDetectionVC.java
+  checksum: 01dfb8c1b047d9f2c8e4cad8f30b515b10ccc693432ebfdec91b65ca83fe0
+fileignoreconfig:
+- filename: ImmunoglobulinDetectionSub.java
+  checksum: 52a0ed51d369812db18d3f5fbe75c63edc3ad795fa2bc718ba6da3adeb2f5
+fileignoreconfig:
+- filename: ConstPassportVC.java
+  checksum: b91c106058512f19c5f15c7dec689e74a66eb3124d8722955be494e9cf244
+fileignoreconfig:
+- filename: 0012-健康码-vc-新的json-ld格式.md
+  checksum: 008899819ba5311f78290c06276d8324a109f4142f51ef61ee11658c36897
+fileignoreconfig:
+- filename: IdentityRegistryRequest.java
+  checksum: 3572e208b2d590fac3d577e2286dba8a31b6aa9cd952eb80828f7415a1e15
+fileignoreconfig:
+- filename: application.yml
+  checksum: fca740b977183a0a4fdd2aad898bef0a11b7dfec4d8fe05ecafc3f36d3f53
+fileignoreconfig:
+- filename: IdentityRegistryRequest.java
+  checksum: 3572e208b2d590fac3d577e2286dba8a31b6aa9cd952eb80828f7415a1e15
+fileignoreconfig:
+- filename: Keys.java
+  checksum: d0a531e07babc0876f07cbb9322c879cb43c050cafded6cd9bcc28783273c
+fileignoreconfig:
+- filename: VerifierService.java
+  checksum: a2af71f4193322aff8ea5ebbe9c5de167d74eb8b57e073acdcfeea4168420
+fileignoreconfig:
+- filename: TblVerifiers.java
+  checksum: cc5aafd73c6870477265b95e524ad13b2259fc23c4b03a4902bf474a7e512
+fileignoreconfig:
+- filename: Keys.java
+  checksum: d0a531e07babc0876f07cbb9322c879cb43c050cafded6cd9bcc28783273c
+fileignoreconfig:
+- filename: FlywaySchemaHistory.java
+  checksum: d0f7f5ca237e3a51fb24260307ceec64bf7672dc5dbbbb709369726ab5732
+fileignoreconfig:
+- filename: VerifierService.java
+  checksum: a2af71f4193322aff8ea5ebbe9c5de167d74eb8b57e073acdcfeea4168420
+fileignoreconfig:
+- filename: TblHealthyVerificationClaim.java
+  checksum: e68bb15a26780c35c9b75f43ab72e50c76fbc9932310ab3db1dd296533b10
+fileignoreconfig:
+- filename: Identity.java
+  checksum: 89710313a71b79cd1fa9c63b0f9bb93b260fdcf5e35e20766e58e01185e7a
+fileignoreconfig:
+- filename: DCEPUtil.java
+  checksum: 0c00363f02b859b4fc429cee0d761b56c92d53c87e7f4185c4bb68908b2b3
+fileignoreconfig:
+- filename: application-dev.yml
+  checksum: 9adcf8133c005a693a9408410ad72e74266d21636392e4e9df316508626bc
+fileignoreconfig:
+- filename: Dependencies.kt
+  checksum: 69720638c50bbfcc1e653b7f9c0fb4eab1e50ac737fee42f00aaac1fd3586
+fileignoreconfig:
+- filename: ingress.yaml
+  checksum: e33e7c60991be0baf3d6f81f5b97c2935793041373d4dfa884cd4ef86d68b
+fileignoreconfig:
+- filename: application.yml
+  checksum: fca740b977183a0a4fdd2aad898bef0a11b7dfec4d8fe05ecafc3f36d3f53
+fileignoreconfig:
+- filename: application.yml
+  checksum: fca740b977183a0a4fdd2aad898bef0a11b7dfec4d8fe05ecafc3f36d3f53
+fileignoreconfig:
+- filename: CryptoError.java
+  checksum: 799a8774c2ab1686dea9e8159dc9334b9d439788e970d8936998610f67032
+fileignoreconfig:
+- filename: EthSync.java
+  checksum: ec910db29fb397392114c0fa4b6b764fac58cb4f8d7c484ea1468c5fe1f65
+fileignoreconfig:
+- filename: TblHealthyVerificationClaim.java
+  checksum: e68bb15a26780c35c9b75f43ab72e50c76fbc9932310ab3db1dd296533b10
+fileignoreconfig:
+- filename: FlywaySchemaHistory.java
+  checksum: d0f7f5ca237e3a51fb24260307ceec64bf7672dc5dbbbb709369726ab5732
+fileignoreconfig:
+- filename: TblTransactions.java
+  checksum: 35594eda3f4e276dfde461fdb1822ed99a7dbed49af668b1e5523c669ec34
+fileignoreconfig:
+- filename: CryptoFacade.java
+  checksum: 8eacb8b9bdabb01c8e271bc568950ff222c17fe13626a5cb7706faeac9f5e
+fileignoreconfig:
+- filename: application-dev.yml
+  checksum: 9adcf8133c005a693a9408410ad72e74266d21636392e4e9df316508626bc
+fileignoreconfig:
+- filename: KeyType.java
+  checksum: 6839f614349a57b26d42a50d9049b1eff3f263dc7c4af37b7c3ecdc98f59a
+fileignoreconfig:
+- filename: IdentityRegistered.java
+  checksum: c1cd86df7d16652a8e7968142f8831d3e4bc470dd2e944ba68f9aba252af1
+fileignoreconfig:
+- filename: Dependencies.kt
+  checksum: 69720638c50bbfcc1e653b7f9c0fb4eab1e50ac737fee42f00aaac1fd3586
+fileignoreconfig:
+- filename: TblVcTypes.java
+  checksum: 2f57bd82f52a139bfc3c4ef3c0f3f802f6c1abdeee13a3314d9e8c80e07fc
+fileignoreconfig:
+- filename: TblVerifiers.java
+  checksum: cc5aafd73c6870477265b95e524ad13b2259fc23c4b03a4902bf474a7e512
+fileignoreconfig:
+- filename: application-dev.yml
+  checksum: 9adcf8133c005a693a9408410ad72e74266d21636392e4e9df316508626bc
+fileignoreconfig:
+- filename: TblDcep.java
+  checksum: ebaf6e93b21efb6d8dc1b27cbb5c5eaf0fed2b22b95c98fcfeac4c6c8d851
+fileignoreconfig:
+- filename: TblIdentities.java
+  checksum: cfd4dcd1d06840a95fc0a04cf7b971476a3781da73b77581b8f3b504ccf09
+fileignoreconfig:
+- filename: TblIssuers.java
+  checksum: f1a1ec2af9a8665c55a25dd6c7416c70133268790caa2efadf1e24aa6561b
+fileignoreconfig:
+- filename: FlywaySchemaHistory.java
+  checksum: d0f7f5ca237e3a51fb24260307ceec64bf7672dc5dbbbb709369726ab5732
+fileignoreconfig:
+- filename: TblHealthyVerificationClaimV2.java
+  checksum: 449721493a2c6e3da8809caa3f80cc66279154e938267640fb74c81ccdecc
+fileignoreconfig:
+- filename: TblDcep.java
+  checksum: ebaf6e93b21efb6d8dc1b27cbb5c5eaf0fed2b22b95c98fcfeac4c6c8d851
+fileignoreconfig:
+- filename: codeql-analysis.yml
+  checksum: 6bdf9d50304e6bdd62d7316ab0fb7a14912cb6f5aa9ff54e981f39a6ab3a5
+fileignoreconfig:
+- filename: TblHealthyVerificationClaimV2.java
+  checksum: 449721493a2c6e3da8809caa3f80cc66279154e938267640fb74c81ccdecc
+fileignoreconfig:
+- filename: TblSuspectedPatientsPhoneList.java
+  checksum: 97f654283d284730042cee01701c49c50951ace274f27c2e4d557a5d8440b
+fileignoreconfig:
+- filename: TblTransactions.java
+  checksum: 35594eda3f4e276dfde461fdb1822ed99a7dbed49af668b1e5523c669ec34
+fileignoreconfig:
+- filename: main.yml
+  checksum: e3070453be39d4191f34f3d8ba6691e441a8efafadf81516ba554accf83b4
+fileignoreconfig:
+- filename: TblVcTypes.java
+  checksum: 2f57bd82f52a139bfc3c4ef3c0f3f802f6c1abdeee13a3314d9e8c80e07fc
+fileignoreconfig:
+- filename: TblTransactions.java
+  checksum: 35594eda3f4e276dfde461fdb1822ed99a7dbed49af668b1e5523c669ec34
+fileignoreconfig:
+- filename: TblBlocks.java
+  checksum: 55eb6be8031d0234a1a3a23e8b1a816e9c2b0e9565f40321da011962da288
+fileignoreconfig:
+- filename: TblBlocks.java
+  checksum: 55eb6be8031d0234a1a3a23e8b1a816e9c2b0e9565f40321da011962da288
+fileignoreconfig:
+- filename: IdentityCreated.java
+  checksum: 8823ab125d7fc1e24e1682d653a573c5681af5442482187a74e2690353287
+fileignoreconfig:
+- filename: TWPTransferRequest.java
+  checksum: 6692205119a6ee76a55dd3cb1857f31d63fd6d73a50103297b77ad4c28ce3
+fileignoreconfig:
+- filename: EthSync.java
+  checksum: ec910db29fb397392114c0fa4b6b764fac58cb4f8d7c484ea1468c5fe1f65
+fileignoreconfig:
+- filename: TblSuspectedPatientsPhoneList.java
+  checksum: 97f654283d284730042cee01701c49c50951ace274f27c2e4d557a5d8440b
+fileignoreconfig:
+- filename: Keys.java
+  checksum: d0a531e07babc0876f07cbb9322c879cb43c050cafded6cd9bcc28783273c
+fileignoreconfig:
+- filename: QuorumServiceImpl.java
+  checksum: 745f4a18ce7da1348871307620cc78ad62ce79a438d6946879827e162a492
+fileignoreconfig:
+- filename: TWPTransferRequest.java
+  checksum: 6692205119a6ee76a55dd3cb1857f31d63fd6d73a50103297b77ad4c28ce3
+fileignoreconfig:
+- filename: TblIssuers.java
+  checksum: f1a1ec2af9a8665c55a25dd6c7416c70133268790caa2efadf1e24aa6561b
+fileignoreconfig:
+- filename: 央行方案.jpg
+  checksum: 736746d15310897c958ccd6efa55f5a32e1ba83a4ead5b3694e4db4b14b39
+fileignoreconfig:
+- filename: 前后端通信加密.jpg
+  checksum: 5207ccc157351558c9e8290724d5b6f63bece4c122ff70be729dfd2523672
+- filename: 框架规划.jpg
+  checksum: 9a39666d9056295f98b102ffadf113ef169b591856036e34bb9d9958d2f55
+fileignoreconfig:
+- filename: .github/workflows/main.yml
+  checksum: 5df444c7bfb65ec6d492e518052930b09bff0162f78ec8cf92b6d685909f4353
