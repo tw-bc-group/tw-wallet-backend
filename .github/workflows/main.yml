@@ -55,7 +55,6 @@ jobs:
     needs: build
     name: sonar
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request }}
     steps:
       - name: download
         uses: actions/download-artifact@v2
@@ -112,7 +111,7 @@ jobs:
   delpoy:
     needs: [ build,sonar ]
     name: deploy
-    if: ${{ github.event.push }}
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
     steps:
 
