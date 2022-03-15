@@ -53,34 +53,34 @@ jobs:
           name: tw-wallet-backend
           path: build/
 
-  sonar:
-    needs: build
-    name: sonar
-    runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request }}
-    steps:
-      - name: download
-      - uses: actions/download-artifact@v2
-        with:
-          name: tw-wallet-backend
-          path: build/
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Gradle packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew --no-daemon -Penv=dev sonarqube --info
+#  sonar:
+#    needs: build
+#    name: sonar
+#    runs-on: ubuntu-20.04
+#    if: ${{ github.event.pull_request }}
+#    steps:
+#      - name: download
+#      - uses: actions/download-artifact@v2
+#        with:
+#          name: tw-wallet-backend
+#          path: build/
+#      - name: Cache SonarCloud packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.sonar/cache
+#          key: ${{ runner.os }}-sonar
+#          restore-keys: ${{ runner.os }}-sonar
+#      - name: Cache Gradle packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+#          restore-keys: ${{ runner.os }}-gradle
+#      - name: Build and analyze
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        run: ./gradlew --no-daemon -Penv=dev sonarqube --info
 
 #jobs:
 #  job1:
