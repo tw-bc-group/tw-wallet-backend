@@ -6,22 +6,98 @@ on:
   pull_request:
     branches: [ master, citest ]
 
+env:
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  NODE1_PRIVATE_KEY: ${{ secrets.NODE1_PRIVATE_KEY }}
+  TWPOINT_CONTRACT_ADDRESS: ${{ secrets.TWPOINT_CONTRACT_ADDRESS }}
+  IDENTITY_REGISTRY_CONTRACT_ADDRESS: ${{ secrets.IDENTITY_REGISTRY_CONTRACT_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_CONTRACT_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_ADDRESS }}
+  HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY: ${{ secrets.HEALTH_VERIFICATION_CLAIM_ISSUER_PRIVATE_KEY }}
+  RPC_URL: ${{ secrets.RPC_URL }}
+  HOST_IP: ${{ secrets.HOST_IP }}
+  IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/tw-wallet
+  IMAGE_TAG_PREFIX: gba-build
+  NAMESPACE: tw-wallet-backend-ns
+
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    name: job1
+  build:
+    name: build
+    runs-on: ubuntu-20.04
+
     steps:
-      - run: echo "job1 run"
-  job2:
-    runs-on: ubuntu-latest
-    name: job2
-    needs: job1
-    steps:
-      - run: echo "job2 run"
-  job3:
-    runs-on: ubuntu-latest
-    name: job3
-    needs: [job1, job2]
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2.1.1
+
+      - name: Migration
+        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} flywayMigrate -i
+
+      - name: Build
+        run: ./gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} clean build -x test
+
+      - name: Cache
+        uses: actions/upload-artifact@v2
+        with:
+          name: tw-wallet-backend
+          path: build/
+
+  sonar:
+    needs: build
+    name: sonar
+    runs-on: ubuntu-20.04
     if: ${{ github.event.pull_request }}
     steps:
-      - run: echo "job3 run"
+      - name: download
+      - uses: actions/download-artifact@v2
+        with:
+          name: tw-wallet-backend
+          path: build/
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew --no-daemon -Penv=dev sonarqube --info
+
+#jobs:
+#  job1:
+#    runs-on: ubuntu-latest
+#    name: job1
+#    steps:
+#      - run: echo "job1 run"
+#  job2:
+#    runs-on: ubuntu-latest
+#    name: job2
+#    needs: job1
+#    steps:
+#      - run: echo "job2 run"
+#  job3:
+#    runs-on: ubuntu-latest
+#    name: job3
+#    needs: [job1, job2]
+#    if: ${{ github.event.pull_request }}
+#    steps:
+#      - run: echo "job3 run"
