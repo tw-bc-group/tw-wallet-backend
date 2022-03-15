@@ -2,7 +2,7 @@ name: TWallet backend CI
 
 on:
   push:
-    branches: [ master ,sonar*]
+    branches: [ master ,sonar* ]
   pull_request:
     branches: [ master ]
 env:
@@ -124,8 +124,8 @@ jobs:
           name: tw-wallet-backend
           path: build/
 
-      - name: test
-        run: echo "==============="
+#      - name: test
+#        run: echo "==============="
 #      - name: Configure AWS credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
