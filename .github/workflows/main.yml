@@ -110,7 +110,7 @@ jobs:
 #        uses: github/codeql-action/analyze@v1
 
   delpoy:
-    needs: [ build,sonar,code_ql ]
+    needs: [ build,sonar ]
     name: deploy
     if: ${{ github.event.push }}
     runs-on: ubuntu-20.04
