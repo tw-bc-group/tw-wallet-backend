@@ -7,7 +7,6 @@ fileignoreconfig:
   allowed_patterns:
   - address
 version: "1.0"
-version: "1.0"
 fileignoreconfig:
 - filename: V1.4__create_tbl_healthy_verification.sql
   checksum: 7255c380b5ed2bc12a709e518521918d105f2ba0ff91a2e0ebe9d3c56e8d4
@@ -605,3 +604,4 @@ version: "1.0"
 fileignoreconfig:
 - filename: .github/workflows/main.yml
   checksum: 5df444c7bfb65ec6d492e518052930b09bff0162f78ec8cf92b6d685909f4353
+version: "1.0"
