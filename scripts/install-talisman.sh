@@ -27,12 +27,28 @@ run() {
 
   GITHUB_URL="https://github.com/thoughtworks/talisman"
   VERSION_URL="https://api.github.com/repos/thoughtworks/talisman/releases/latest"
-  VERSION=0
+  RESPONSE=null
   if [[ $GITHUB_TOKEN == "" ]]; then
- 			VERSION=$(curl --silent  "$VERSION_URL" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+ 			RESPONSE=$(curl --silent -w '"http_code": "%{http_code}"' "$VERSION_URL")
  	else
- 	    VERSION=$(curl --silent --header "authorization: Bearer $GITHUB_TOKEN" "$VERSION_URL" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+ 	    RESPONSE=$(curl --silent -w '"http_code": "%{http_code}"' --header "authorization: Bearer $GITHUB_TOKEN" "$VERSION_URL")
   fi
+  HTTP_CODE=$(echo $RESPONSE | grep '"http_code":' | sed -E 's/.*"([^"]+)".*/\1/')
+  if [[ $HTTP_CODE != 200 ]]; then
+    echo "Fail to install talisman pre-commit hook!"
+     if [[ $RESPONSE =~ "API rate limit exceeded" ]]; then
+        echo ""
+        echo $RESPONSE
+        echo "You can add a github token and then run './gradlew --no-daemon -Penv=dev -PGITHUB_TOKEN=<YOUR_GITHUB_TOKEN> }} clean build -x test' "
+        echo "About github token,please refer to https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+     else
+        echo "problems occured while request github"
+        echo "you can run the following command to see what happened:"
+        echo "'curl $VERSION_URL'"
+     fi
+     exit 1
+  fi
+  VERSION=$(echo "$RESPONSE" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
   BINARY_BASE_URL="$GITHUB_URL/releases/download/$VERSION"
   REPO_HOOK_BIN_DIR=".git/hooks/bin"
