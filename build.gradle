@@ -91,6 +91,7 @@ task installLocalGitHook() {
     def content = preCommit.text
     if (content && !content.contains("exec < /dev/tty")) {
         content = content.replace("#!/bin/bash\n", "#!/bin/bash\nexec < /dev/tty\n")
+        content = content.replace("--githook pre-commit", "--githook pre-commit --interactive")
         preCommit.write(content)
     }
 }
