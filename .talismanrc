@@ -617,3 +617,7 @@ fileignoreconfig:
 - filename: tw-wallet-webapp/gradle/enviroments.gradle
   checksum: cc00b5651b6b89ea3dba7c32a32fe76e7aa7e7a289ed13719242982292c0c47f
 version: "1.0"
+fileignoreconfig:
+- filename: .env.local
+  checksum: 8f0c4c18fe7f1e8ee89a07c6bf2ac2af419c018d329989a5d3c318984bb4977e
+version: "1.0"
