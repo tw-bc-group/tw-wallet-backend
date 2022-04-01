@@ -605,3 +605,15 @@ fileignoreconfig:
 - filename: .github/workflows/main.yml
   checksum: 5df444c7bfb65ec6d492e518052930b09bff0162f78ec8cf92b6d685909f4353
 version: "1.0"
+fileignoreconfig:
+- filename: tw-wallet-sync/src/main/resources/cnroot.pem
+  checksum: 3aa736d180d9e10487dc4f41619244bdcc34fa1e53fc3bddbc2980caf21b2859
+- filename: tw-wallet-webapp/src/main/resources/cnroot.pem
+  checksum: f8c8c3ac67bf7c55e97cba343c127d68faa3b9fb6559804df497101d550e0f84
+version: "1.0"
+fileignoreconfig:
+- filename: tw-wallet-sync/gradle/enviroments.gradle
+  checksum: dccd56a64c96fd081c74f25a84560ada70830a7cbab26f5c185c021dfaa5b186
+- filename: tw-wallet-webapp/gradle/enviroments.gradle
+  checksum: cc00b5651b6b89ea3dba7c32a32fe76e7aa7e7a289ed13719242982292c0c47f
+version: "1.0"

@@ -25,7 +25,7 @@ if (environment == 'local') {
 }else{
     file("../.env.keys").readLines().each() {
         def (key, value) = it.tokenize('=')
-        binding.put(key, System.getenv(key) ?: key)
+        binding.put(key, System.getenv(key) ?: value)
     }
 }
 println(binding)
