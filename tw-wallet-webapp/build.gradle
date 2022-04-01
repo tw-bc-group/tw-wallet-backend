@@ -59,7 +59,7 @@ apply from: 'gradle/integration-test.gradle'
 apply from: "gradle/enviroments.gradle"
 
 flyway {
-    url = "${environment.spring.datasource.url}"
+    url = "${environment.spring.flyway.url}"
     user = "${environment.spring.datasource.username}"
     password = "${environment.spring.datasource.password}"
     locations = "${environment.spring.flyway.locations}".split(',')

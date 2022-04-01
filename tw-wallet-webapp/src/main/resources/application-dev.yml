@@ -6,7 +6,7 @@ swagger:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_URL}:5432/${DB_NAME}
+    url: jdbc:postgresql://${DB_URL}:5432/${DB_NAME}?sslmode=verify-full&sslfactory=org.postgresql.ssl.SingleCertValidatingFactory&sslfactoryarg=classpath:cnroot.pem
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -18,3 +18,5 @@ spring:
   flyway:
     enabled: false
     locations: filesystem:src/main/resources/migration,classpath:migration
+    # since SingleCertValidatingFactory cannot be compatible with gradle flyway, workaround like below
+    url: jdbc:postgresql://${DB_URL}:5432/${DB_NAME}?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
