@@ -164,7 +164,7 @@ jobs:
         run: |
           if [[ ${{ job.status }} == 'success' ]]
           then
-            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed"
+            MESSAGE="✅ Success - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is deployed, please check if <https://wallet.cn.blockchain.thoughtworks.cn/v1/contracts/identities|it works>."
           else
             MESSAGE="❌ Failure - The <https://github.com/tw-bc-group/tw-wallet-backend/actions/runs/${{ github.run_id }}|build #${{ github.run_number }}> is not deployed"
           fi
