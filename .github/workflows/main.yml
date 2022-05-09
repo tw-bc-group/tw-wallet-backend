@@ -179,3 +179,11 @@ jobs:
           slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
           slack-text: ${{ steps.get_status.outputs.message }}
           slack-optional-icon_emoji: ":fire:"
+
+      - name: Google Chat Notification
+        uses: Co-qn/google-chat-notification@releases/v1
+        with:
+          name: Build
+          url: ${{ secrets.WEBHOOKTOGCHAT }}
+          status: ${{ job.status }}
+        if: always()
