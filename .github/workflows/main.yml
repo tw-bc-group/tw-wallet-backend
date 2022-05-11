@@ -170,16 +170,6 @@ jobs:
           fi
           echo "::set-output name=message::$MESSAGE"
 
-      - name: Send message to Slack when deployment is success
-        if: always()
-        uses: archive/github-actions-slack@v2.0.0
-        id: notify
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-text: ${{ steps.get_status.outputs.message }}
-          slack-optional-icon_emoji: ":fire:"
-
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         with:
