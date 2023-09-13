@@ -622,3 +622,23 @@ fileignoreconfig:
   checksum: a032b809c674ba2f2658fb32899ef579b6b67eb5c074db7028b3f539b69657d9
 - filename: .env.local
   checksum: 03ff5031286325c28efd8e91258cc4b7e558967505bbc58259feb2c4783ffbd7
+- filename: Makefile
+  checksum: a5d97fe76af59dd7065eacb618e0270a94e981d1238b0cb43c17fda968d3495f
+- filename: README.md
+  checksum: 798fa0e5ca9ffc9b58bcddd7680265438b9a6450979df052e04b49cf4807f66c
+version: ""
+
+fileignoreconfig:
+- filename: README.md
+  checksum: 798fa0e5ca9ffc9b58bcddd7680265438b9a6450979df052e04b49cf4807f66c
+version: ""
+fileignoreconfig:
+- filename: .env.keys
+  checksum: a032b809c674ba2f2658fb32899ef579b6b67eb5c074db7028b3f539b69657d9
+- filename: .env.local
+  checksum: 03ff5031286325c28efd8e91258cc4b7e558967505bbc58259feb2c4783ffbd7
+- filename: Makefile
+  checksum: a5d97fe76af59dd7065eacb618e0270a94e981d1238b0cb43c17fda968d3495f
+- filename: README.md
+  checksum: 798fa0e5ca9ffc9b58bcddd7680265438b9a6450979df052e04b49cf4807f66c
+version: ""

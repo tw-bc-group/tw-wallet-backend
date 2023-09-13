@@ -4,13 +4,14 @@ APP	      := tw-wallet-backend
 TAG       ?= tw-wallet:latest
 NAME_SPACE := tw-wallet-backend-ns
 
-CACHE     := $(shell pwd | md5sum | awk '{ print "$(APP)-"$$1 }')
+CACHE     := $(shell pwd | shasum | awk '{ print "$(APP)-"$$1 }')
 JDK_IMAGE := openjdk:8u212-jdk-alpine3.9
 OPTS       = --rm
 # OPTS	    +=  -u $(shell id -u) 
 OPTS      +=  -v $(CACHE):/home/gradle/.gradle
 OPTS      +=  -v $(shell pwd):/home/gradle/project
 OPTS      +=  -w /home/gradle/project
+OPTS      +=  --env-file .env.local
 
 FLAG      ?= --info
 gradle    := docker run ${OPTS} ${JDK_IMAGE} ./gradlew --no-daemon $(flag)
@@ -26,7 +27,10 @@ clean:
 	@echo clean start
 	$(gradle) clean
 	@echo clean done 
-
+boot:
+	@echo springboot run
+	$(gradle) :tw-wallet-webapp:bootRun -x integTest
+	@echo springboot end
 build:
 	@echo build start
 	$(gradle) clean build -x integTest

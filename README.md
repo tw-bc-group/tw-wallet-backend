@@ -11,11 +11,18 @@
 #### QuickStart
 
 
-##### 1. start by gradlew
+##### 0. start by gradlew
 ```sh
 # set environment in .env.local 
 source ./loadenv.sh
 ./gradlew :tw-wallet-webapp:bootRun
+```
+#### 1. Recommend to start by Makefile
+```shell
+# Applie M1/M2 only for colima
+colima start --runtime docker --vm-type=vz --vz-rosetta -m 4 
+
+make boot
 ```
 
 ##### 2. debug by idea
