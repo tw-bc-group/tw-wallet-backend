@@ -618,6 +618,7 @@ fileignoreconfig:
   checksum: cc00b5651b6b89ea3dba7c32a32fe76e7aa7e7a289ed13719242982292c0c47f
 version: "1.0"
 fileignoreconfig:
+- filename: .env.keys
+  checksum: a032b809c674ba2f2658fb32899ef579b6b67eb5c074db7028b3f539b69657d9
 - filename: .env.local
-  checksum: 8f0c4c18fe7f1e8ee89a07c6bf2ac2af419c018d329989a5d3c318984bb4977e
-version: "1.0"
+  checksum: 03ff5031286325c28efd8e91258cc4b7e558967505bbc58259feb2c4783ffbd7

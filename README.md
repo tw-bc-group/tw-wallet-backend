@@ -13,7 +13,7 @@
 
 ##### 1. start by gradlew
 ```sh
-set environment in .env.local 
+# set environment in .env.local 
 source ./loadenv.sh
 ./gradlew :tw-wallet-webapp:bootRun
 ```
